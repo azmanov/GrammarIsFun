@@ -472,8 +472,7 @@
             </div>
 
             <h3 style="font-size: 16px; margin: 10px 0 5px 0;">Peta Pembelajaran Anda:</h3>
-            <div class="menu-grid" id="menuGrid">
-                </div>
+            <div class="menu-grid" id="menuGrid"></div>
             
             <div style="text-align: center; margin-top: 15px;">
                 <button class="btn" onclick="resetGame()" style="background:#A0AEC0; box-shadow: 0 5px 0 #718096; font-size:12px; padding: 6px 12px; width:auto;">Padam Rekod Kemajuan</button>
@@ -505,8 +504,7 @@
 
         <div class="screen" id="screenTopicInfo">
             <h2 id="infoTitle">Nama Topik</h2>
-            <div class="explanation-panel" id="infoContent">
-                </div>
+            <div class="explanation-panel" id="infoContent"></div>
             <button class="btn btn-success" onclick="startTopicActivity()">Mula Aktiviti Praktis ➔</button>
         </div>
 
@@ -514,14 +512,11 @@
             <h2 id="activityTopicTitle">Topik X</h2>
             <div class="question-box" id="questionBox">Soalan akan muncul di sini...</div>
             
-            <div class="options-container" id="optionsContainer">
-                </div>
+            <div class="options-container" id="optionsContainer"></div>
 
             <div id="dragDropContainer" style="display: none;">
-                <div class="drag-slots" id="dragSlots">
-                    </div>
-                <div class="drag-tokens" id="dragTokens">
-                    </div>
+                <div class="drag-slots" id="dragSlots"></div>
+                <div class="drag-tokens" id="dragTokens"></div>
                 <div style="text-align: center;">
                     <button class="btn btn-success" id="btnCheckSentence" onclick="checkDraggedSentence()" style="width: 70%; display:none;">Semak Jawapan 🧐</button>
                 </div>
@@ -552,8 +547,7 @@
                 <p style="font-weight: bold; color: var(--success); font-size: 18px;">Grammar Master: Subject-Verb-Object</p>
             </div>
 
-            <div class="badge-wall" id="finalBadgeWall">
-                </div>
+            <div class="badge-wall" id="finalBadgeWall"></div>
 
             <button class="btn" onclick="resetGame()" style="background: var(--success); box-shadow: 0 5px 0 #05B386;">Main Semula Permainan 🔄</button>
         </div>
@@ -562,7 +556,7 @@
 
     <script>
         /*************************************************************
-         * 1. BANK DATA SOALAN & SILIBUS LENGKAP (20-30 Per Topik)
+         * 1. BANK DATA SOALAN & SILIBUS LENGKAP (20 Per Topik)
          *************************************************************/
         const TOPICS_DATA = [
             {
@@ -582,8 +576,8 @@
                 questions: [
                     { q: "Kenal pasti Subject dalam ayat ini: <u>She</u> plays netball.", o: ["She", "plays", "netball"], a: "She", exp: "'She' ialah Subject (kata ganti nama bagi perempuan)." },
                     { q: "Kenal pasti Subject dalam ayat ini: <u>The cat</u> sleeps on the rug.", o: ["The cat", "sleeps", "rug"], a: "The cat", exp: "'The cat' (kucing itu) merupakan pelaku utama atau kata nama di awal ayat." },
-                    { q: "Antara berikut, yang manakah merupakan <b>Plural Subject</b> (lebih daripada satu)?", o: ["The boys", "A girl", "He", "Abu"], a: "The boys", exp: "'The boys' bermaksud budak-budak lelaki itu (lebih dari seorang)." },
-                    { q: "Antara berikut, yang manakah merupakan <b>Singular Subject</b> (hanya satu)?", o: ["We", "They", "My mother", "The birds"], a: "My mother", exp: "'My mother' bermaksud emak saya (seorang sahaja)." },
+                    { q: "Antara berikut, yang manakah merupakan <b>Plural Subject</b>?", o: ["The boys", "A girl", "He", "Abu"], a: "The boys", exp: "'The boys' bermaksud budak-budak lelaki itu (lebih dari seorang)." },
+                    { q: "Antara berikut, yang manakah merupakan <b>Singular Subject</b>?", o: ["We", "They", "My mother", "The birds"], a: "My mother", exp: "'My mother' bermaksud emak saya (seorang sahaja)." },
                     { q: "Pilih kata ganti nama (Pronoun) yang sesuai untuk 'Siti dan Sarah':", o: ["We", "They", "He", "She"], a: "They", exp: "Mereka berkumpulan, jadi kita gunakan 'They' (Mereka)." },
                     { q: "Pilih kata ganti nama yang sesuai untuk seekor anjing 'The dog':", o: ["It", "He", "She", "I"], a: "It", exp: "Untuk haiwan tunggal atau objek biasa, gunakan 'It'." },
                     { q: "Kenal pasti jenis bagi Subject ini: <b>My parents</b>", o: ["Singular Noun", "Plural Noun", "Pronoun"], a: "Plural Noun", exp: "'Parents' bermaksud ibu bapa (dua orang), maka ia adalah Plural Noun." },
@@ -612,7 +606,7 @@
                     <p><b>Verb</b> ialah perkataan yang menunjukkan perbuatan atau keadaan kewujudan pelaku. Tanpa Verb, ayat menjadi tergantung dan tidak aktif.</p><br>
                     <p>Mari kenali beberapa jenis Verb asas:</p>
                     <ul>
-                        <li><b>Action Verbs (Kata Kerja Perbuatan):</b> eat, walk, sleep, write, read, play, jump, run, swim.</li>
+                        <li><b>Action Verbs:</b> eat, walk, sleep, write, read, play, jump, run, swim.</li>
                         <li><b>Be Verb:</b> am, is, are.</li>
                         <li><b>Do Verb:</b> do, does.</li>
                         <li><b>Have Verb:</b> have, has.</li>
@@ -620,7 +614,7 @@
                     </ul>
                 `,
                 questions: [
-                    { q: "Pilih yang mana satu merupakan <b>Action Verb</b> (perbuatan)?", o: ["is", "eat", "have", "happy"], a: "eat", exp: "'eat' (makan) menunjukkan aksi perbuatan secara fizikal." },
+                    { q: "Pilih yang mana satu merupakan <b>Action Verb</b>?", o: ["is", "eat", "have", "happy"], a: "eat", exp: "'eat' (makan) menunjukkan aksi perbuatan secara fizikal." },
                     { q: "Antara perkataan berikut, yang manakah di bawah kumpulan <b>Be Verb</b>?", o: ["are", "do", "has", "walk"], a: "are", exp: "Be Verb terdiri daripada 'am', 'is', dan 'are'." },
                     { q: "Antara berikut, yang manakah merupakan <b>Have Verb</b>?", o: ["does", "goes", "has", "am"], a: "has", exp: "'has' dan 'have' tergolong dalam Have Verb." },
                     { q: "Kenal pasti Verb dalam ayat ini: The children <u>play</u> football.", o: ["children", "play", "football"], a: "play", exp: "'play' (bermain) adalah kata kerja aksi kumpulan mereka." },
@@ -630,9 +624,506 @@
                     { q: "Kenal pasti Verb: My sister <u>reads</u> a storybook.", o: ["My sister", "reads", "storybook"], a: "reads", exp: "'reads' (membaca) ialah perbuatan yang dibuat oleh subjek." },
                     { q: "Lengkapkan ayat dengan Do Verb: He ______ his homework.", o: ["does", "is", "has", "read"], a: "does", exp: "'does' ialah bentuk Do Verb yang sesuai untuk tugasan kerja rumah." },
                     { q: "Kenal pasti Verb: They <u>walk</u> to the morning market.", o: ["They", "walk", "market"], a: "walk", exp: "'walk' ialah aksi berjalan." },
-                    { q: "Pilih Action Verb yang sesuai untuk gambar aktiviti di kolam air:", o: ["sleep", "swim", "write", "eat"], a: "swim", exp: "'swim' bermaksud berenang." },
+                    { q: "Pilih Action Verb yang sesuai untuk aktiviti di kolam air:", o: ["sleep", "swim", "write", "eat"], a: "swim", exp: "'swim' bermaksud berenang." },
                     { q: "Pilih Do Verb dari senarai pilihan ini:", o: ["do", "have", "are", "go"], a: "do", exp: "'do' merupakan bentuk asal Do Verb." },
                     { q: "Kenal pasti Verb: We <u>have</u> two cute rabbits.", o: ["We", "have", "rabbits"], a: "have", exp: "'have' menunjukkan pemilikan dan bertindak sebagai Have Verb." },
                     { q: "Yang manakah perkataan aksi melompat?", o: ["jump", "sleep", "read", "am"], a: "jump", exp: "'jump' bermaksud melompat." },
                     { q: "Kenal pasti Verb: The students <u>listen</u> to the teacher.", o: ["students", "listen", "teacher"], a: "listen", exp: "'listen' (mendengar) ialah perbuatan." },
-                    { q: "Pilih Be Verb tunggal yang dipasangkan khas untuk subjek 'I':", o: ["is", "are", "am", "does"], a: "am", exp: "Subjek 'I' sentiasa berpasangan dengan 'am'
+                    { q: "Pilih Be Verb tunggal yang dipasangkan khas untuk subjek 'I':", o: ["is", "are", "am", "does"], a: "am", exp: "Subjek 'I' sentiasa berpasangan dengan 'am'." },
+                    { q: "Kenal pasti Verb: The birds <u>fly</u> high.", o: ["The birds", "fly", "high"], a: "fly", exp: "'fly' (terbang) ialah perbuatan burung." },
+                    { q: "Pilih Go Verb dalam senarai ini:", o: ["go", "has", "am", "run"], a: "go", exp: "'go' ialah sebahagian daripada Go Verb." },
+                    { q: "Kenal pasti Verb: She <u>sleeps</u> early.", o: ["She", "sleeps", "early"], a: "sleeps", exp: "'sleeps' (tidur) ialah kata kerja." },
+                    { q: "Apakah fungsi utama Verb dalam susunan S-V-O?", o: ["Menerangkan tindakan subjek", "Menunjukkan nama orang", "Mengakhiri ayat"], a: "Menerangkan tindakan subjek", exp: "Verb diletakkan selepas subjek untuk memberitahu tindakan pelaku." }
+                ]
+            },
+            {
+                id: 3,
+                title: "Topik 3: Subject-Verb Agreement",
+                icon: "🤝",
+                badge: "🥉 Agreement King",
+                badgeEmoji: "🤝",
+                infoHtml: `
+                    <p><b>Subject-Verb Agreement (SVA)</b> bermaksud subjek dan kata kerja mestilah sepadan.</p><br>
+                    <strong>Formula:</strong><br>
+                    • Subjek <b>Singular (Satu)</b> ➔ Kata kerja tambah <b>-s/-es</b> (is, does, has).<br>
+                    • Subjek <b>Plural (Banyak & I/You)</b> ➔ Kata kerja kekal asal <b>tanpa s</b> (are, do, have).
+                `,
+                questions: [
+                    { q: "Pilih perkataan yang betul: He ______ to school everyday.", o: ["walk", "walks"], a: "walks", exp: "Sebab 'He' seorang (Singular), kata kerja perlu ditambah 's'." },
+                    { q: "Pilih perkataan yang betul: They ______ football in the evening.", o: ["play", "plays"], a: "play", exp: "Sebab 'They' ramai (Plural), kata kerja kekal asal tanpa 's'." },
+                    { q: "Lengkapkan ayat: I ______ happy to meet you.", o: ["am", "is", "are"], a: "am", exp: "Subjek 'I' sentiasa dipadankan dengan 'am'." },
+                    { q: "Lengkapkan ayat: She ______ an expensive storybook.", o: ["have", "has"], a: "has", exp: "Subjek tunggal 'She' menggunakan 'has'." },
+                    { q: "Lengkapkan ayat: We ______ our homework together.", o: ["do", "does"], a: "do", exp: "Subjek ramai 'We' menggunakan kata kerja asal 'do'." },
+                    { q: "Betulkan kesalahan ayat: 'The cat eat fish.'", o: ["The cat eats fish.", "The cats eat fish."], a: "The cat eats fish.", exp: "'The cat' ialah seekor (Singular), jadi ia memerlukan kata kerja 'eats'." },
+                    { q: "Lengkapkan ayat: My parents ______ very kind.", o: ["is", "are", "am"], a: "are", exp: "'My parents' (ibu bapa) adalah ramai, jadi gunakan 'are'." },
+                    { q: "Lengkapkan ayat: Ali ______ to the mosque.", o: ["go", "goes"], a: "goes", exp: "Ali ialah seorang (Singular), maka kita gunakan Go Verb 'goes'." },
+                    { q: "Lengkapkan ayat: You ______ a very smart pupil.", o: ["is", "are", "am"], a: "are", exp: "Subjek 'You' sentiasa dikira di bawah peraturan kata kerja jamak 'are'." },
+                    { q: "Pilih jawapan betul: The boys ______ fast.", o: ["run", "runs"], a: "run", exp: "Subjek 'The boys' ramai, jadi gunakan 'run' tanpa s." },
+                    { q: "Lengkapkan ayat: It ______ a tail.", o: ["has", "have"], a: "has", exp: "'It' ialah subjek singular, jadi ia dipadankan dengan 'has'." },
+                    { q: "Lengkapkan ayat: We ______ to the zoo.", o: ["go", "goes"], a: "go", exp: "'We' ramai, kata kerja kembali ke kata dasar 'go'." },
+                    { q: "Pilih ayat yang mempunyai SVA yang betul:", o: ["She like ice cream.", "She likes ice cream."], a: "She likes ice cream.", exp: "Subjek 'She' memerlukan penambahan 's' pada kata kerja 'likes'." },
+                    { q: "Lengkapkan ayat: My father ______ a white car.", o: ["drive", "drives"], a: "drives", exp: "Bapa saya seorang, jadi kata kerjanya ialah 'drives'." },
+                    { q: "Lengkapkan ayat: Tigers ______ in the jungle.", o: ["live", "lives"], a: "live", exp: "'Tigers' banyak, gunakan kata kerja asal tanpa s iaitu 'live'." },
+                    { q: "Lengkapkan ayat: He ______ his room every morning.", o: ["clean", "cleans"], a: "cleans", exp: "Subjek tunggal 'He' sepadan dengan 'cleans'." },
+                    { q: "Lengkapkan ayat: The baby ______ loudly.", o: ["cry", "cries"], a: "cries", exp: "'The baby' memerlukan 'cries' (y ditukar kepada ies)." },
+                    { q: "Lengkapkan ayat: Monkeys ______ bananas.", o: ["love", "loves"], a: "love", exp: "'Monkeys' itu plural, jadi padanannya ialah 'love'." },
+                    { q: "Lengkapkan: I ______ my teeth everyday.", o: ["brush", "brushes"], a: "brush", exp: "Walaupun 'I' seorang, ia mengikut undang-undang subjek khas tanpa s." },
+                    { q: "Lengkapkan ayat: She ______ her mother in the kitchen.", o: ["help", "helps"], a: "helps", exp: "'She' memerlukan kata kerja berakhiran s iaitu 'helps'." }
+                ]
+            },
+            {
+                id: 4,
+                title: "Topik 4: Object (Pelengkap Maksud)",
+                icon: "🍏",
+                badge: "🏅 Object Finder",
+                badgeEmoji: "🏅",
+                infoHtml: `
+                    <p><b>Object</b> hadir selepas kata kerja untuk melengkapkan maksud ayat.</p><br>
+                    <p>Object terbahagi kepada dua kategori utama:</p>
+                    <ul>
+                        <li><b>Object Tunggal:</b> an apple, a book, milk, football, a pencil.</li>
+                        <li><b>Object Frasa:</b> at school, in the classroom, with my father, in the park, on the table.</li>
+                    </ul>
+                `,
+                questions: [
+                    { q: "Kenal pasti Object dalam ayat: She reads <u>a book</u>.", o: ["She", "reads", "a book"], a: "a book", exp: "'a book' ialah objek tunggal yang menerima aksi bacaan." },
+                    { q: "Kenal pasti Object jenis frasa dalam ayat: They play <u>in the park</u>.", o: ["They", "play", "in the park"], a: "in the park", exp: "'in the park' menceritakan tempat dan berbentuk frasa pelengkap." },
+                    { q: "Pilih Object tunggal yang sesuai: The cat drinks ______.", o: ["milk", "in the classroom", "with my father"], a: "milk", exp: "Kucing minum objek cecair, maka 'milk' (susu) paling tepat." },
+                    { q: "Pilih Object frasa yang sesuai: The teacher teaches ______.", o: ["in the classroom", "an apple", "football"], a: "in the classroom", exp: "Guru mengajar di dalam kelas (frasa tempat)." },
+                    { q: "Kenal pasti Object: Ali writes <u>a pencil</u>.", o: ["Ali", "writes", "a pencil"], a: "a pencil", exp: "'a pencil' ialah objek di hujung ayat." },
+                    { q: "Manakah antara berikut ialah <b>Object Frasa</b>?", o: ["on the table", "milk", "a book", "football"], a: "on the table", exp: "'on the table' terdiri daripada beberapa perkataan membentuk frasa." },
+                    { q: "Manakah antara berikut ialah <b>Object Tunggal</b>?", o: ["at school", "an apple", "with my father", "in the park"], a: "an apple", exp: "'an apple' ialah perkataan objek tunggal." },
+                    { q: "Kenal pasti Object: Ahmad goes <u>to school</u>.", o: ["Ahmad", "goes", "to school"], a: "to school", exp: "'to school' ialah frasa arah tujuan yang bertindak sebagai objek pelengkap." },
+                    { q: "Lengkapkan dengan Object yang logik: My mother cooks ______.", o: ["soup", "at school", "a pencil"], a: "soup", exp: "Ibu memasak sup ('soup' ialah objek makanan)." },
+                    { q: "Kenal pasti Object: The boy kicks <u>the ball</u>.", o: ["The boy", "kicks", "the ball"], a: "the ball", exp: "'the ball' ialah objek benda yang menerima kesan tendangan." },
+                    { q: "Pilih Object frasa yang bermaksud 'bersama bapa saya':", o: ["with my father", "at school", "on the table"], a: "with my father", exp: "'with my father' bermaksud bersama bapa saya." },
+                    { q: "Lengkapkan ayat: We study English ______.", o: ["at school", "milk", "an apple"], a: "at school", exp: "Kami belajar Bahasa Inggeris di sekolah (Object Frasa)." },
+                    { q: "Kenal pasti Object: She puts the keys <u>on the table</u>.", o: ["She", "keys", "on the table"], a: "on the table", exp: "'on the table' di akhir ayat melengkapkan lokasi kunci diletakkan." },
+                    { q: "Lengkapkan dengan Object Tunggal: The girl draws ______.", o: ["a picture", "in the park", "at school"], a: "a picture", exp: "'a picture' (gambar) ialah hasil lukisan objek tunggal." },
+                    { q: "Kenal pasti Object: The baby drinks <u>milk</u>.", o: ["The baby", "drinks", "milk"], a: "milk", exp: "'milk' ialah objek benda cecair itu." },
+                    { q: "Pilih Object yang sesuai: He eats ______.", o: ["a burger", "a pencil", "a table"], a: "a burger", exp: "'a burger' ialah makanan yang logik untuk dimakan." },
+                    { q: "Kenal pasti Object Frasa: The kids swim <u>in the pool</u>.", o: ["The kids", "swim", "in the pool"], a: "in the pool", exp: "'in the pool' ialah frasa tempat." },
+                    { q: "Lengkapkan ayat: My brother plays ______.", o: ["football", "at school", "in the classroom"], a: "football", exp: "Bermain bola sepak ('football' objek sukan tunggal) paling tepat." },
+                    { q: "Kenal pasti Object: The birds sit <u>on the branch</u>.", o: ["The birds", "sit", "on the branch"], a: "on the branch", exp: "Burung duduk di atas dahan (Object Frasa)." },
+                    { q: "Apakah peranan utama Object dalam struktur kalimat?", o: ["Membuat ayat tergantung", "Melengkapkan maksud ayat", "Menjadi kepala utama ayat"], a: "Melengkapkan maksud ayat", exp: "Object diletakkan di hujung untuk menutup penerangan struktur ayat." }
+                ]
+            },
+            {
+                id: 5,
+                title: "Topik 5: Latih Tubi Membina Ayat",
+                icon: "✍️",
+                badge: "💎 Grammar Grandmaster",
+                badgeEmoji: "💎",
+                infoHtml: `
+                    <p><b>Tahniah!</b> Anda sudah mempelajari semua komponen penting ayat:</p>
+                    <p style="text-align:center; font-weight:bold; color:var(--primary-dark);">Subject ➔ Verb ➔ Object</p>
+                    <p>Mari uji kemahiran menyusun dan membina ayat bahasa Inggeris yang lengkap secara rawak!</p>
+                `,
+                questions: [
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "The boy", tokenV: "eats", tokenO: "an apple", exp: "Susunan yang betul: The boy (S) + eats (V) + an apple (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "She", tokenV: "reads", tokenO: "a book", exp: "Susunan yang betul: She (S) + reads (V) + a book (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "They", tokenV: "play", tokenO: "football", exp: "Susunan yang betul: They (S) + play (V) + football (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "Ali", tokenV: "writes", tokenO: "an essay", exp: "Susunan yang betul: Ali (S) + writes (V) + an essay (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "The cat", tokenV: "drinks", tokenO: "milk", exp: "Susunan yang betul: The cat (S) + drinks (V) + milk (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "We", tokenV: "visit", tokenO: "the zoo", exp: "Susunan yang betul: We (S) + visit (V) + the zoo (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "My mother", tokenV: "cooks", tokenO: "soup", exp: "Susunan yang betul: My mother (S) + cooks (V) + soup (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "He", tokenV: "rides", tokenO: "a bicycle", exp: "Susunan yang betul: He (S) + rides (V) + a bicycle (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "The teachers", tokenV: "teach", tokenO: "at school", exp: "Susunan yang betul: The teachers (S) + teach (V) + at school (O)." },
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "I", tokenV: "wash", tokenO: "my hands", exp: "Susunan yang betul: I (S) + wash (V) + my hands (O)." },
+                    { q: "Pilih susunan ayat yang menepati formula S-V-O:", o: ["Eats Ali an apple.", "Ali eats an apple.", "An apple Ali eats."], a: "Ali eats an apple.", exp: "Ali (Subject) + eats (Verb) + an apple (Object)." },
+                    { q: "Pilih ayat yang mempunyai kesalahan pasang (SVA):", o: ["They walks to school.", "They walk to school.", "He walks to school."], a: "They walks to school.", exp: "'They' sepatutnya berpasangan dengan 'walk' tanpa s." },
+                    { q: "Lengkapkan bahagian 'Verb': The smart girl ______ a beautiful song.", o: ["sings", "sing", "song"], a: "sings", exp: "'The smart girl' ialah subjek singular, memerlukan verb 'sings'." },
+                    { q: "Lengkapkan bahagian 'Object' yang sesuai: My grandfather watches ______.", o: ["the television", "sleeps", "He"], a: "the television", exp: "'the television' bertindak sebagai objek penyambut." },
+                    { q: "Lengkapkan bahagian 'Subject': ______ bake a delicious chocolate cake.", o: ["The bakers", "A baker", "He"], a: "The bakers", exp: "Kerana kata kerja 'bake' tiada s (plural), subjek mesti plural iaitu 'The bakers'." },
+                    { q: "Pilih ayat lengkap yang betul perkataan besertakan objek frasa:", o: ["We swimming in the pool.", "We swim in the pool.", "We swims in the pool."], a: "We swim in the pool.", exp: "'We' berpasangan dengan kata kerja dasar 'swim'." },
+                    { q: "Ayat mana yang mempunyai susunan S-V-O yang sempurna?", o: ["The bird flies in the sky.", "In the sky flies the bird.", "Flies the bird in sky."], a: "The bird flies in the sky.", exp: "Mematuhi formula penuh Subject-Verb-Object." },
+                    { q: "Betulkan binaan ayat ini: 'She drive a car.'", o: ["She drives a car.", "She driving a car.", "She driven a car."], a: "She drives a car.", exp: "Subjek 'She' bermaksud seorang, wajib ditambahkan s pada verb menjadi 'drives'." },
+                    { q: "Manakah pilihan jawapan yang melengkapkan ayat 'The students ______ at the library.'", o: ["read books", "reads books", "reading"], a: "read books", exp: "'The students' ramai, jadi pasangannya ialah kata kerja asal 'read' ditambah objek 'books'." },
+                    { q: "Apakah susunan penuh formula pembinaan ayat utama yang anda pelajari?", o: ["Subject ➔ Verb ➔ Object", "Object ➔ Subject ➔ Verb", "Verb ➔ Object ➔ Subject"], a: "Subject ➔ Verb ➔ Object", exp: "Susunan rasmi yang tepat ialah Subject, diikuti Verb, dan diakhiri Object." }
+                ]
+            }
+        ];
+
+        /*************************************************************
+         * 2. PENGURUSAN STATUS & SISTEM SIMPAN KEMAJUAN
+         *************************************************************/
+        let gameState = {
+            unlockedTopic: 1,
+            score: 0,
+            earnedBadges: []
+        };
+
+        let currentTopic = null;
+        let currentQuestionsList = [];
+        let currentQuestionIndex = 0;
+        let currentQuestionData = null;
+        let selectedDragTokens = { S: null, V: null, O: null };
+        let audioEnabled = true;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (!audioEnabled) return;
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.25);
+                } else if (type === 'levelUp') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(261.63, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(329.63, audioCtx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(392.00, audioCtx.currentTime + 0.2);
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.5);
+                }
+            } catch (e) {
+                console.log("Audio Error:", e);
+            }
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('audioBtn').innerText = audioEnabled ? "🔊" : "🔇";
+        }
+
+        function loadGameFromStorage() {
+            const saved = localStorage.getItem('powerbi_progress_2026');
+            if (saved) {
+                try {
+                    gameState = JSON.parse(saved);
+                } catch(e) {
+                    console.error(e);
+                }
+            }
+            renderMenuGrid();
+        }
+
+        function saveGameToStorage() {
+            localStorage.setItem('powerbi_progress_2026', JSON.stringify(gameState));
+        }
+
+        function resetGame() {
+            if(confirm("Adakah anda pasti mahu memadam semua rekod mata dan lencana ganjaran?")) {
+                localStorage.removeItem('powerbi_progress_2026');
+                gameState = { unlockedTopic: 1, score: 0, earnedBadges: [] };
+                saveGameToStorage();
+                showScreen('screenMenu');
+                renderMenuGrid();
+                document.getElementById('statsBar').style.display = "none";
+                document.getElementById('progressContainer').style.display = "none";
+            }
+        }
+
+        /*************************************************************
+         * 3. PENGURUSAN NAVIGATION ANTARAMUKA
+         *************************************************************/
+        function showScreen(screenId) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function renderMenuGrid() {
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = "";
+
+            TOPICS_DATA.forEach(topic => {
+                const isUnlocked = topic.id <= gameState.unlockedTopic;
+                const card = document.createElement('div');
+                card.className = `menu-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+                
+                const hasBadge = gameState.earnedBadges.includes(topic.badge);
+
+                card.innerHTML = `
+                    <div class="icon">${isUnlocked ? topic.icon : "🔒"}</div>
+                    <div class="details">
+                        <h3>${topic.title}</h3>
+                        ${hasBadge ? `<span class="badge-pill">${topic.badge}</span>` : (isUnlocked ? '<span class="badge-pill" style="background:#CBD5E0;">Belum Mula</span>' : '')}
+                    </div>
+                `;
+
+                if (isUnlocked) {
+                    card.onclick = () => selectTopic(topic.id);
+                }
+                grid.appendChild(card);
+            });
+        }
+
+        function startIntro() {
+            showScreen('screenIntro');
+            document.getElementById('statsBar').style.display = "none";
+            document.getElementById('progressContainer').style.display = "none";
+        }
+
+        function finishIntro() {
+            selectTopic(1);
+        }
+
+        function selectTopic(topicId) {
+            currentTopic = TOPICS_DATA.find(t => t.id === topicId);
+            document.getElementById('infoTitle').innerText = currentTopic.title;
+            document.getElementById('infoContent').innerHTML = currentTopic.infoHtml;
+            
+            showScreen('screenTopicInfo');
+            document.getElementById('statsBar').style.display = "none";
+            document.getElementById('progressContainer').style.display = "none";
+        }
+
+        function startTopicActivity() {
+            currentQuestionsList = shuffleArray([...currentTopic.questions]);
+            currentQuestionIndex = 0;
+            
+            document.getElementById('statsBar').style.display = "flex";
+            document.getElementById('progressContainer').style.display = "block";
+            updateStatsUI();
+
+            showScreen('screenActivity');
+            loadQuestion();
+        }
+
+        function updateStatsUI() {
+            const totalQ = currentQuestionsList.length;
+            const currentNum = currentQuestionIndex + 1;
+            document.getElementById('statQuestion').innerText = `Soalan: ${currentNum} / ${totalQ}`;
+            document.getElementById('statScore').innerText = `Mata: ${gameState.score}`;
+            
+            const progressPercent = (currentQuestionIndex / totalQ) * 100;
+            document.getElementById('progressBar').style.width = `${progressPercent}%`;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        /*************************************************************
+         * 4. LOGIK PERMAINAN, SOALAN & SEMAKAN JAWAPAN
+         *************************************************************/
+        function loadQuestion() {
+            document.getElementById('feedbackOverlay').style.display = "none";
+            updateStatsUI();
+
+            currentQuestionData = currentQuestionsList[currentQuestionIndex];
+            document.getElementById('activityTopicTitle').innerText = currentTopic.title;
+            document.getElementById('questionBox').innerHTML = currentQuestionData.q;
+
+            const optContainer = document.getElementById('optionsContainer');
+            const dragContainer = document.getElementById('dragDropContainer');
+
+            if (currentQuestionData.type === "drag") {
+                optContainer.style.display = "none";
+                dragContainer.style.display = "block";
+                setupDragDropActivity();
+            } else {
+                optContainer.style.display = "grid";
+                dragContainer.style.display = "none";
+                setupMultipleChoiceActivity();
+            }
+        }
+
+        function setupMultipleChoiceActivity() {
+            const optContainer = document.getElementById('optionsContainer');
+            optContainer.innerHTML = "";
+
+            const shuffledOptions = shuffleArray([...currentQuestionData.o]);
+
+            shuffledOptions.forEach(optionText => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn";
+                btn.innerText = optionText;
+                btn.onclick = () => checkAnswer(optionText);
+                optContainer.appendChild(btn);
+            });
+        }
+
+        function setupDragDropActivity() {
+            selectedDragTokens = { S: null, V: null, O: null };
+            document.getElementById('btnCheckSentence').style.display = "none";
+
+            const slotsDiv = document.getElementById('dragSlots');
+            slotsDiv.innerHTML = `
+                <div class="slot" id="slotS" onclick="returnToken('S')"><span class="slot-label">Subject</span><span class="slot-text"></span></div>
+                <div class="slot" id="slotV" onclick="returnToken('V')"><span class="slot-label">Verb</span><span class="slot-text"></span></div>
+                <div class="slot" id="slotO" onclick="returnToken('O')"><span class="slot-label">Object</span><span class="slot-text"></span></div>
+            `;
+
+            const tokensDiv = document.getElementById('dragTokens');
+            tokensDiv.innerHTML = "";
+
+            const rawTokens = [
+                { type: 'S', text: currentQuestionData.tokenS },
+                { type: 'V', text: currentQuestionData.tokenV },
+                { type: 'O', text: currentQuestionData.tokenO }
+            ];
+            const shuffledTokens = shuffleArray(rawTokens);
+
+            shuffledTokens.forEach((tk, idx) => {
+                const tokenElement = document.createElement('div');
+                tokenElement.className = "token";
+                tokenElement.innerText = tk.text;
+                tokenElement.id = `token_idx_${idx}`;
+                tokenElement.onclick = () => placeToken(tk.text, tk.type, tokenElement.id);
+                tokensDiv.appendChild(tokenElement);
+            });
+        }
+
+        function placeToken(text, originalType, elementId) {
+            let targetSlot = null;
+            if (!selectedDragTokens.S) targetSlot = 'S';
+            else if (!selectedDragTokens.V) targetSlot = 'V';
+            else if (!selectedDragTokens.O) targetSlot = 'O';
+
+            if (targetSlot) {
+                selectedDragTokens[targetSlot] = { text: text, elementId: elementId };
+                document.getElementById(`slot${targetSlot}`).querySelector('.slot-text').innerText = text;
+                document.getElementById(elementId).classList.add('used');
+                playSound('correct');
+            }
+
+            if (selectedDragTokens.S && selectedDragTokens.V && selectedDragTokens.O) {
+                document.getElementById('btnCheckSentence').style.display = "inline-block";
+            }
+        }
+
+        function returnToken(slotType) {
+            const slotData = selectedDragTokens[slotType];
+            if (slotData) {
+                document.getElementById(`slot${slotType}`).querySelector('.slot-text').innerText = "";
+                document.getElementById(slotData.elementId).classList.remove('used');
+                selectedDragTokens[slotType] = null;
+                document.getElementById('btnCheckSentence').style.display = "none";
+            }
+        }
+
+        function checkDraggedSentence() {
+            const isCorrect = (selectedDragTokens.S.text === currentQuestionData.tokenS &&
+                               selectedDragTokens.V.text === currentQuestionData.tokenV &&
+                               selectedDragTokens.O.text === currentQuestionData.tokenO);
+
+            showFeedback(isCorrect, currentQuestionData.exp);
+        }
+
+        function checkAnswer(selectedOption) {
+            const isCorrect = (selectedOption === currentQuestionData.a);
+            showFeedback(isCorrect, currentQuestionData.exp || "");
+        }
+
+        function showFeedback(isCorrect, explanation) {
+            const overlay = document.getElementById('feedbackOverlay');
+            const emoji = document.getElementById('feedbackEmoji');
+            const title = document.getElementById('feedbackTitle');
+            const explain = document.getElementById('feedbackExplain');
+
+            if (isCorrect) {
+                playSound('correct');
+                emoji.innerText = "🎉";
+                title.innerText = "Betul! Hebat!";
+                title.style.color = "var(--success)";
+                gameState.score += 10;
+            } else {
+                playSound('wrong');
+                emoji.innerText = "❌";
+                title.innerText = "Cuba lagi!";
+                title.style.color = "var(--danger)";
+            }
+
+            explain.innerHTML = explanation || "Fahami susunan S-V-O dengan meneliti jenis perkataan.";
+            overlay.style.display = "flex";
+        }
+
+        function closeFeedback() {
+            document.getElementById('feedbackOverlay').style.display = "none";
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuestionsList.length) {
+                loadQuestion();
+            } else {
+                handleTopicCompletion();
+            }
+        }
+
+        /*************************************************************
+         * 5. GANJARAN, LENCANA & PENUTUP
+         *************************************************************/
+        function handleTopicCompletion() {
+            playSound('levelUp');
+            
+            if (!gameState.earnedBadges.includes(currentTopic.badge)) {
+                gameState.earnedBadges.push(currentTopic.badge);
+            }
+
+            if (gameState.unlockedTopic === currentTopic.id && gameState.unlockedTopic < TOPICS_DATA.length) {
+                gameState.unlockedTopic++;
+            }
+
+            saveGameToStorage();
+
+            if (currentTopic.id === TOPICS_DATA.length) {
+                showGrandFinale();
+            } else {
+                document.getElementById('earnedBadgeIcon').innerText = currentTopic.badgeEmoji;
+                document.getElementById('earnedBadgeName').innerText = currentTopic.badge;
+                document.getElementById('topicDoneMessage').innerText = `Hebat! Anda menyelesaikan semua cabaran bagi ${currentTopic.title}.`;
+                
+                document.getElementById('statsBar').style.display = "none";
+                document.getElementById('progressContainer').style.display = "none";
+                showScreen('screenTopicDone');
+            }
+        }
+
+        function returnToMenu() {
+            renderMenuGrid();
+            showScreen('screenMenu');
+        }
+
+        function showGrandFinale() {
+            document.getElementById('statsBar').style.display = "none";
+            document.getElementById('progressContainer').style.display = "none";
+            
+            const wall = document.getElementById('finalBadgeWall');
+            wall.innerHTML = "";
+            
+            TOPICS_DATA.forEach(t => {
+                const div = document.createElement('div');
+                div.className = "badge-item earned";
+                div.innerHTML = `
+                    <div class="badge-icon">${t.badgeEmoji}</div>
+                    <div>${t.badge.split(' ')[1]}</div>
+                `;
+                wall.appendChild(div);
+            });
+
+            showScreen('screenGrandFinale');
+        }
+
+        window.onload = function() {
+            loadGameFromStorage();
+        };
+    </script>
+</body>
+</html>
