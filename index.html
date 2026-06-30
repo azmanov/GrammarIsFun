@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PowerBI - Kuiz Sistem S-V-O</title>
-    <!-- Google Fonts & Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka+One&display=swap" rel="stylesheet">
     
@@ -42,14 +41,12 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between text-slate-700 antialiased selection:background-none">
 
-    <!-- TOP BAR -->
     <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 px-4 py-3 shadow-sm">
         <div class="max-w-4xl mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-2 cursor-pointer" onclick="goHome()">
                 <span class="text-3xl">🚀</span>
                 <span class="font-header text-2xl tracking-wide bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">PowerBI</span>
             </div>
-            <!-- BGM Audio Control Button -->
             <button id="audio-toggle" onclick="toggleBGM()" class="p-2 rounded-full bg-slate-100 hover:bg-blue-100 text-slate-500 hover:text-blue-600 transition-colors flex items-center space-x-1">
                 <span id="audio-status-icon">🎵</span>
                 <span id="audio-text" class="text-xs font-bold px-1">Muzik: OFF</span>
@@ -57,23 +54,18 @@
         </div>
     </header>
 
-    <!-- MAIN CONTAINER -->
     <main class="flex-grow px-4 py-8 max-w-4xl w-full mx-auto">
         
-        <!-- SCREEN 1: DASHBOARD -->
         <div id="screen-dashboard" class="space-y-6">
             <div class="bg-white p-6 rounded-3xl card-shadow border border-slate-100 text-center space-y-3">
                 <h1 class="font-header text-3xl md:text-4xl text-slate-800">Kuasai Struktur Ayat BI!</h1>
                 <p class="text-lg text-slate-500 max-w-xl mx-auto">Selesaikan setiap topik mengikut turutan untuk membuka (unlock) cabaran yang seterusnya!</p>
             </div>
 
-            <!-- TOPICS GRID -->
             <div id="topics-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Dynamic injected via JS -->
-            </div>
+                </div>
         </div>
 
-        <!-- SCREEN 2: INFO & STUDY -->
         <div id="screen-info" class="hidden space-y-6">
             <button onclick="goHome()" class="inline-flex items-center space-x-2 text-sm font-bold text-blue-600 hover:text-blue-700 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 transition-transform active:scale-95">
                 <span>⬅️ Kembali ke Menu</span>
@@ -85,12 +77,9 @@
                     <h2 id="info-title" class="font-header text-2xl text-slate-800"></h2>
                 </div>
                 
-                <!-- Info Content -->
                 <div id="info-body" class="prose max-w-none text-slate-600 leading-relaxed text-base md:text-lg">
-                    <!-- Injected Content -->
-                </div>
+                    </div>
 
-                <!-- Action Button -->
                 <div class="pt-4 border-t border-slate-100 flex justify-end">
                     <button onclick="startQuiz()" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-header text-lg rounded-2xl shadow-md shadow-blue-200 transition-all active:scale-[0.98] flex items-center justify-center space-x-2">
                         <span>Mula Latihan Praktis</span>
@@ -100,9 +89,7 @@
             </div>
         </div>
 
-        <!-- SCREEN 3: ACTIVE QUIZ -->
         <div id="screen-quiz" class="hidden space-y-6">
-            <!-- Quiz Progress Meta -->
             <div class="bg-white/60 backdrop-blur-sm px-6 py-3 rounded-2xl border border-slate-200/60 flex items-center justify-between text-sm font-bold text-slate-500 shadow-sm">
                 <div class="flex items-center space-x-2">
                     <span>Soalan:</span>
@@ -114,28 +101,21 @@
                 </div>
             </div>
 
-            <!-- Progress Bar -->
             <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden shadow-inner">
                 <div id="quiz-progress-bar" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-full transition-all duration-300 w-0"></div>
             </div>
 
-            <!-- Topic Title Indicator -->
             <div class="text-center">
                 <span id="quiz-topic-title" class="text-sm font-bold tracking-wider text-indigo-500 bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100"></span>
             </div>
 
-            <!-- Question Box Card -->
             <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-slate-100 space-y-6 text-center">
                 <h3 id="quiz-question-text" class="text-xl md:text-2xl font-bold text-slate-800 leading-relaxed"></h3>
                 
-                <!-- CONTAINER 1: MULTIPLE CHOICE OPTIONS -->
                 <div id="quiz-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
-                    <!-- Options buttons injection -->
-                </div>
+                    </div>
 
-                <!-- CONTAINER 2: DRAG & DROP INTERFACE -->
                 <div id="quiz-drag-container" class="hidden space-y-6 pt-4">
-                    <!-- Drop Slots Target -->
                     <div class="grid grid-cols-3 gap-2">
                         <div class="flex flex-col space-y-1">
                             <span class="text-xs font-bold text-slate-400 tracking-wider">SUBJECT</span>
@@ -151,15 +131,12 @@
                         </div>
                     </div>
 
-                    <!-- Draggable Pool Tokens -->
                     <div class="p-4 bg-slate-50 border border-slate-200/60 rounded-2xl">
                         <p class="text-xs text-slate-400 mb-3 font-bold uppercase tracking-widest">Gendong blok perkataan ke petak di atas:</p>
                         <div id="drag-tokens-pool" class="flex flex-wrap items-center justify-center gap-3">
-                            <!-- Tokens injected here -->
-                        </div>
+                            </div>
                     </div>
 
-                    <!-- Drag Verification Action -->
                     <div class="pt-2">
                         <button id="btn-submit-drag" onclick="checkDragAnswer()" class="w-full py-4 bg-blue-600 text-white font-header rounded-xl shadow-md transition-all active:scale-95 disabled:opacity-40 disabled:pointer-events-none" disabled>
                             Sahkan Susunan Ayat
@@ -167,13 +144,11 @@
                     </div>
                 </div>
 
-                <!-- Explanation / Feedback Banner -->
                 <div id="quiz-feedback" class="hidden p-4 rounded-2xl border text-left space-y-1.5 animate-fade-in">
                     <h4 id="feedback-title" class="font-header text-lg"></h4>
                     <p id="feedback-desc" class="text-sm leading-relaxed"></p>
                 </div>
 
-                <!-- Footer Control Button -->
                 <div id="quiz-control-box" class="hidden pt-2 flex justify-end">
                     <button id="btn-next-question" onclick="nextQuestion()" class="w-full sm:w-auto px-8 py-3 bg-slate-800 hover:bg-slate-900 text-white font-header rounded-xl transition-all active:scale-95 flex items-center justify-center space-x-2">
                         <span>Seterusnya</span>
@@ -183,7 +158,6 @@
             </div>
         </div>
 
-        <!-- SCREEN 4: SUMMARY & RESULTS -->
         <div id="screen-result" class="hidden space-y-6 max-w-md mx-auto text-center">
             <div class="bg-white p-8 rounded-3xl card-shadow border border-slate-100 space-y-6">
                 <div class="space-y-2">
@@ -192,13 +166,11 @@
                     <p id="result-topic-name" class="text-sm font-bold text-indigo-500"></p>
                 </div>
 
-                <!-- Score ring stats representation -->
                 <div class="bg-slate-50 py-4 px-6 rounded-2xl border border-slate-100 inline-block mx-auto">
                     <span class="text-xs font-bold text-slate-400 tracking-wider block uppercase">Skor Pencapaian</span>
                     <span id="result-score" class="font-header text-4xl text-blue-600">0 / 0</span>
                 </div>
 
-                <!-- Badge Reward Box -->
                 <div id="badge-reward-box" class="p-4 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl flex items-center space-x-4 text-left">
                     <span id="badge-icon" class="text-4xl bg-white p-2.5 rounded-xl shadow-sm border border-amber-100"></span>
                     <div>
@@ -207,7 +179,17 @@
                     </div>
                 </div>
 
-                <!-- Navigation Controls -->
+                <div id="challenge-trigger-box" class="p-4 bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-2xl hidden flex-col space-y-3 text-center">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-600 tracking-wider block uppercase">🔥 MOD CABARAN PENGUKUHAN</span>
+                        <p class="text-xs text-slate-500 mt-1">Lulus cemerlang! Sedia untuk menguji kefahaman anda ke tahap maksima?</p>
+                    </div>
+                    <button onclick="startChallengeMode()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-header rounded-xl shadow-md transition-all active:scale-95 text-sm flex items-center justify-center space-x-2">
+                        <span>Mula Progressive Challenge (5 Stage)</span>
+                        <span>⚡</span>
+                    </button>
+                </div>
+
                 <div class="pt-2 space-y-2">
                     <button onclick="goHome()" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-header rounded-xl shadow-md shadow-blue-100 transition-all active:scale-95">
                         Kembali ke Utama
@@ -216,16 +198,58 @@
             </div>
         </div>
 
+        <div id="screen-challenge" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-3xl text-white text-center space-y-2 shadow-lg relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+                <span class="text-sm font-bold tracking-widest bg-white/20 px-3 py-1 rounded-full uppercase">Progressive Challenge</span>
+                <h2 id="challenge-stage-title" class="font-header text-3xl">Stage 1 daripada 5</h2>
+                <p id="challenge-stage-desc" class="text-sm opacity-90 max-w-md mx-auto"></p>
+                
+                <div class="flex justify-center items-center space-x-2 pt-2">
+                    <span id="dot-stage-1" class="w-3 h-3 rounded-full bg-white"></span>
+                    <span class="text-xs opacity-50">➔</span>
+                    <span id="dot-stage-2" class="w-3 h-3 rounded-full bg-white/40"></span>
+                    <span class="text-xs opacity-50">➔</span>
+                    <span id="dot-stage-3" class="w-3 h-3 rounded-full bg-white/40"></span>
+                    <span class="text-xs opacity-50">➔</span>
+                    <span id="dot-stage-4" class="w-3 h-3 rounded-full bg-white/40"></span>
+                    <span class="text-xs opacity-50">➔</span>
+                    <span id="dot-stage-5" class="w-3 h-3 rounded-full bg-white/40"></span>
+                </div>
+            </div>
+
+            <div class="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-2xl border border-slate-200/60 flex items-center justify-between text-sm font-bold text-slate-500 shadow-sm">
+                <div>Soalan Stage: <span id="challenge-q-text" class="text-indigo-600 font-header">1 / 5</span></div>
+                <div>Skor Stage: <span id="challenge-score-text" class="text-purple-600 font-header">0</span></div>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-slate-100 space-y-6 text-center">
+                <h3 id="challenge-question-body" class="text-xl md:text-2xl font-bold text-slate-800 leading-relaxed"></h3>
+                
+                <div id="challenge-options-box" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4"></div>
+
+                <div id="challenge-feedback-box" class="hidden p-4 rounded-2xl border text-left space-y-1.5 animate-fade-in">
+                    <h4 id="challenge-feedback-title" class="font-header text-lg"></h4>
+                    <p id="challenge-feedback-desc" class="text-sm leading-relaxed"></p>
+                </div>
+
+                <div id="challenge-control-box" class="hidden pt-2 flex justify-end">
+                    <button id="btn-challenge-next" onclick="nextChallengeQuestion()" class="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-header rounded-xl transition-all active:scale-95 flex items-center justify-center space-x-2">
+                        <span>Teruskan</span>
+                        <span>➡️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <!-- TRIVIA FOOTER BAR -->
     <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 font-medium">
         <div class="max-w-4xl mx-auto px-4">
             PowerBI © 2026 • Sistem Pembelajaran Digital Komponen Bahasa Inggeris Bersiri
         </div>
     </footer>
 
-    <!-- AUDIO DRIVER GENERATORS AND APPLICATION SCRIPT ENGINE -->
     <script>
         /*************************************************************
          * 1. BANK DATA SOALAN & SILIBUS LENGKAP
@@ -411,14 +435,12 @@
                     { q: "Manakah antara berikut ialah <b>Object Frasa</b>?", o: ["on the table", "milk", "a book", "football"], a: "on the table", exp: "'on the table' terdiri daripada beberapa perkataan membentuk frasa." },
                     { q: "Manakah antara berikut ialah <b>Object Tunggal</b>?", o: ["at school", "an apple", "with my father", "in the park"], a: "an apple", exp: "'an apple' ialah perkataan objek tunggal." },
                     { q: "Kenal pasti Object: Ahmad goes to school.", o: ["Ahmad", "goes", "to school"], a: "to school", exp: "'to school' ialah frasa arah tujuan yang bertindak sebagai objek pelengkap." },
-                    /* TWEAK 2: Menukarkan 'soup' kepada 'chicken soup' demi rasa lazat */
                     { q: "Lengkapkan dengan Object yang logik: My mother cooks ______.", o: ["chicken soup", "at school", "a pencil"], a: "chicken soup", exp: "Ibu memasak sup ayam ('chicken soup' ialah objek makanan)." },
                     { q: "Kenal pasti Object: The boy kicks the ball.", o: ["The boy", "kicks", "the ball"], a: "the ball", exp: "'the ball' ialah objek benda yang menerima kesan tendangan." },
                     { q: "Pilih Object frasa yang bermaksud 'bersama bapa saya':", o: ["with my father", "at school", "on the table"], a: "with my father", exp: "'with my father' bermaksud bersama bapa saya." },
                     { q: "Lengkapkan ayat: We study English ______.", o: ["at school", "milk", "an apple"], a: "at school", exp: "Kami belajar Bahasa Inggeris di sekolah (Object Frasa)." },
                     { q: "Kenal pasti Object: She puts the keys on the table.", o: ["She", "keys", "on the table"], a: "on the table", exp: "'on the table' di akhir ayat melengkapkan lokasi kunci diletakkan." },
                     { q: "Lengkapkan dengan Object Tunggal: The girl draws ______.", o: ["a picture", "in the park", "at school"], a: "a picture", exp: "'a picture' (gambar) ialah hasil lukisan objek tunggal." },
-                    /* TWEAK 1: Menukar penerangan maklum balas 'milk' mengikut kehendak spesifik fail tugasan */
                     { q: "Kenal pasti Object: The baby drinks milk.", o: ["The baby", "drinks", "milk"], a: "milk", exp: "milk merujuk kepada susu." },
                     { q: "Pilih Object yang sesuai: He eats ______.", o: ["a burger", "a pencil", "a table"], a: "a burger", exp: "'a burger' ialah makanan yang logik untuk dimakan." },
                     { q: "Kenal pasti Object Frasa: The kids swim in the pool.", o: ["The kids", "swim", "in the pool"], a: "in the pool", exp: "'in the pool' ialah frasa tempat." },
@@ -445,7 +467,6 @@
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "Ali", tokenV: "writes", tokenO: "an essay", exp: "Susunan yang betul: Ali (S) + writes (V) + an essay (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "The cat", tokenV: "drinks", tokenO: "milk", exp: "Susunan yang betul: The cat (S) + drinks (V) + milk (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "We", tokenV: "visit", tokenO: "the zoo", exp: "Susunan yang betul: We (S) + visit (V) + the zoo (O)." },
-                    /* TWEAK 2 (Drag & Drop): Menukarkan komponen 'soup' kepada 'chicken soup' */
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "My mother", tokenV: "cooks", tokenO: "chicken soup", exp: "Susunan yang betul: My mother (S) + cooks (V) + chicken soup (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "He", tokenV: "rides", tokenO: "a bicycle", exp: "Susunan yang betul: He (S) + rides (V) + a bicycle (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "The teachers", tokenV: "teach", tokenO: "at school", exp: "Susunan yang betul: The teachers (S) + teach (V) + at school (O)." },
@@ -482,6 +503,17 @@
 
         // Drag and drop memory buffer object
         let dragSelections = { S: null, V: null, O: null };
+
+        // MODULAR DATA BUFFER FOR PROGRESSIVE CHALLENGE MODE
+        let challengeState = {
+            active: false,
+            stage: 1,
+            maxStages: 5,
+            questions: [],
+            currentIndex: 0,
+            stageScore: 0,
+            bonusPoints: 0
+        };
 
         /*************************************************************
          * 3. INITIALIZATION & UI ROUTING ENGINE
@@ -533,6 +565,7 @@
         }
 
         function goHome() {
+            challengeState.active = false;
             hideAllScreens();
             renderDashboardTopics();
             document.getElementById('screen-dashboard').classList.remove('hidden');
@@ -574,6 +607,7 @@
             document.getElementById('screen-info').classList.add('hidden');
             document.getElementById('screen-quiz').classList.add('hidden');
             document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-challenge').classList.add('hidden');
         }
 
         /*************************************************************
@@ -744,7 +778,7 @@
         }
 
         /*************************************************************
-         * 6. FEEDBACK & NAVIGATION PROGRESS WITH TOPIC UNLOCK
+         * 5. FEEDBACK & NAVIGATION PROGRESS WITH TOPIC UNLOCK
          *************************************************************/
         function triggerFeedback(isSuccess, title, msg) {
             const box = document.getElementById('quiz-feedback');
@@ -783,11 +817,13 @@
             
             const badgeIconNode = document.getElementById('badge-icon');
             const badgeTitleNode = document.getElementById('badge-title');
+            const challengeBox = document.getElementById('challenge-trigger-box');
 
             if (score >= passThreshold) {
                 document.getElementById('result-emoji').innerText = "🏆";
                 badgeIconNode.innerText = currentTopic.badgeEmoji;
                 badgeTitleNode.innerText = currentTopic.badge;
+                challengeBox.classList.remove('hidden'); // Show challenge link only if passed
 
                 if (currentTopic.id === unlockedProgress && unlockedProgress < TOPICS_DATA.length) {
                     unlockedProgress = currentTopic.id + 1;
@@ -797,9 +833,201 @@
                 document.getElementById('result-emoji').innerText = "💪";
                 badgeIconNode.innerText = "⏳";
                 badgeTitleNode.innerText = "Sijil Penyertaan Latihan (Capai 70% Untuk Unlock Topik Baru)";
+                challengeBox.classList.add('hidden');
             }
 
             document.getElementById('screen-result').classList.remove('hidden');
+        }
+
+        /*************************************************************
+         * NEW MODULE: 6. PROGRESSIVE CHALLENGE MODE ENGINE
+         *************************************************************/
+        function startChallengeMode() {
+            challengeState.active = true;
+            challengeState.stage = 1;
+            challengeState.bonusPoints = 0;
+            buildChallengeStageQuestions();
+        }
+
+        function buildChallengeStageQuestions() {
+            challengeState.currentIndex = 0;
+            challengeState.stageScore = 0;
+            
+            document.getElementById('challenge-feedback-box').classList.add('hidden');
+            document.getElementById('challenge-control-box').classList.add('hidden');
+
+            // Set dynamic header content and indicator dots style
+            document.getElementById('challenge-stage-title').innerText = `Stage ${challengeState.stage} daripada 5`;
+            
+            for (let i = 1; i <= 5; i++) {
+                const dot = document.getElementById(`dot-stage-${i}`);
+                if (i < challengeState.stage) {
+                    dot.className = "w-3 h-3 rounded-full bg-emerald-400"; // Completed stages
+                } else if (i === challengeState.stage) {
+                    dot.className = "w-3 h-3 rounded-full bg-white scale-125 shadow"; // Current active stage
+                } else {
+                    dot.className = "w-3 h-3 rounded-full bg-white/40"; // Upcoming locked stages
+                }
+            }
+
+            let descText = "";
+            let pool = [];
+
+            // Implementation of Natural Progression Engine
+            switch(challengeState.stage) {
+                case 1:
+                    descText = "✨ Tahap Asas: 5 Soalan Mudah Pilihan Tunggal.";
+                    pool = currentTopic.questions.filter(q => !q.type || q.type !== 'drag');
+                    break;
+                case 2:
+                    descText = "⚡ Tahap Sederhana: Struktur soalan sedikit lebih panjang.";
+                    pool = currentTopic.questions.filter(q => q.q.length > 30);
+                    if(pool.length < 5) pool = [...currentTopic.questions];
+                    break;
+                case 3:
+                    descText = "🧩 Tahap Campuran: Kombinasi soalan drag & drop berserta pilihan objektif.";
+                    pool = [...currentTopic.questions];
+                    break;
+                case 4:
+                    descText = "🔥 Cabaran Mencabar: Pilihan jawapan yang memerlukan penelitian tinggi.";
+                    pool = [...currentTopic.questions];
+                    break;
+                case 5:
+                    descText = "👑 Cabaran Akhir: Selesaikan ujian komprehensif bagi membuktikan penguasaan anda!";
+                    pool = [...currentTopic.questions];
+                    break;
+            }
+
+            document.getElementById('challenge-stage-desc').innerText = descText;
+
+            // Gather 5 distinct questions
+            shuffleArray(pool);
+            challengeState.questions = pool.slice(0, 5);
+
+            hideAllScreens();
+            document.getElementById('screen-challenge').classList.remove('hidden');
+            loadChallengeQuestion();
+        }
+
+        function loadChallengeQuestion() {
+            document.getElementById('challenge-feedback-box').classList.add('hidden');
+            document.getElementById('challenge-control-box').classList.add('hidden');
+
+            const qObj = challengeState.questions[challengeState.currentIndex];
+            document.getElementById('challenge-q-text').innerText = `${challengeState.currentIndex + 1} / 5`;
+            document.getElementById('challenge-score-text').innerText = challengeState.stageScore;
+
+            const qBody = document.getElementById('challenge-question-body');
+            const optionsBox = document.getElementById('challenge-options-box');
+            optionsBox.innerHTML = '';
+
+            if (qObj.type === "drag") {
+                qBody.innerHTML = `${qObj.q}<br><span class="text-xs font-bold text-indigo-500 uppercase tracking-widest">[Format Objektif Cabaran]: Pilih susunan S-V-O yang betul</span>`;
+                
+                // For Challenge compatibility, present drag queries into advanced multiple choice structure seamlessly
+                let standardAns = `${qObj.tokenS} ${qObj.tokenV} ${qObj.tokenO}`;
+                let distractors = [
+                    `${qObj.tokenV} ${qObj.tokenS} ${qObj.tokenO}`,
+                    `${qObj.tokenO} ${qObj.tokenV} ${qObj.tokenS}`,
+                    standardAns
+                ];
+                shuffleArray(distractors);
+
+                distractors.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.className = "p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold rounded-2xl transition-all shadow-sm text-sm text-center cursor-pointer";
+                    btn.innerText = option;
+                    btn.onclick = () => verifyChallengeAnswer(btn, option, standardAns, qObj.exp);
+                    optionsBox.appendChild(btn);
+                });
+            } else {
+                qBody.innerHTML = qObj.q;
+                qObj.o.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.className = "p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold rounded-2xl transition-all shadow-sm text-sm text-center cursor-pointer";
+                    btn.innerText = option;
+                    btn.onclick = () => verifyChallengeAnswer(btn, option, qObj.a, qObj.exp);
+                    optionsBox.appendChild(btn);
+                });
+            }
+        }
+
+        function verifyChallengeAnswer(btnNode, chosen, correct, exp) {
+            const children = document.getElementById('challenge-options-box').querySelectorAll('button');
+            children.forEach(b => b.disabled = true);
+
+            const isCorrect = (chosen === correct);
+            const feedbackBox = document.getElementById('challenge-feedback-box');
+            const fTitle = document.getElementById('challenge-feedback-title');
+            const fDesc = document.getElementById('challenge-feedback-desc');
+
+            feedbackBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                challengeState.stageScore += 20; // 5 questions * 20 = 100 points max per stage
+                btnNode.className = "p-4 bg-emerald-50 border-2 border-emerald-500 text-emerald-800 font-bold rounded-2xl text-sm text-center";
+                feedbackBox.className = "p-4 rounded-2xl border text-left space-y-1.5 bg-emerald-50 border-emerald-200 text-emerald-900";
+                fTitle.innerText = "Tepat Sekali! 🌟";
+                playTone(587.33, 0.15);
+            } else {
+                btnNode.className = "p-4 bg-rose-50 border-2 border-rose-400 text-rose-700 font-bold rounded-2xl text-sm text-center";
+                feedbackBox.className = "p-4 rounded-2xl border text-left space-y-1.5 bg-amber-50 border-amber-200 text-amber-900";
+                fTitle.innerText = "Kurang Tepat Untuk Stage Ini 💡";
+                children.forEach(b => {
+                    if (b.innerText === correct) b.className = "p-4 bg-emerald-50 border-2 border-emerald-400 text-emerald-700 font-bold rounded-2xl text-sm text-center";
+                });
+                playTone(293.66, 0.25);
+            }
+
+            fDesc.innerHTML = exp;
+            document.getElementById('challenge-score-text').innerText = challengeState.stageScore;
+            document.getElementById('challenge-control-box').classList.remove('hidden');
+        }
+
+        function nextChallengeQuestion() {
+            challengeState.currentIndex++;
+            if (challengeState.currentIndex < 5) {
+                loadChallengeQuestion();
+            } else {
+                evaluateChallengeStageResult();
+            }
+        }
+
+        function evaluateChallengeStageResult() {
+            // Passing criteria: Must get at least 60/100 (3 correct questions out of 5)
+            if (challengeState.stageScore >= 60) {
+                challengeState.bonusPoints += challengeState.stageScore;
+                
+                if (challengeState.stage < challengeState.maxStages) {
+                    // Show immediate celebration modal & advance stage
+                    alert(`🎉 TAHNIAH!\nAnda Berjaya Melepasi Stage ${challengeState.stage}!\nMata Bonus Terkumpul: +${challengeState.bonusPoints}\n\nKlik OK untuk mara ke Stage seterusnya.`);
+                    challengeState.stage++;
+                    buildChallengeStageQuestions();
+                } else {
+                    // All stages completed perfectly! Display special victory skrin
+                    hideAllScreens();
+                    const summaryScreen = document.getElementById('screen-result');
+                    
+                    document.getElementById('result-emoji').innerText = "👑👑👑";
+                    document.getElementById('result-topic-name').innerText = `MOD CABARAN PENGUKUHAN: ${currentTopic.title.toUpperCase()}`;
+                    document.getElementById('result-score').innerText = `REKOD SEMPURNA`;
+                    
+                    document.getElementById('badge-icon').innerText = "💎";
+                    document.getElementById('badge-title').innerText = `Lencana Khas Berprestasi Tinggi: ${currentTopic.badge} (ULTRA MASTER)`;
+                    
+                    document.getElementById('challenge-trigger-box').innerHTML = `
+                        <div class="p-2 bg-emerald-100 text-emerald-800 rounded-xl text-xs font-bold">
+                            🏆 SEMUA STAGE SELESAI! Anda mendapat total bonus +${challengeState.bonusPoints} mata.
+                        </div>
+                    `;
+                    document.getElementById('challenge-trigger-box').classList.remove('hidden');
+                    summaryScreen.classList.remove('hidden');
+                }
+            } else {
+                // Failed the current stage, prompt replay without damaging main topic sequence
+                alert(`❌ Peringkat Gagal!\nAnda mendapat ${challengeState.stageScore} markah (Lulus: min 60 markah).\n\nJangan kecewa, cuba semula Stage ${challengeState.stage} sekarang!`);
+                buildChallengeStageQuestions();
+            }
         }
 
         /*************************************************************
@@ -821,7 +1049,7 @@
             if (isBGMPlaying) {
                 statusIcon.innerText = "🔊";
                 textNode.innerText = "Muzik: ON";
-                if (!document.getElementById('screen-quiz').classList.contains('hidden')) {
+                if (!document.getElementById('screen-quiz').classList.contains('hidden') || !document.getElementById('screen-challenge').classList.contains('hidden')) {
                     startBGM();
                 }
             } else {
