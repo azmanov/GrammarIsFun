@@ -238,12 +238,60 @@
                 badge: "🥇 Subject Hero",
                 badgeEmoji: "🥇",
                 infoHtml: `
-                    <p><b>Subject</b> ialah kepala atau permulaan sesuatu ayat. Tanpa Subject, kita tidak tahu ayat itu bercakap tentang siapa atau apa benda.</p><br>
-                    <p>Subject terbahagi kepada dua kategori utama:</p>
-                    <ul>
-                        <li><b>Pronouns (Kata Ganti Nama):</b> I, You, We, They, He, She, It.</li>
-                        <li><b>Nouns (Kata Nama):</b> Singular (Satu) seperti <i>Ali, The cat, My father</i> ATAU Plural (Banyak) seperti <i>The boys, My parents</i>.</li>
-                    </ul>
+                    <p class="mb-4"><b>Subject</b> ialah kepala atau permulaan sesuatu ayat. Tanpa Subject, kita tidak tahu ayat itu bercakap tentang siapa atau apa benda.</p>
+                    
+                    <!-- KEMAS KINI JADUAL KOMPONEN SUBJECT (RUJUKAN: JADUAL SUBJECT.PNG) -->
+                    <div class="overflow-x-auto my-4 border border-slate-300 rounded-xl shadow-sm">
+                        <table class="min-w-full border-collapse text-left text-sm md:text-base">
+                            <thead>
+                                <tr class="bg-slate-800 text-white font-header">
+                                    <th class="p-3 text-center border-b border-slate-300" colspan="3">Ringkasan Komponen Subject</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <!-- SECTION PRONOUNS -->
+                                <tr class="bg-blue-50/40">
+                                    <td class="p-3 font-bold text-slate-800 border-r border-slate-200 align-top w-28">PRONOUNS</td>
+                                    <td class="p-3 font-medium text-blue-900 bg-blue-100/60 border-r border-slate-200 leading-relaxed">
+                                        I<br>You<br>We<br>They
+                                    </td>
+                                    <td class="p-3 bg-blue-100/60 align-middle">
+                                        <span class="font-bold text-blue-700 block">Plural Pronouns</span>
+                                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide">Terdapat 7 Pronouns<br>Ada 4 Plural Pronouns</span>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-3 font-bold text-slate-800 border-r border-slate-200 align-top"></td>
+                                    <td class="p-3 font-medium text-slate-800 border-r border-slate-200 leading-relaxed">
+                                        He<br>She<br>It
+                                    </td>
+                                    <td class="p-3 align-middle">
+                                        <span class="font-bold text-slate-700 block">Singular Pronouns</span>
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">3 Singular Pronouns</span>
+                                    </td>
+                                </tr>
+                                <!-- SECTION NOUNS -->
+                                <tr class="bg-blue-50/40 border-t-2 border-slate-300">
+                                    <td class="p-3 font-bold text-slate-800 border-r border-slate-200 align-top">NOUNS</td>
+                                    <td class="p-3 font-medium text-blue-900 bg-blue-100/60 border-r border-slate-200 leading-relaxed">
+                                        Umar and his friends<br>The zebras<br>The fruits<br>The pencils<br>My father and my brother
+                                    </td>
+                                    <td class="p-3 bg-blue-100/60 align-middle">
+                                        <span class="font-bold text-blue-700 block">Plural Nouns</span>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="p-3 font-bold text-slate-800 border-r border-slate-200 align-top"></td>
+                                    <td class="p-3 font-medium text-slate-800 border-r border-slate-200 leading-relaxed">
+                                        Aisyah<br>Si Puteh<br>The computer<br>A bread<br>My grandfather
+                                    </td>
+                                    <td class="p-3 align-middle">
+                                        <span class="font-bold text-slate-700 block">Singular Nouns</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 `,
                 questions: [
                     { q: "Kenal pasti Subject dalam ayat ini: She plays netball.", o: ["She", "plays", "netball"], a: "She", exp: "'She' ialah Subject (kata ganti nama bagi perempuan)." },
@@ -251,7 +299,7 @@
                     { q: "Antara berikut, yang manakah merupakan <b>Plural Subject</b>?", o: ["The boys", "A girl", "He", "Abu"], a: "The boys", exp: "'The boys' bermaksud budak-budak lelaki itu (lebih dari seorang)." },
                     { q: "Antara berikut, yang manakah merupakan <b>Singular Subject</b>?", o: ["We", "They", "My mother", "The birds"], a: "My mother", exp: "'My mother' bermaksud emak saya (seorang sahaja)." },
                     { q: "Pilih kata ganti nama (Pronoun) yang sesuai untuk 'Siti dan Sarah':", o: ["We", "They", "He", "She"], a: "They", exp: "Mereka berkumpulan, jadi kita gunakan 'They' (Mereka)." },
-                    { q: "Pilih kata ganti nama yang sesuai untuk seekor anjing 'The dog':", o: ["It", "He", "She", "I"], a: "It", exp: "Untuk haiwan tunggal atau objek biasa, gunakan 'It'." },
+                    { q: "Pilih kata ganti nama yang sesuai untuk sebuah komputer 'The computer':", o: ["It", "He", "She", "I"], a: "It", exp: "Untuk objek bukan hidup atau haiwan tunggal, gunakan 'It'." },
                     { q: "Kenal pasti jenis bagi Subject ini: <b>My parents</b>", o: ["Singular Noun", "Plural Noun", "Pronoun"], a: "Plural Noun", exp: "'Parents' bermaksud ibu bapa (dua orang), maka ia adalah Plural Noun." },
                     { q: "Kenal pasti jenis bagi Subject ini: <b>He</b>", o: ["Singular Noun", "Plural Noun", "Pronoun"], a: "Pronoun", exp: "'He' ialah Pronoun (Kata ganti nama untuk lelaki tunggal)." },
                     { q: "Lengkapkan kepala ayat yang sesuai: ______ is my best friend.", o: ["Ali", "They", "We", "The dogs"], a: "Ali", exp: "Sebab ayat menggunakan kata kerja tunggal 'is', 'Ali' (Singular) paling tepat." },
@@ -301,7 +349,7 @@
                     { q: "Kenal pasti Verb: We have two cute rabbits.", o: ["We", "have", "rabbits"], a: "have", exp: "'have' menunjukkan pemilikan dan bertindak sebagai Have Verb." },
                     { q: "Yang manakah perkataan aksi melompat?", o: ["jump", "sleep", "read", "am"], a: "jump", exp: "'jump' bermaksud melompat." },
                     { q: "Kenal pasti Verb: The students listen to the teacher.", o: ["students", "listen", "teacher"], a: "listen", exp: "'listen' (mendengar) ialah perbuatan." },
-                    { q: "Pilih Be Verb tunggal yang dipasangkan khas untuk subjek 'I':", o: ["is", "are", "am", "does"], a: "am", exp: "Subjek 'I' sentiasa berpasangan dengan 'am'." },
+                    { p: "Pilih Be Verb tunggal yang dipasangkan khas untuk subjek 'I':", o: ["is", "are", "am", "does"], a: "am", exp: "Subjek 'I' sentiasa berpasangan dengan 'am'." },
                     { q: "Kenal pasti Verb: The birds fly high.", o: ["The birds", "fly", "high"], a: "fly", exp: "'fly' (terbang) ialah perbuatan burung." },
                     { q: "Pilih Go Verb dalam senarai ini:", o: ["go", "has", "am", "run"], a: "go", exp: "'go' ialah sebahagian daripada Go Verb." },
                     { q: "Kenal pasti Verb: She sleeps early.", o: ["She", "sleeps", "early"], a: "sleeps", exp: "'sleeps' (tidur) ialah kata kerja." },
@@ -492,7 +540,7 @@
         }
 
         function viewTopicInfo(topicId) {
-            if (topicId > unlockedProgress) return; // Guard rails protection
+            if (topicId > unlockedProgress) return; 
 
             currentTopic = TOPICS_DATA.find(t => t.id === topicId);
             if (!currentTopic) return;
@@ -517,7 +565,6 @@
             document.getElementById('screen-quiz').classList.remove('hidden');
             loadQuestion();
 
-            // Auto-trigger soft background music if active
             if (isBGMPlaying) {
                 startBGM();
             }
@@ -580,7 +627,7 @@
                 score += 10;
                 selectedButtonNode.className = "p-4 bg-emerald-50 border-2 border-emerald-500 text-emerald-800 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
                 triggerFeedback(true, "Tahniah! Betul 🎉", explanationStr);
-                playTone(587.33, 0.15); // Musical chime D5
+                playTone(587.33, 0.15); 
             } else {
                 selectedButtonNode.className = "p-4 bg-rose-50 border-2 border-rose-400 text-rose-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
                 allOptionsButtons.forEach(btn => {
@@ -589,7 +636,7 @@
                     }
                 });
                 triggerFeedback(false, "Alamak, Kurang Tepat 💡", explanationStr);
-                playTone(293.66, 0.25); // Musical flat tone D4
+                playTone(293.66, 0.25); 
             }
 
             document.getElementById('quiz-score-text').innerText = score;
@@ -728,12 +775,12 @@
         }
 
         function showResultsSummary() {
-            stopBGM(); // Stop loop background track
+            stopBGM(); 
             hideAllScreens();
             
             const totalQ = currentQuestionsList.length;
             const maxScore = totalQ * 10;
-            const passThreshold = maxScore * 0.7; // 70% passing criteria to unlock next level
+            const passThreshold = maxScore * 0.7; 
             
             document.getElementById('result-topic-name').innerText = currentTopic.title.toUpperCase();
             document.getElementById('result-score').innerText = `${score} / ${maxScore}`;
@@ -746,7 +793,6 @@
                 badgeIconNode.innerText = currentTopic.badgeEmoji;
                 badgeTitleNode.innerText = currentTopic.badge;
 
-                // Evaluate and increment progress parameters mapping constraints
                 if (currentTopic.id === unlockedProgress && unlockedProgress < TOPICS_DATA.length) {
                     unlockedProgress = currentTopic.id + 1;
                     localStorage.setItem('powerbi_unlocked_progress', unlockedProgress);
@@ -779,7 +825,6 @@
             if (isBGMPlaying) {
                 statusIcon.innerText = "🔊";
                 textNode.innerText = "Muzik: ON";
-                // Only start loop if currently residing inside the quiz gameplay scene
                 if (!document.getElementById('screen-quiz').classList.contains('hidden')) {
                     startBGM();
                 }
@@ -811,31 +856,27 @@
             }
         }
 
-        // Synthesize Soft Background Lofi-Style Arpeggio Melodies loops
         function startBGM() {
             if (!audioContext || bgmIntervalId) return;
             
-            // Chord Progression Sequencer Array: C-major, F-major, G-major, Am
             const notesSequence = [
-                261.63, 329.63, 392.00, 523.25, // C4, E4, G4, C5
-                349.23, 440.00, 523.25, 698.46, // F4, A4, C5, F5
-                392.00, 493.88, 587.33, 783.99, // G4, B4, D5, G5
-                440.00, 523.25, 659.25, 880.00  // A4, C5, E5, A5
+                261.63, 329.63, 392.00, 523.25, 
+                349.23, 440.00, 523.25, 698.46, 
+                392.00, 493.88, 587.33, 783.99, 
+                440.00, 523.25, 659.25, 880.00  
             ];
             
             let noteIdx = 0;
             bgmIntervalId = setInterval(() => {
                 if (!isBGMPlaying) return;
                 
-                // Synthesis execution loop rules parameters setup configurations
                 try {
                     const osc = audioContext.createOscillator();
                     const gain = audioContext.createGain();
                     
-                    osc.type = 'triangle'; // Soft flute/lofi timber texture profile
+                    osc.type = 'triangle'; 
                     osc.frequency.setValueAtTime(notesSequence[noteIdx], audioContext.currentTime);
                     
-                    // Main gentle low volume ambient metrics setup
                     gain.gain.setValueAtTime(0.015, audioContext.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.45);
                     
@@ -847,7 +888,7 @@
                 } catch(err){}
 
                 noteIdx = (noteIdx + 1) % notesSequence.length;
-            }, 600); // Relaxed melodic rhythmic pacing tempo pulse
+            }, 600); 
         }
 
         function stopBGM() {
