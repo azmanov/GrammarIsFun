@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PowerBI - Power Belajar Inggeris</title>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --primary-dark: #357ABD;
+            --secondary: #FFD166;
+            --success: #06D6A0;
+            --danger: #EF476F;
+            --neutral-dark: #2C3E50;
+            --neutral-light: #F8F9FA;
+            --font-family: 'Comic Sans MS', 'Chalkboard SE', 'Ubuntu', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #E0F2FE, #E0FAFF);
+            color: var(--neutral-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            border: 4px solid #BEE3F8;
+            padding: 20px;
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #E2E8F0;
+            padding-bottom: 10px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-shadow: 1px 1px 0px var(--secondary);
+        }
+
+        .audio-toggle {
+            background: #EDF2F7;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .audio-toggle:active {
+            transform: scale(0.9);
+        }
+
+        .stats-bar {
+            background: #EDF2F7;
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #E2E8F0;
+            border-radius: 10px;
+            height: 14px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--success);
+            width: 0%;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            flex-grow: 1;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 22px;
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        p.desc {
+            font-size: 15px;
+            line-height: 1.5;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #4A5568;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 var(--primary-dark);
+            transition: all 0.1s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px auto;
+            width: 80%;
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            box-shadow: 0 5px 0 #05B386;
+        }
+        .btn-success:active {
+            box-shadow: 0 1px 0 #05B386;
+        }
+
+        /* Menu Styles */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .menu-card {
+            background: #F7FAFC;
+            border: 3px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-card.unlocked {
+            border-color: var(--primary);
+            background: #EBF8FF;
+        }
+
+        .menu-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .menu-card .icon {
+            font-size: 28px;
+            margin-right: 15px;
+        }
+
+        .menu-card .details {
+            flex-grow: 1;
+        }
+
+        .menu-card h3 {
+            font-size: 16px;
+            color: var(--neutral-dark);
+        }
+
+        .badge-pill {
+            background: var(--secondary);
+            color: var(--neutral-dark);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Intro Presentation Styles */
+        .svo-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .svo-card {
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        .svo-s { background-color: #EF476F; }
+        .svo-v { background-color: #FFD166; color: #2C3E50; }
+        .svo-o { background-color: #06D6A0; }
+
+        .explanation-panel {
+            background: #FFFBEB;
+            border: 2px solid #FCD34D;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        /* Question / Activity Area */
+        .question-box {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #EDF2F7;
+            border-radius: 16px;
+            border: 2px solid #CBD5E0;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 3px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 15px 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s;
+            box-shadow: 0 4px 0 #E2E8F0;
+            text-align: center;
+        }
+
+        .option-btn:active:not(.disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #E2E8F0;
+        }
+
+        /* Drag and Drop Sentence Builder Styles */
+        .drag-slots {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .slot {
+            flex: 1;
+            height: 55px;
+            border: 3px dashed #CBD5E0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F7FAFC;
+            font-weight: bold;
+            font-size: 15px;
+            position: relative;
+        }
+
+        .slot-label {
+            position: absolute;
+            top: -18px;
+            font-size: 10px;
+            background: #718096;
+            color: white;
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+
+        .drag-tokens {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .token {
+            background: var(--secondary);
+            border: 2px solid #F6AD55;
+            padding: 10px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #F6AD55;
+        }
+
+        .token.used {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Feedback Modal overlay style inside container */
+        .feedback-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            z-index: 10;
+            animation: fadeIn 0.2s;
+        }
+
+        .feedback-emoji {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .feedback-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feedback-explain {
+            font-size: 15px;
+            color: #4A5568;
+            margin-bottom: 20px;
+            background: #EDF2F7;
+            padding: 12px;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary);
+            width: 100%;
+        }
+
+        /* Certificate / Badge screen */
+        .cert-card {
+            border: 8px double var(--secondary);
+            background: #FFFDF5;
+            padding: 25px 15px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 15px 0;
+            box-shadow: inset 0 0 20px rgba(212,163,89,0.1);
+        }
+
+        .badge-wall {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            font-weight: bold;
+            width: 70px;
+        }
+
+        .badge-icon {
+            font-size: 35px;
+            background: #EDF2F7;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            border: 2px solid #CBD5E0;
+        }
+
+        .badge-item.earned .badge-icon {
+            background: #FEFCBF;
+            border-color: var(--secondary);
+        }
+
+        @media (max-width: 480px) {
+            .options-container { grid-template-columns: 1fr; }
+            .logo { font-size: 20px; }
+            h2 { font-size: 18px; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <header>
+            <div class="logo">🚀 PowerBI</div>
+            <button class="audio-toggle" id="audioBtn" onclick="toggleAudio()">🔊</button>
+        </header>
+
+        <div class="stats-bar" id="statsBar" style="display: none;">
+            <div id="statQuestion">Soalan: -</div>
+            <div id="statScore">Mata: 0</div>
+        </div>
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="feedback-overlay" id="feedbackOverlay">
+            <div class="feedback-emoji" id="feedbackEmoji">🎉</div>
+            <div class="feedback-title" id="feedbackTitle">Betul!</div>
+            <div class="feedback-explain" id="feedbackExplain">Terangan ringkas.</div>
+            <button class="btn btn-success" id="feedbackBtn" onclick="closeFeedback()" style="width: auto; min-width: 150px;">Seterusnya ➔</button>
+        </div>
+
+        <div class="screen active" id="screenMenu">
+            <h2>Selamat Datang ke PowerBI!</h2>
+            <p class="desc">Kuasai asas Grammar Bahasa Inggeris dengan mudah dan gembira! Sesuai untuk murid pintar berumur 7-9 tahun.</p>
+            
+            <div style="text-align: center; margin-bottom: 15px;">
+                <button class="btn btn-success" onclick="startIntro()" style="width: 90%;">Mula Belajar Sekarang!</button>
+            </div>
+
+            <h3 style="font-size: 16px; margin: 10px 0 5px 0;">Peta Pembelajaran Anda:</h3>
+            <div class="menu-grid" id="menuGrid">
+                </div>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="btn" onclick="resetGame()" style="background:#A0AEC0; box-shadow: 0 5px 0 #718096; font-size:12px; padding: 6px 12px; width:auto;">Padam Rekod Kemajuan</button>
+            </div>
+        </div>
+
+        <div class="screen" id="screenIntro">
+            <h2>Pengenalan: Struktur Ayat S-V-O</h2>
+            <p class="desc">Setiap ayat lengkap dalam Bahasa Inggeris dibina menggunakan struktur asas yang sangat mudah ini:</p>
+            
+            <div class="svo-box">
+                <div class="svo-card svo-s">Subject<br><small>(Pelaku)</small></div>
+                <div class="svo-card svo-v">Verb<br><small>(Kata Kerja)</small></div>
+                <div class="svo-card svo-o">Object<br><small>(Penyambut)</small></div>
+            </div>
+
+            <div class="explanation-panel">
+                <strong>Contoh Ayat Nyata:</strong><br>
+                <span style="font-size: 18px; color: var(--primary-dark); font-weight: bold;">Ahmad goes to school.</span>
+                <hr style="margin: 8px 0; border: none; border-top: 1px dashed #CBD5E0;">
+                • <b style="color:#EF476F">Subject:</b> Ahmad (Siapa?)<br>
+                • <b style="color:#B7791F">Verb:</b> goes (Buat apa?)<br>
+                • <b style="color:#06D6A0">Object:</b> to school (Di mana / Apa?)
+            </div>
+
+            <p class="desc" style="font-weight: bold; color: var(--primary-dark);">Jom kita pelajari komponen-komponen ini satu demi satu untuk jadi Power!</p>
+            <button class="btn btn-success" onclick="finishIntro()">Seterusnya: Topik 1 ➔</button>
+        </div>
+
+        <div class="screen" id="screenTopicInfo">
+            <h2 id="infoTitle">Nama Topik</h2>
+            <div class="explanation-panel" id="infoContent">
+                </div>
+            <button class="btn btn-success" onclick="startTopicActivity()">Mula Aktiviti Praktis ➔</button>
+        </div>
+
+        <div class="screen" id="screenActivity">
+            <h2 id="activityTopicTitle">Topik X</h2>
+            <div class="question-box" id="questionBox">Soalan akan muncul di sini...</div>
+            
+            <div class="options-container" id="optionsContainer">
+                </div>
+
+            <div id="dragDropContainer" style="display: none;">
+                <div class="drag-slots" id="dragSlots">
+                    </div>
+                <div class="drag-tokens" id="dragTokens">
+                    </div>
+                <div style="text-align: center;">
+                    <button class="btn btn-success" id="btnCheckSentence" onclick="checkDraggedSentence()" style="width: 70%; display:none;">Semak Jawapan 🧐</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen" id="screenTopicDone">
+            <h2>🏆 Topik Selesai!</h2>
+            <p class="desc" id="topicDoneMessage">Hebat sekali! Anda telah berjaya menguasai topik ini dengan cemerlang.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div id="earnedBadgeIcon" style="font-size: 70px; animation: bounce 1s infinite alternate;">⭐</div>
+                <h3 id="earnedBadgeName" style="color: #B7791F; margin-top: 10px;">Lencana Super</h3>
+            </div>
+
+            <button class="btn btn-success" onclick="returnToMenu()">Kembali ke Menu Utama ➔</button>
+        </div>
+
+        <div class="screen" id="screenGrandFinale">
+            <h2>🎉 TAHNIAH TERBESAR! 🎉</h2>
+            
+            <div class="cert-card">
+                <span style="font-size: 30px;">🏆</span>
+                <h3 style="font-size: 22px; color: #B7791F; margin: 10px 0;">SIJIL DIGITAL</h3>
+                <p style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Dianugerahkan Kepada:</p>
+                <h4 style="font-size: 24px; color: var(--primary); margin: 15px 0; border-bottom: 2px solid #E2E8F0; padding-bottom: 5px;">PELAJAR PINTAR PowerBI</h4>
+                <p class="desc" style="font-size: 13px; font-weight: bold;">Kerana telah berjaya menamatkan keseluruhan modul dan latihan interaktif struktur asas tata bahasa</p>
+                <p style="font-weight: bold; color: var(--success); font-size: 18px;">Grammar Master: Subject-Verb-Object</p>
+            </div>
+
+            <div class="badge-wall" id="finalBadgeWall">
+                </div>
+
+            <button class="btn" onclick="resetGame()" style="background: var(--success); box-shadow: 0 5px 0 #05B386;">Main Semula Permainan 🔄</button>
+        </div>
+
+    </div>
+
+    <script>
+        /*************************************************************
+         * 1. BANK DATA SOALAN & SILIBUS LENGKAP (20-30 Per Topik)
+         *************************************************************/
+        const TOPICS_DATA = [
+            {
+                id: 1,
+                title: "Topik 1: Subject (Kepala Ayat)",
+                icon: "👤",
+                badge: "🥇 Subject Hero",
+                badgeEmoji: "🥇",
+                infoHtml: `
+                    <p><b>Subject</b> ialah kepala atau permulaan sesuatu ayat. Tanpa Subject, kita tidak tahu ayat itu bercakap tentang siapa atau apa benda.</p><br>
+                    <p>Subject terbahagi kepada dua kategori utama:</p>
+                    <ul>
+                        <li><b>Pronouns (Kata Ganti Nama):</b> I, You, We, They, He, She, It.</li>
+                        <li><b>Nouns (Kata Nama):</b> Singular (Satu) seperti <i>Ali, The cat, My father</i> ATAU Plural (Banyak) seperti <i>The boys, My parents</i>.</li>
+                    </ul>
+                `,
+                questions: [
+                    { q: "Kenal pasti Subject dalam ayat ini: <u>She</u> plays netball.", o: ["She", "plays", "netball"], a: "She", exp: "'She' ialah Subject (kata ganti nama bagi perempuan)." },
+                    { q: "Kenal pasti Subject dalam ayat ini: <u>The cat</u> sleeps on the rug.", o: ["The cat", "sleeps", "rug"], a: "The cat", exp: "'The cat' (kucing itu) merupakan pelaku utama atau kata nama di awal ayat." },
+                    { q: "Antara berikut, yang manakah merupakan <b>Plural Subject</b> (lebih daripada satu)?", o: ["The boys", "A girl", "He", "Abu"], a: "The boys", exp: "'The boys' bermaksud budak-budak lelaki itu (lebih dari seorang)." },
+                    { q: "Antara berikut, yang manakah merupakan <b>Singular Subject</b> (hanya satu)?", o: ["We", "They", "My mother", "The birds"], a: "My mother", exp: "'My mother' bermaksud emak saya (seorang sahaja)." },
+                    { q: "Pilih kata ganti nama (Pronoun) yang sesuai untuk 'Siti dan Sarah':", o: ["We", "They", "He", "She"], a: "They", exp: "Mereka berkumpulan, jadi kita gunakan 'They' (Mereka)." },
+                    { q: "Pilih kata ganti nama yang sesuai untuk seekor anjing 'The dog':", o: ["It", "He", "She", "I"], a: "It", exp: "Untuk haiwan tunggal atau objek biasa, gunakan 'It'." },
+                    { q: "Kenal pasti jenis bagi Subject ini: <b>My parents</b>", o: ["Singular Noun", "Plural Noun", "Pronoun"], a: "Plural Noun", exp: "'Parents' bermaksud ibu bapa (dua orang), maka ia adalah Plural Noun." },
+                    { q: "Kenal pasti jenis bagi Subject ini: <b>He</b>", o: ["Singular Noun", "Plural Noun", "Pronoun"], a: "Pronoun", exp: "'He' ialah Pronoun (Kata ganti nama untuk lelaki tunggal)." },
+                    { q: "Lengkapkan kepala ayat yang sesuai: ______ is my best friend.", o: ["Ali", "They", "We", "The dogs"], a: "Ali", exp: "Sebab ayat menggunakan kata kerja tunggal 'is', 'Ali' (Singular) paling tepat." },
+                    { q: "Ayat mana yang tiada Subject langsung?", o: ["Eats an apple.", "He eats an apple.", "The boy eats."], a: "Eats an apple.", exp: "'Eats an apple' terus dimula dengan kata kerja, tiada pelaku!" },
+                    { q: "Kenal pasti Subject: <u>We</u> like to watch movies.", o: ["We", "like", "movies"], a: "We", exp: "'We' (Kami/Kita) ialah subjek pronoun di permulaan ayat." },
+                    { q: "Antara berikut yang manakah BUKAN subjek?", o: ["The clever student", "They", "beautifully", "Ahmad"], a: "beautifully", exp: "'beautifully' ialah kata keterangan (adverb), tidak boleh jadi subjek." },
+                    { q: "Pilih kata ganti nama (Pronoun) untuk diri anda sendiri apabila bercakap:", o: ["You", "I", "He", "She"], a: "I", exp: "'I' digunakan untuk mewakili diri sendiri (Saya)." },
+                    { q: "Apakah kategori subjek bagi perkataan: <b>The cars</b>", o: ["Singular Noun", "Plural Noun", "Pronoun"], a: "Plural Noun", exp: "Ada akhiran 's' bermakna kereta-kereta itu (Banyak/Plural)." },
+                    { q: "Kenal pasti subjek: <u>My father</u> washes his car.", o: ["My father", "washes", "his car"], a: "My father", exp: "Bapa saya ialah pelaku utama yang melakukan aktiviti membasuh." },
+                    { q: "Pilih Pronoun yang menggantikan 'Muthu':", o: ["She", "He", "It", "We"], a: "He", exp: "'He' digunakan untuk budak/lelaki tunggal." },
+                    { q: "Pilih subjek yang berciri Plural:", o: ["A teacher", "Teachers", "He", "She"], a: "Teachers", exp: "Guru-guru (lebih daripada seorang) adalah plural." },
+                    { q: "Kenal pasti subjek: <u>The big elephant</u> runs fast.", o: ["The big elephant", "runs", "fast"], a: "The big elephant", exp: "Seluruh frasa nama 'The big elephant' bertindak sebagai subjek." },
+                    { q: "Pilih kata ganti nama yang bermaksud 'Kami / Kita':", o: ["They", "You", "We", "I"], a: "We", exp: "'We' membawa maksud kami atau kita." },
+                    { q: "Setiap ayat lengkap Bahasa Inggeris mesti bermula dengan komponen apa?", o: ["Object", "Subject", "Adjective"], a: "Subject", exp: "Subject ialah ketua utama yang menentukan perjalanan makna ayat." }
+                ]
+            },
+            {
+                id: 2,
+                title: "Topik 2: Verb (Kata Kerja)",
+                icon: "🏃‍♂️",
+                badge: "🥈 Verb Master",
+                badgeEmoji: "🥈",
+                infoHtml: `
+                    <p><b>Verb</b> ialah perkataan yang menunjukkan perbuatan atau keadaan kewujudan pelaku. Tanpa Verb, ayat menjadi tergantung dan tidak aktif.</p><br>
+                    <p>Mari kenali beberapa jenis Verb asas:</p>
+                    <ul>
+                        <li><b>Action Verbs (Kata Kerja Perbuatan):</b> eat, walk, sleep, write, read, play, jump, run, swim.</li>
+                        <li><b>Be Verb:</b> am, is, are.</li>
+                        <li><b>Do Verb:</b> do, does.</li>
+                        <li><b>Have Verb:</b> have, has.</li>
+                        <li><b>Go Verb:</b> go, goes.</li>
+                    </ul>
+                `,
+                questions: [
+                    { q: "Pilih yang mana satu merupakan <b>Action Verb</b> (perbuatan)?", o: ["is", "eat", "have", "happy"], a: "eat", exp: "'eat' (makan) menunjukkan aksi perbuatan secara fizikal." },
+                    { q: "Antara perkataan berikut, yang manakah di bawah kumpulan <b>Be Verb</b>?", o: ["are", "do", "has", "walk"], a: "are", exp: "Be Verb terdiri daripada 'am', 'is', dan 'are'." },
+                    { q: "Antara berikut, yang manakah merupakan <b>Have Verb</b>?", o: ["does", "goes", "has", "am"], a: "has", exp: "'has' dan 'have' tergolong dalam Have Verb." },
+                    { q: "Kenal pasti Verb dalam ayat ini: The children <u>play</u> football.", o: ["children", "play", "football"], a: "play", exp: "'play' (bermain) adalah kata kerja aksi kumpulan mereka." },
+                    { q: "Pilih perkataan yang merupakan <b>Go Verb</b>:", o: ["goes", "doing", "is", "sleep"], a: "goes", exp: "'go' dan 'goes' ialah Go Verb." },
+                    { q: "Kenal pasti Verb: I <u>am</u> happy today.", o: ["I", "am", "happy"], a: "am", exp: "'am' bertindak sebagai Be Verb dalam ayat ini." },
+                    { q: "Manakah antara berikut BUKAN kata kerja (Verb)?", o: ["swim", "jump", "pencil", "write"], a: "pencil", exp: "'pencil' ialah kata nama benda (Noun), bukan kata kerja." },
+                    { q: "Kenal pasti Verb: My sister <u>reads</u> a storybook.", o: ["My sister", "reads", "storybook"], a: "reads", exp: "'reads' (membaca) ialah perbuatan yang dibuat oleh subjek." },
+                    { q: "Lengkapkan ayat dengan Do Verb: He ______ his homework.", o: ["does", "is", "has", "read"], a: "does", exp: "'does' ialah bentuk Do Verb yang sesuai untuk tugasan kerja rumah." },
+                    { q: "Kenal pasti Verb: They <u>walk</u> to the morning market.", o: ["They", "walk", "market"], a: "walk", exp: "'walk' ialah aksi berjalan." },
+                    { q: "Pilih Action Verb yang sesuai untuk gambar aktiviti di kolam air:", o: ["sleep", "swim", "write", "eat"], a: "swim", exp: "'swim' bermaksud berenang." },
+                    { q: "Pilih Do Verb dari senarai pilihan ini:", o: ["do", "have", "are", "go"], a: "do", exp: "'do' merupakan bentuk asal Do Verb." },
+                    { q: "Kenal pasti Verb: We <u>have</u> two cute rabbits.", o: ["We", "have", "rabbits"], a: "have", exp: "'have' menunjukkan pemilikan dan bertindak sebagai Have Verb." },
+                    { q: "Yang manakah perkataan aksi melompat?", o: ["jump", "sleep", "read", "am"], a: "jump", exp: "'jump' bermaksud melompat." },
+                    { q: "Kenal pasti Verb: The students <u>listen</u> to the teacher.", o: ["students", "listen", "teacher"], a: "listen", exp: "'listen' (mendengar) ialah perbuatan." },
+                    { q: "Pilih Be Verb tunggal yang dipasangkan khas untuk subjek 'I':", o: ["is", "are", "am", "does"], a: "am", exp: "Subjek 'I' sentiasa berpasangan dengan 'am'
