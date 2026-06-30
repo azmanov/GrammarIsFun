@@ -339,7 +339,6 @@
                     { q: "Kenal pasti Verb: I am happy today.", o: ["I", "am", "happy"], a: "am", exp: "'am' bertindak sebagai Be Verb dalam ayat ini." },
                     { q: "Manakah antara berikut BUKAN kata kerja (Verb)?", o: ["swim", "jump", "pencil", "write"], a: "pencil", exp: "'pencil' ialah kata nama benda (Noun), bukan kata kerja." },
                     { q: "Kenal pasti Verb: My sister reads a storybook.", o: ["My sister", "reads", "storybook"], a: "reads", exp: "'reads' (membaca) ialah perbuatan yang dibuat oleh subjek." },
-                    /* BUG FIX 2: Menggantikan ayat bocor "He does his homework." kepada blank "He ______ his homework." */
                     { q: "Lengkapkan ayat dengan Do Verb: He ______ his homework.", o: ["does", "is", "has", "read"], a: "does", exp: "'does' ialah bentuk Do Verb yang sesuai untuk tugasan kerja rumah." },
                     { q: "Kenal pasti Verb: They walk to the morning market.", o: ["They", "walk", "market"], a: "walk", exp: "'walk' ialah aksi berjalan." },
                     { q: "Pilih Action Verb yang sesuai untuk aktiviti di kolam air:", o: ["sleep", "swim", "write", "eat"], a: "swim", exp: "'swim' bermaksud berenang." },
@@ -347,7 +346,6 @@
                     { q: "Kenal pasti Verb: We have two cute rabbits.", o: ["We", "have", "rabbits"], a: "have", exp: "'have' menunjukkan pemilikan dan bertindak sebagai Have Verb." },
                     { q: "Yang manakah perkataan aksi melompat?", o: ["jump", "sleep", "read", "am"], a: "jump", exp: "'jump' bermaksud melompat." },
                     { q: "Kenal pasti Verb: The students listen to the teacher.", o: ["students", "listen", "teacher"], a: "listen", exp: "'listen' (mendengar) ialah perbuatan." },
-                    /* BUG FIX 1: Membetulkan kunci typo 'p:' kepada 'q:' supaya teks soalan tidak lagi memaparkan 'undefined' */
                     { q: "Pilih Be Verb tunggal yang dipasangkan khas untuk subjek 'I':", o: ["is", "are", "am", "does"], a: "am", exp: "Subjek 'I' sentiasa berpasangan dengan 'am'." },
                     { q: "Kenal pasti Verb: The birds fly high.", o: ["The birds", "fly", "high"], a: "fly", exp: "'fly' (terbang) ialah perbuatan burung." },
                     { q: "Pilih Go Verb dalam senarai ini:", o: ["go", "has", "am", "run"], a: "go", exp: "'go' ialah sebahagian daripada Go Verb." },
@@ -413,13 +411,15 @@
                     { q: "Manakah antara berikut ialah <b>Object Frasa</b>?", o: ["on the table", "milk", "a book", "football"], a: "on the table", exp: "'on the table' terdiri daripada beberapa perkataan membentuk frasa." },
                     { q: "Manakah antara berikut ialah <b>Object Tunggal</b>?", o: ["at school", "an apple", "with my father", "in the park"], a: "an apple", exp: "'an apple' ialah perkataan objek tunggal." },
                     { q: "Kenal pasti Object: Ahmad goes to school.", o: ["Ahmad", "goes", "to school"], a: "to school", exp: "'to school' ialah frasa arah tujuan yang bertindak sebagai objek pelengkap." },
-                    { q: "Lengkapkan dengan Object yang logik: My mother cooks ______.", o: ["soup", "at school", "a pencil"], a: "soup", exp: "Ibu memasak sup ('soup' ialah objek makanan)." },
+                    /* TWEAK 2: Menukarkan 'soup' kepada 'chicken soup' demi rasa lazat */
+                    { q: "Lengkapkan dengan Object yang logik: My mother cooks ______.", o: ["chicken soup", "at school", "a pencil"], a: "chicken soup", exp: "Ibu memasak sup ayam ('chicken soup' ialah objek makanan)." },
                     { q: "Kenal pasti Object: The boy kicks the ball.", o: ["The boy", "kicks", "the ball"], a: "the ball", exp: "'the ball' ialah objek benda yang menerima kesan tendangan." },
                     { q: "Pilih Object frasa yang bermaksud 'bersama bapa saya':", o: ["with my father", "at school", "on the table"], a: "with my father", exp: "'with my father' bermaksud bersama bapa saya." },
                     { q: "Lengkapkan ayat: We study English ______.", o: ["at school", "milk", "an apple"], a: "at school", exp: "Kami belajar Bahasa Inggeris di sekolah (Object Frasa)." },
                     { q: "Kenal pasti Object: She puts the keys on the table.", o: ["She", "keys", "on the table"], a: "on the table", exp: "'on the table' di akhir ayat melengkapkan lokasi kunci diletakkan." },
                     { q: "Lengkapkan dengan Object Tunggal: The girl draws ______.", o: ["a picture", "in the park", "at school"], a: "a picture", exp: "'a picture' (gambar) ialah hasil lukisan objek tunggal." },
-                    { q: "Kenal pasti Object: The baby drinks milk.", o: ["The baby", "drinks", "milk"], a: "milk", exp: "'milk' ialah objek benda cecair itu." },
+                    /* TWEAK 1: Menukar penerangan maklum balas 'milk' mengikut kehendak spesifik fail tugasan */
+                    { q: "Kenal pasti Object: The baby drinks milk.", o: ["The baby", "drinks", "milk"], a: "milk", exp: "milk merujuk kepada susu." },
                     { q: "Pilih Object yang sesuai: He eats ______.", o: ["a burger", "a pencil", "a table"], a: "a burger", exp: "'a burger' ialah makanan yang logik untuk dimakan." },
                     { q: "Kenal pasti Object Frasa: The kids swim in the pool.", o: ["The kids", "swim", "in the pool"], a: "in the pool", exp: "'in the pool' ialah frasa tempat." },
                     { q: "Lengkapkan ayat: My brother plays ______.", o: ["football", "at school", "in the classroom"], a: "football", exp: "Bermain bola sepak ('football' objek sukan tunggal) paling tepat." },
@@ -445,7 +445,8 @@
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "Ali", tokenV: "writes", tokenO: "an essay", exp: "Susunan yang betul: Ali (S) + writes (V) + an essay (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "The cat", tokenV: "drinks", tokenO: "milk", exp: "Susunan yang betul: The cat (S) + drinks (V) + milk (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "We", tokenV: "visit", tokenO: "the zoo", exp: "Susunan yang betul: We (S) + visit (V) + the zoo (O)." },
-                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "My mother", tokenV: "cooks", tokenO: "soup", exp: "Susunan yang betul: My mother (S) + cooks (V) + soup (O)." },
+                    /* TWEAK 2 (Drag & Drop): Menukarkan komponen 'soup' kepada 'chicken soup' */
+                    { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "My mother", tokenV: "cooks", tokenO: "chicken soup", exp: "Susunan yang betul: My mother (S) + cooks (V) + chicken soup (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "He", tokenV: "rides", tokenO: "a bicycle", exp: "Susunan yang betul: He (S) + rides (V) + a bicycle (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "The teachers", tokenV: "teach", tokenO: "at school", exp: "Susunan yang betul: The teachers (S) + teach (V) + at school (O)." },
                     { type: "drag", q: "Susun perkataan menjadi struktur ayat S-V-O yang betul:", tokenS: "I", tokenV: "wash", tokenO: "my hands", exp: "Susunan yang betul: I (S) + wash (V) + my hands (O)." },
@@ -601,49 +602,6 @@
             }
         }
 
-        function setupMultipleChoiceQuestion(questionObj) {
-            document.getElementById('quiz-drag-container').classList.add('hidden');
-            const optionsContainer = document.getElementById('quiz-options-container');
-            optionsContainer.classList.remove('hidden');
-            optionsContainer.innerHTML = '';
-
-            questionObj.o.forEach(option => {
-                const btn = document.createElement('button');
-                btn.className = "p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 active:border-slate-400 text-slate-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center cursor-pointer active:scale-[0.99]";
-                btn.innerText = option;
-                btn.onclick = () => evaluateMultipleChoiceAnswer(btn, option, questionObj.a, questionObj.exp);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function evaluateMultipleChoiceAnswer(selectedButtonNode, selectedValue, correctValue, explanationStr) {
-            const allOptionsButtons = document.getElementById('quiz-options-container').querySelectorAll('button');
-            allOptionsButtons.forEach(btn => btn.disabled = true);
-
-            const isCorrect = (selectedValue === correctValue);
-            if (isCorrect) {
-                score += 10;
-                selectedButtonNode.className = "p-4 bg-emerald-50 border-2 border-emerald-500 text-emerald-800 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
-                triggerFeedback(true, "Tahniah! Betul 🎉", explanationStr);
-                playTone(587.33, 0.15); 
-            } else {
-                selectedButtonNode.className = "p-4 bg-rose-50 border-2 border-rose-400 text-rose-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
-                allOptionsButtons.forEach(btn => {
-                    if (btn.innerText === correctValue) {
-                        btn.className = "p-4 bg-emerald-50 border-2 border-emerald-400 text-emerald-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
-                    }
-                });
-                triggerFeedback(false, "Alamak, Kurang Tepat 💡", explanationStr);
-                playTone(293.66, 0.25); 
-            }
-
-            document.getElementById('quiz-score-text').innerText = score;
-            document.getElementById('quiz-control-box').classList.remove('hidden');
-        }
-
-        /*************************************************************
-         * 5. DRAG AND DROP STRUCTURAL INTERFACING
-         *************************************************************/
         function setupDragQuestion(questionObj) {
             document.getElementById('quiz-options-container').classList.add('hidden');
             const dragContainer = document.getElementById('quiz-drag-container');
@@ -743,6 +701,46 @@
             } else {
                 slotNode.className = "token-slot rounded-xl flex items-center justify-center p-2 bg-rose-50 text-base font-bold text-rose-800 border-2 border-rose-400";
             }
+        }
+
+        function setupMultipleChoiceQuestion(questionObj) {
+            document.getElementById('quiz-drag-container').classList.add('hidden');
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.classList.remove('hidden');
+            optionsContainer.innerHTML = '';
+
+            questionObj.o.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 active:border-slate-400 text-slate-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center cursor-pointer active:scale-[0.99]";
+                btn.innerText = option;
+                btn.onclick = () => evaluateMultipleChoiceAnswer(btn, option, questionObj.a, questionObj.exp);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function evaluateMultipleChoiceAnswer(selectedButtonNode, selectedValue, correctValue, explanationStr) {
+            const allOptionsButtons = document.getElementById('quiz-options-container').querySelectorAll('button');
+            allOptionsButtons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = (selectedValue === correctValue);
+            if (isCorrect) {
+                score += 10;
+                selectedButtonNode.className = "p-4 bg-emerald-50 border-2 border-emerald-500 text-emerald-800 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
+                triggerFeedback(true, "Tahniah! Betul 🎉", explanationStr);
+                playTone(587.33, 0.15); 
+            } else {
+                selectedButtonNode.className = "p-4 bg-rose-50 border-2 border-rose-400 text-rose-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
+                allOptionsButtons.forEach(btn => {
+                    if (btn.innerText === correctValue) {
+                        btn.className = "p-4 bg-emerald-50 border-2 border-emerald-400 text-emerald-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
+                    }
+                });
+                triggerFeedback(false, "Alamak, Kurang Tepat 💡", explanationStr);
+                playTone(293.66, 0.25); 
+            }
+
+            document.getElementById('quiz-score-text').innerText = score;
+            document.getElementById('quiz-control-box').classList.remove('hidden');
         }
 
         /*************************************************************
