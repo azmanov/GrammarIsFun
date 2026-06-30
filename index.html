@@ -240,7 +240,6 @@
                 infoHtml: `
                     <p class="mb-4"><b>Subject</b> ialah kepala atau permulaan sesuatu ayat. Tanpa Subject, kita tidak tahu ayat itu bercakap tentang siapa atau apa benda.</p>
                     
-                    <!-- KEMAS KINI JADUAL KOMPONEN SUBJECT (RUJUKAN: JADUAL SUBJECT.PNG) -->
                     <div class="overflow-x-auto my-4 border border-slate-300 rounded-xl shadow-sm">
                         <table class="min-w-full border-collapse text-left text-sm md:text-base">
                             <thead>
@@ -249,7 +248,6 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-200">
-                                <!-- SECTION PRONOUNS -->
                                 <tr class="bg-blue-50/40">
                                     <td class="p-3 font-bold text-slate-800 border-r border-slate-200 align-top w-28">PRONOUNS</td>
                                     <td class="p-3 font-medium text-blue-900 bg-blue-100/60 border-r border-slate-200 leading-relaxed">
@@ -270,7 +268,6 @@
                                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">3 Singular Pronouns</span>
                                     </td>
                                 </tr>
-                                <!-- SECTION NOUNS -->
                                 <tr class="bg-blue-50/40 border-t-2 border-slate-300">
                                     <td class="p-3 font-bold text-slate-800 border-r border-slate-200 align-top">NOUNS</td>
                                     <td class="p-3 font-medium text-blue-900 bg-blue-100/60 border-r border-slate-200 leading-relaxed">
@@ -342,14 +339,16 @@
                     { q: "Kenal pasti Verb: I am happy today.", o: ["I", "am", "happy"], a: "am", exp: "'am' bertindak sebagai Be Verb dalam ayat ini." },
                     { q: "Manakah antara berikut BUKAN kata kerja (Verb)?", o: ["swim", "jump", "pencil", "write"], a: "pencil", exp: "'pencil' ialah kata nama benda (Noun), bukan kata kerja." },
                     { q: "Kenal pasti Verb: My sister reads a storybook.", o: ["My sister", "reads", "storybook"], a: "reads", exp: "'reads' (membaca) ialah perbuatan yang dibuat oleh subjek." },
-                    { q: "Lengkapkan ayat dengan Do Verb: He does his homework.", o: ["does", "is", "has", "read"], a: "does", exp: "'does' ialah bentuk Do Verb yang sesuai untuk tugasan kerja rumah." },
+                    /* BUG FIX 2: Menggantikan ayat bocor "He does his homework." kepada blank "He ______ his homework." */
+                    { q: "Lengkapkan ayat dengan Do Verb: He ______ his homework.", o: ["does", "is", "has", "read"], a: "does", exp: "'does' ialah bentuk Do Verb yang sesuai untuk tugasan kerja rumah." },
                     { q: "Kenal pasti Verb: They walk to the morning market.", o: ["They", "walk", "market"], a: "walk", exp: "'walk' ialah aksi berjalan." },
                     { q: "Pilih Action Verb yang sesuai untuk aktiviti di kolam air:", o: ["sleep", "swim", "write", "eat"], a: "swim", exp: "'swim' bermaksud berenang." },
                     { q: "Pilih Do Verb dari senarai pilihan ini:", o: ["do", "have", "are", "go"], a: "do", exp: "'do' merupakan bentuk asal Do Verb." },
                     { q: "Kenal pasti Verb: We have two cute rabbits.", o: ["We", "have", "rabbits"], a: "have", exp: "'have' menunjukkan pemilikan dan bertindak sebagai Have Verb." },
                     { q: "Yang manakah perkataan aksi melompat?", o: ["jump", "sleep", "read", "am"], a: "jump", exp: "'jump' bermaksud melompat." },
                     { q: "Kenal pasti Verb: The students listen to the teacher.", o: ["students", "listen", "teacher"], a: "listen", exp: "'listen' (mendengar) ialah perbuatan." },
-                    { p: "Pilih Be Verb tunggal yang dipasangkan khas untuk subjek 'I':", o: ["is", "are", "am", "does"], a: "am", exp: "Subjek 'I' sentiasa berpasangan dengan 'am'." },
+                    /* BUG FIX 1: Membetulkan kunci typo 'p:' kepada 'q:' supaya teks soalan tidak lagi memaparkan 'undefined' */
+                    { q: "Pilih Be Verb tunggal yang dipasangkan khas untuk subjek 'I':", o: ["is", "are", "am", "does"], a: "am", exp: "Subjek 'I' sentiasa berpasangan dengan 'am'." },
                     { q: "Kenal pasti Verb: The birds fly high.", o: ["The birds", "fly", "high"], a: "fly", exp: "'fly' (terbang) ialah perbuatan burung." },
                     { q: "Pilih Go Verb dalam senarai ini:", o: ["go", "has", "am", "run"], a: "go", exp: "'go' ialah sebahagian daripada Go Verb." },
                     { q: "Kenal pasti Verb: She sleeps early.", o: ["She", "sleeps", "early"], a: "sleeps", exp: "'sleeps' (tidur) ialah kata kerja." },
@@ -487,7 +486,6 @@
          * 3. INITIALIZATION & UI ROUTING ENGINE
          *************************************************************/
         window.addEventListener('DOMContentLoaded', () => {
-            // Load saved user state from localStorage if available
             const savedProgress = localStorage.getItem('powerbi_unlocked_progress');
             if (savedProgress) {
                 unlockedProgress = parseInt(savedProgress, 10);
