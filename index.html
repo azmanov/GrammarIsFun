@@ -28,6 +28,16 @@
             border-color: #3b82f6;
             background-color: #eff6ff;
         }
+        .topic-locked {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+        }
+        .topic-locked:hover {
+            transform: none !important;
+            border-color: #e2e8f0 !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between text-slate-700 antialiased selection:background-none">
@@ -37,12 +47,12 @@
         <div class="max-w-4xl mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-2 cursor-pointer" onclick="goHome()">
                 <span class="text-3xl">🚀</span>
-                <span class="font-header text-2xl tracking-wide bg-gradient-to-r flex-row from-blue-600 to-indigo-600 bg-clip-text text-transparent">PowerBI</span>
+                <span class="font-header text-2xl tracking-wide bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">PowerBI</span>
             </div>
-            <button id="audio-toggle" onclick="toggleAudio()" class="p-2 rounded-full bg-slate-100 hover:bg-blue-100 text-slate-500 hover:text-blue-600 transition-colors">
-                <svg id="audio-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                </svg>
+            <!-- BGM Audio Control Button -->
+            <button id="audio-toggle" onclick="toggleBGM()" class="p-2 rounded-full bg-slate-100 hover:bg-blue-100 text-slate-500 hover:text-blue-600 transition-colors flex items-center space-x-1">
+                <span id="audio-status-icon">🎵</span>
+                <span id="audio-text" class="text-xs font-bold px-1">Muzik: OFF</span>
             </button>
         </div>
     </header>
@@ -54,7 +64,7 @@
         <div id="screen-dashboard" class="space-y-6">
             <div class="bg-white p-6 rounded-3xl card-shadow border border-slate-100 text-center space-y-3">
                 <h1 class="font-header text-3xl md:text-4xl text-slate-800">Kuasai Struktur Ayat BI!</h1>
-                <p class="text-lg text-slate-500 max-w-xl mx-auto">Sistem formula mudah <b>Subject + Verb + Object (S-V-O)</b> untuk bantu anda membina ayat dengan yakin tanpa ragu-ragu.</p>
+                <p class="text-lg text-slate-500 max-w-xl mx-auto">Selesaikan setiap topik mengikut turutan untuk membuka (unlock) cabaran yang seterusnya!</p>
             </div>
 
             <!-- TOPICS GRID -->
@@ -157,7 +167,7 @@
                     </div>
                 </div>
 
-                <!-- Explanation / Feedback Banner Modal-styled inside block -->
+                <!-- Explanation / Feedback Banner -->
                 <div id="quiz-feedback" class="hidden p-4 rounded-2xl border text-left space-y-1.5 animate-fade-in">
                     <h4 id="feedback-title" class="font-header text-lg"></h4>
                     <p id="feedback-desc" class="text-sm leading-relaxed"></p>
@@ -218,7 +228,7 @@
     <!-- AUDIO DRIVER GENERATORS AND APPLICATION SCRIPT ENGINE -->
     <script>
         /*************************************************************
-         * 1. BANK DATA SOALAN & SILIBUS LENGKAP (20 Per Topik)
+         * 1. BANK DATA SOALAN & SILIBUS LENGKAP
          *************************************************************/
         const TOPICS_DATA = [
             {
@@ -280,7 +290,7 @@
                     { q: "Antara perkataan berikut, yang manakah di bawah kumpulan <b>Be Verb</b>?", o: ["are", "do", "has", "walk"], a: "are", exp: "Be Verb terdiri daripada 'am', 'is', dan 'are'." },
                     { q: "Antara berikut, yang manakah merupakan <b>Have Verb</b>?", o: ["does", "goes", "has", "am"], a: "has", exp: "'has' dan 'have' tergolong dalam Have Verb." },
                     { q: "Kenal pasti Verb dalam ayat ini: The children play football.", o: ["children", "play", "football"], a: "play", exp: "'play' (bermain) adalah kata kerja aksi kumpulan mereka." },
-                    { q: "Pilih perkataan yang merupakan <b>Go Verb</b>:", o: ["goes", "doing", "is", "sleep"], a: "goes", exp: "'go' dan 'goes' ialah Go Verb." },
+                    { q: "Pilih perkataan yang merupakan <b>Go Verb</b>:", o: ["goes", "doing", "is", "sleep"], a: "goes", exp: "'goes' ialah Go Verb." },
                     { q: "Kenal pasti Verb: I am happy today.", o: ["I", "am", "happy"], a: "am", exp: "'am' bertindak sebagai Be Verb dalam ayat ini." },
                     { q: "Manakah antara berikut BUKAN kata kerja (Verb)?", o: ["swim", "jump", "pencil", "write"], a: "pencil", exp: "'pencil' ialah kata nama benda (Noun), bukan kata kerja." },
                     { q: "Kenal pasti Verb: My sister reads a storybook.", o: ["My sister", "reads", "storybook"], a: "reads", exp: "'reads' (membaca) ialah perbuatan yang dibuat oleh subjek." },
@@ -316,7 +326,7 @@
                     { q: "Lengkapkan ayat: I ______ happy to meet you.", o: ["am", "is", "are"], a: "am", exp: "Subjek 'I' sentiasa dipadankan dengan 'am'." },
                     { q: "Lengkapkan ayat: She ______ an expensive storybook.", o: ["have", "has"], a: "has", exp: "Subjek tunggal 'She' menggunakan 'has'." },
                     { q: "Lengkapkan ayat: We ______ our homework together.", o: ["do", "does"], a: "do", exp: "Subjek ramai 'We' menggunakan kata kerja asal 'do'." },
-                    { q: "Betulkan kesalahan ayat: 'The cat eat fish.'", o: ["The cat eats fish.", "The cats eat fish."], a: "The cat eats fish.", exp: "'The cat' ialah seekor (Singular), jadi ia memerlukan kata kerja 'eats'." },
+                    { q: "Betulkan kesalahan ayat: 'The cat eat fish.'", o: ["The cat eats fish.", "The cats eat fish."], a: "The cat eats fish.", exp: "'The cat' ialah sebuah (Singular), jadi ia memerlukan kata kerja 'eats'." },
                     { q: "Lengkapkan ayat: My parents ______ very kind.", o: ["is", "are", "am"], a: "are", exp: "'My parents' (ibu bapa) adalah ramai, jadi gunakan 'are'." },
                     { q: "Lengkapkan ayat: Ali ______ to the mosque.", o: ["go", "goes"], a: "goes", exp: "Ali ialah seorang (Singular), maka kita gunakan Go Verb 'goes'." },
                     { q: "Lengkapkan ayat: You ______ a very smart pupil.", o: ["is", "are", "am"], a: "are", exp: "Subjek 'You' sentiasa dikira di bawah peraturan kata kerja jamak 'are'." },
@@ -378,7 +388,7 @@
                 badgeEmoji: "💎",
                 infoHtml: `
                     <p><b>Tahniah!</b> Anda sudah mempelajari semua komponen penting ayat:</p>
-                    <p style="text-align:center; font-weight:bold; color:var(--primary-dark);">Subject ➔ Verb ➔ Object</p>
+                    <p style="text-align:center; font-weight:bold; color:#2563eb;">Subject ➔ Verb ➔ Object</p>
                     <p>Mari uji kemahiran menyusun dan membina ayat bahasa Inggeris yang lengkap secara rawak!</p>
                 `,
                 questions: [
@@ -401,27 +411,39 @@
                     { q: "Ayat mana yang mempunyai susunan S-V-O yang sempurna?", o: ["The bird flies in the sky.", "In the sky flies the bird.", "Flies the bird in sky."], a: "The bird flies in the sky.", exp: "Mematuhi formula penuh Subject-Verb-Object." },
                     { q: "Betulkan binaan ayat ini: 'She drive a car.'", o: ["She drives a car.", "She driving a car.", "She driven a car."], a: "She drives a car.", exp: "Subjek 'She' bermaksud seorang, wajib ditambahkan s pada verb menjadi 'drives'." },
                     { q: "Manakah pilihan jawapan yang melengkapkan ayat 'The students ______ at the library.'", o: ["read books", "reads books", "reading"], a: "read books", exp: "'The students' ramai, jadi pasangannya ialah kata kerja asal 'read' ditambah objek 'books'." },
-                    { q: "Apakah susunan penuh formula pembinaan ayat utama yang anda pelajari?", o: ["Subject ➔ Verb ➔ Object", "Object ➔ Subject ➔ Verb", "Verb ➔ Object ➔ Subject"], a: "Subject ➔ Verb ➔ Object", exp: "Susunan rasmi yang tepat ialah Subject, diikuti Verb, and diakhiri Object." }
+                    { q: "Apakah susunan penuh formula pembinaan ayat utama yang anda pelajari?", o: ["Subject ➔ Verb ➔ Object", "Object ➔ Subject ➔ Verb", "Verb ➔ Object ➔ Subject"], a: "Subject ➔ Verb ➔ Object", exp: "Susunan rasmi yang tepat ialah Subject, diikuti Verb, dan diakhiri Object." }
                 ]
             }
         ];
 
         /*************************************************************
-         * 2. STATE MANAGEMENT SYSTEM VARIABLES
+         * 2. STATE MANAGEMENT SYSTEM
          *************************************************************/
         let currentTopic = null;
         let currentQuestionsList = [];
         let currentQuestionIndex = 0;
         let score = 0;
-        let isAudioEnabled = true;
         
-        // Drag and drop processing buffer storage object
+        // Topic Unlock System Progress
+        let unlockedProgress = 1; 
+
+        // Web Audio Synthesized BGM System
+        let isBGMPlaying = false;
+        let audioContext = null;
+        let bgmIntervalId = null;
+
+        // Drag and drop memory buffer object
         let dragSelections = { S: null, V: null, O: null };
 
         /*************************************************************
          * 3. INITIALIZATION & UI ROUTING ENGINE
          *************************************************************/
         window.addEventListener('DOMContentLoaded', () => {
+            // Load saved user state from localStorage if available
+            const savedProgress = localStorage.getItem('powerbi_unlocked_progress');
+            if (savedProgress) {
+                unlockedProgress = parseInt(savedProgress, 10);
+            }
             renderDashboardTopics();
             goHome();
         });
@@ -431,30 +453,47 @@
             container.innerHTML = '';
             
             TOPICS_DATA.forEach(topic => {
+                const isLocked = topic.id > unlockedProgress;
                 const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between hover:border-blue-300 transition-all cursor-pointer group hover:-translate-y-1";
-                card.onclick = () => viewTopicInfo(topic.id);
                 
-                card.innerHTML = `
-                    <div class="flex items-center space-x-4">
-                        <span class="text-3xl p-2.5 bg-slate-50 group-hover:bg-blue-50 rounded-xl transition-colors">${topic.icon}</span>
-                        <div>
-                            <h3 class="font-header text-lg text-slate-800">${topic.title}</h3>
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">${topic.questions.length} Cabaran</span>
+                if (isLocked) {
+                    card.className = "bg-white p-5 rounded-2xl border border-slate-100 flex items-center justify-between topic-locked select-none shadow-sm";
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-4">
+                            <span class="text-3xl p-2.5 bg-slate-200 rounded-xl text-slate-400">🔒</span>
+                            <div>
+                                <h3 class="font-header text-lg text-slate-400">${topic.title}</h3>
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Terkunci (Selesaikan Topik ${topic.id - 1})</span>
+                            </div>
                         </div>
-                    </div>
-                    <span class="text-slate-300 group-hover:text-blue-500 transition-colors text-xl font-bold">➔</span>
-                `;
+                    `;
+                } else {
+                    card.className = "bg-white p-5 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between hover:border-blue-300 transition-all cursor-pointer group hover:-translate-y-1";
+                    card.onclick = () => viewTopicInfo(topic.id);
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-4">
+                            <span class="text-3xl p-2.5 bg-slate-50 group-hover:bg-blue-50 rounded-xl transition-colors">${topic.icon}</span>
+                            <div>
+                                <h3 class="font-header text-lg text-slate-800">${topic.title}</h3>
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">${topic.questions.length} Cabaran</span>
+                            </div>
+                        </div>
+                        <span class="text-slate-300 group-hover:text-blue-500 transition-colors text-xl font-bold">➔</span>
+                    `;
+                }
                 container.appendChild(card);
             });
         }
 
         function goHome() {
             hideAllScreens();
+            renderDashboardTopics();
             document.getElementById('screen-dashboard').classList.remove('hidden');
         }
 
         function viewTopicInfo(topicId) {
+            if (topicId > unlockedProgress) return; // Guard rails protection
+
             currentTopic = TOPICS_DATA.find(t => t.id === topicId);
             if (!currentTopic) return;
 
@@ -463,14 +502,11 @@
             document.getElementById('info-icon').innerText = currentTopic.icon;
             document.getElementById('info-body').innerHTML = currentTopic.infoHtml;
             document.getElementById('screen-info').classList.remove('hidden');
-            
-            speakText(`${currentTopic.title}. Sila baca nota ringkas sebelum memulakan kuiz.`);
         }
 
         function startQuiz() {
             if (!currentTopic) return;
             
-            // Shallow copy questions list array then execute random permutation shuffle
             currentQuestionsList = [...currentTopic.questions];
             shuffleArray(currentQuestionsList);
             
@@ -480,6 +516,11 @@
             hideAllScreens();
             document.getElementById('screen-quiz').classList.remove('hidden');
             loadQuestion();
+
+            // Auto-trigger soft background music if active
+            if (isBGMPlaying) {
+                startBGM();
+            }
         }
 
         function hideAllScreens() {
@@ -490,17 +531,15 @@
         }
 
         /*************************************************************
-         * 4. QUIZ CORE INTERACTION FLOW & GENERATION LOGIC
+         * 4. QUIZ CORE INTERACTION FLOW
          *************************************************************/
         function loadQuestion() {
-            // Reset question system display wrappers
             document.getElementById('quiz-feedback').className = "hidden p-4 rounded-2xl border text-left space-y-1.5";
             document.getElementById('quiz-control-box').classList.add('hidden');
             
             const totalQ = currentQuestionsList.length;
             const currentQ = currentQuestionsList[currentQuestionIndex];
             
-            // Progress display updates
             document.getElementById('quiz-topic-title').innerText = currentTopic.title.toUpperCase();
             document.getElementById('quiz-progress-text').innerText = `${currentQuestionIndex + 1} / ${totalQ}`;
             document.getElementById('quiz-score-text').innerText = score;
@@ -510,16 +549,11 @@
 
             document.getElementById('quiz-question-text').innerHTML = currentQ.q;
 
-            // Conditional view branch rendering architecture based on item data type layout rules
             if (currentQ.type === "drag") {
                 setupDragQuestion(currentQ);
             } else {
                 setupMultipleChoiceQuestion(currentQ);
             }
-
-            // Accessibility Audio Trigger
-            const vocalizeText = currentQ.type === "drag" ? "Susun perkataan menjadi struktur ayat" : currentQ.q.replace(/<[^>]*>/g, '');
-            speakText(vocalizeText);
         }
 
         function setupMultipleChoiceQuestion(questionObj) {
@@ -528,7 +562,6 @@
             optionsContainer.classList.remove('hidden');
             optionsContainer.innerHTML = '';
 
-            // Render option control nodes loop
             questionObj.o.forEach(option => {
                 const btn = document.createElement('button');
                 btn.className = "p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 active:border-slate-400 text-slate-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center cursor-pointer active:scale-[0.99]";
@@ -540,24 +573,23 @@
 
         function evaluateMultipleChoiceAnswer(selectedButtonNode, selectedValue, correctValue, explanationStr) {
             const allOptionsButtons = document.getElementById('quiz-options-container').querySelectorAll('button');
-            allOptionsButtons.forEach(btn => btn.disabled = true); // Freeze further modifications
+            allOptionsButtons.forEach(btn => btn.disabled = true);
 
             const isCorrect = (selectedValue === correctValue);
             if (isCorrect) {
                 score += 10;
                 selectedButtonNode.className = "p-4 bg-emerald-50 border-2 border-emerald-500 text-emerald-800 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
                 triggerFeedback(true, "Tahniah! Betul 🎉", explanationStr);
-                playTone(600, 0.1);
+                playTone(587.33, 0.15); // Musical chime D5
             } else {
                 selectedButtonNode.className = "p-4 bg-rose-50 border-2 border-rose-400 text-rose-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
-                // Highlight explicit valid node path target visual element
                 allOptionsButtons.forEach(btn => {
                     if (btn.innerText === correctValue) {
                         btn.className = "p-4 bg-emerald-50 border-2 border-emerald-400 text-emerald-700 font-bold rounded-2xl transition-all shadow-sm text-base text-center";
                     }
                 });
                 triggerFeedback(false, "Alamak, Kurang Tepat 💡", explanationStr);
-                playTone(250, 0.25);
+                playTone(293.66, 0.25); // Musical flat tone D4
             }
 
             document.getElementById('quiz-score-text').innerText = score;
@@ -565,14 +597,13 @@
         }
 
         /*************************************************************
-         * 5. DRAG AND DROP STRUCTURAL CONTROL FUNCTIONALITIES
+         * 5. DRAG AND DROP STRUCTURAL INTERFACING
          *************************************************************/
         function setupDragQuestion(questionObj) {
             document.getElementById('quiz-options-container').classList.add('hidden');
             const dragContainer = document.getElementById('quiz-drag-container');
             dragContainer.classList.remove('hidden');
 
-            // Reset dynamic tokens configurations structure values maps
             dragSelections = { S: null, V: null, O: null };
             document.getElementById('slot-S').innerText = '';
             document.getElementById('slot-V').innerText = '';
@@ -582,7 +613,6 @@
             const tokensPool = document.getElementById('drag-tokens-pool');
             tokensPool.innerHTML = '';
 
-            // Generate target source data tokens randomly sorted array sequence layout
             let rawTokens = [questionObj.tokenS, questionObj.tokenV, questionObj.tokenO];
             shuffleArray(rawTokens);
 
@@ -615,8 +645,6 @@
 
             try {
                 const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-                
-                // If targeted component block is occupied, bounce execution routing operation back safely
                 if (dragSelections[slotType] !== null) return;
 
                 const matchingTokenElement = document.getElementById(data.id);
@@ -625,12 +653,11 @@
                 slot.innerText = data.text;
                 dragSelections[slotType] = { id: data.id, text: data.text };
 
-                // Handle conditional execution lock release configuration parameter controls
                 if (dragSelections.S && dragSelections.V && dragSelections.O) {
                     document.getElementById('btn-submit-drag').disabled = false;
                 }
             } catch (err) {
-                console.error("Drop parsing failure caught safely:", err);
+                console.error(err);
             }
         }
 
@@ -652,13 +679,13 @@
                 applySlotStyle(slotV, 'emerald');
                 applySlotStyle(slotO, 'emerald');
                 triggerFeedback(true, "Susunan Sempurna! 🌟", currentQ.exp);
-                playTone(600, 0.1);
+                playTone(587.33, 0.15);
             } else {
                 applySlotStyle(slotS, dragSelections.S.text === currentQ.tokenS ? 'emerald' : 'rose');
                 applySlotStyle(slotV, dragSelections.V.text === currentQ.tokenV ? 'emerald' : 'rose');
                 applySlotStyle(slotO, dragSelections.O.text === currentQ.tokenO ? 'emerald' : 'rose');
                 triggerFeedback(false, "Susunan Kurang Tepat 🛠️", `${currentQ.exp}<br><br><b>Susunan Sebenar:</b> <span class='text-emerald-600 font-bold'>${currentQ.tokenS} + ${currentQ.tokenV} + ${currentQ.tokenO}</span>`);
-                playTone(250, 0.25);
+                playTone(293.66, 0.25);
             }
 
             document.getElementById('quiz-score-text').innerText = score;
@@ -674,7 +701,7 @@
         }
 
         /*************************************************************
-         * 6. FEEDBACK DISPLAYS & NAVIGATION PROCESS ROUTINES
+         * 6. FEEDBACK & NAVIGATION PROGRESS WITH TOPIC UNLOCK
          *************************************************************/
         function triggerFeedback(isSuccess, title, msg) {
             const box = document.getElementById('quiz-feedback');
@@ -684,15 +711,11 @@
             box.classList.remove('hidden');
             if (isSuccess) {
                 box.className = "p-4 rounded-2xl border text-left space-y-1.5 bg-emerald-50 border-emerald-200 text-emerald-900";
-                tNode.innerText = title;
             } else {
                 box.className = "p-4 rounded-2xl border text-left space-y-1.5 bg-amber-50 border-amber-200 text-amber-900";
-                tNode.innerText = title;
             }
+            tNode.innerText = title;
             dNode.innerHTML = msg;
-            
-            // Text to speech verification narrative
-            speakText(title + ". " + dNode.innerText);
         }
 
         function nextQuestion() {
@@ -705,9 +728,12 @@
         }
 
         function showResultsSummary() {
+            stopBGM(); // Stop loop background track
             hideAllScreens();
+            
             const totalQ = currentQuestionsList.length;
             const maxScore = totalQ * 10;
+            const passThreshold = maxScore * 0.7; // 70% passing criteria to unlock next level
             
             document.getElementById('result-topic-name').innerText = currentTopic.title.toUpperCase();
             document.getElementById('result-score').innerText = `${score} / ${maxScore}`;
@@ -715,72 +741,119 @@
             const badgeIconNode = document.getElementById('badge-icon');
             const badgeTitleNode = document.getElementById('badge-title');
 
-            // Dynamically evaluate performance constraints thresholds met
-            if (score >= (maxScore * 0.8)) {
+            if (score >= passThreshold) {
                 document.getElementById('result-emoji').innerText = "🏆";
                 badgeIconNode.innerText = currentTopic.badgeEmoji;
                 badgeTitleNode.innerText = currentTopic.badge;
-                speakText("Tahniah! Anda lulus cemerlang dan berjaya memperoleh lencana penghargaan tertinggi!");
+
+                // Evaluate and increment progress parameters mapping constraints
+                if (currentTopic.id === unlockedProgress && unlockedProgress < TOPICS_DATA.length) {
+                    unlockedProgress = currentTopic.id + 1;
+                    localStorage.setItem('powerbi_unlocked_progress', unlockedProgress);
+                }
             } else {
                 document.getElementById('result-emoji').innerText = "💪";
                 badgeIconNode.innerText = "⏳";
-                badgeTitleNode.innerText = "Sijil Penyertaan Latihan";
-                speakText("Selesai! Teruskan berusaha memantapkan kefahaman anda untuk mencapai markah penuh kelak.");
+                badgeTitleNode.innerText = "Sijil Penyertaan Latihan (Capai 70% Untuk Unlock Topik Baru)";
             }
 
             document.getElementById('screen-result').classList.remove('hidden');
         }
 
         /*************************************************************
-         * 7. ACCESSIBILITY UTILITIES (TTS SPEECH ENGINE & ACCENTS)
+         * 7. SOUND SYNTHESIZER UTILITIES (SOFT BGM ENGINE)
          *************************************************************/
-        function toggleAudio() {
-            isAudioEnabled = !isAudioEnabled;
-            const icon = document.getElementById('audio-icon');
-            if (isAudioEnabled) {
-                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />`;
-                playTone(440, 0.05);
-            } else {
-                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />`;
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
         }
 
-        function speakText(rawString) {
-            if (!isAudioEnabled || !('speechSynthesis' in window)) return;
+        function toggleBGM() {
+            initAudioContext();
+            isBGMPlaying = !isBGMPlaying;
             
-            // Abort pre-existing speech audio queues instantly to prevent compounding overlaps
-            window.speechSynthesis.cancel();
-            
-            const cleanText = rawString.replace(/______/g, 'tempat kosong');
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            
-            // Simple heuristic lexical scanner language targeting assignment routing
-            const containsEnglishPhrases = /[A-Z][a-z]+ (?:is|are|am|was|were|play|eats|run|sleeps|walk|reads|kicks|draws)/.test(rawString) || rawString.includes("Subject") || rawString.includes("Verb");
-            utterance.lang = containsEnglishPhrases ? 'en-US' : 'ms-MY';
-            utterance.rate = 0.95;
-            
-            window.speechSynthesis.speak(utterance);
+            const statusIcon = document.getElementById('audio-status-icon');
+            const textNode = document.getElementById('audio-text');
+
+            if (isBGMPlaying) {
+                statusIcon.innerText = "🔊";
+                textNode.innerText = "Muzik: ON";
+                // Only start loop if currently residing inside the quiz gameplay scene
+                if (!document.getElementById('screen-quiz').classList.contains('hidden')) {
+                    startBGM();
+                }
+            } else {
+                statusIcon.innerText = "🎵";
+                textNode.innerText = "Muzik: OFF";
+                stopBGM();
+            }
         }
 
         function playTone(freq, duration) {
-            if (!isAudioEnabled) return;
+            if (!audioContext) return;
             try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
                 
                 oscillator.type = 'sine';
                 oscillator.frequency.value = freq;
-                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                gainNode.gain.setValueAtTime(0.04, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + duration);
                 
                 oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
+                gainNode.connect(audioContext.destination);
                 
                 oscillator.start();
-                oscillator.stop(audioCtx.currentTime + duration);
+                oscillator.stop(audioContext.currentTime + duration);
             } catch (e) {
-                console.log("Web Audio tone synthesis initialization skipped:", e);
+                console.log(e);
+            }
+        }
+
+        // Synthesize Soft Background Lofi-Style Arpeggio Melodies loops
+        function startBGM() {
+            if (!audioContext || bgmIntervalId) return;
+            
+            // Chord Progression Sequencer Array: C-major, F-major, G-major, Am
+            const notesSequence = [
+                261.63, 329.63, 392.00, 523.25, // C4, E4, G4, C5
+                349.23, 440.00, 523.25, 698.46, // F4, A4, C5, F5
+                392.00, 493.88, 587.33, 783.99, // G4, B4, D5, G5
+                440.00, 523.25, 659.25, 880.00  // A4, C5, E5, A5
+            ];
+            
+            let noteIdx = 0;
+            bgmIntervalId = setInterval(() => {
+                if (!isBGMPlaying) return;
+                
+                // Synthesis execution loop rules parameters setup configurations
+                try {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    
+                    osc.type = 'triangle'; // Soft flute/lofi timber texture profile
+                    osc.frequency.setValueAtTime(notesSequence[noteIdx], audioContext.currentTime);
+                    
+                    // Main gentle low volume ambient metrics setup
+                    gain.gain.setValueAtTime(0.015, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.45);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.start();
+                    osc.stop(audioContext.currentTime + 0.5);
+                } catch(err){}
+
+                noteIdx = (noteIdx + 1) % notesSequence.length;
+            }, 600); // Relaxed melodic rhythmic pacing tempo pulse
+        }
+
+        function stopBGM() {
+            if (bgmIntervalId) {
+                clearInterval(bgmIntervalId);
+                bgmIntervalId = null;
             }
         }
 
