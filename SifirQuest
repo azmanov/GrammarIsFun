@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sifir Quest - Pengembaraan Matematik</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
+                        playful: {
+                            pink: '#ff2e93',
+                            purple: '#a855f7',
+                            blue: '#06b6d4',
+                            yellow: '#eab308',
+                            orange: '#f97316',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Fredoka', 'Nunito', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Fredoka & Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Fredoka', 'Nunito', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+            background-color: #0f172a;
+        }
+
+        /* Portrait Mobile Container Simulator for Desktop view */
+        .app-container {
+            max-width: 480px;
+            height: 100vh;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Customizable themes */
+        .theme-galaxy {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        }
+        .theme-forest {
+            background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+        }
+        .theme-sunset {
+            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+        }
+
+        /* Custom Scrollbar for inner scrolls */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        /* Floating effect for maps/avatars */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Pop effect */
+        @keyframes pop {
+            0% { transform: scale(0.9); opacity: 0; }
+            80% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop {
+            animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Confetti or Stars Particle effect */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: particleFall 1.5s ease-out forwards;
+        }
+        @keyframes particleFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(300px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Pulse and Glow for Adventure Path Nodes */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.9); }
+        }
+        .active-node {
+            animation: pulseGlow 2s infinite;
+        }
+
+        /* Shake animation for wrong answers */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Balloon rise animation */
+        @keyframes riseUp {
+            0% { transform: translateY(400px); opacity: 1; }
+            100% { transform: translateY(-200px); opacity: 1; }
+        }
+        .balloon-animation {
+            animation: riseUp 6s linear infinite;
+        }
+
+        /* Spin Wheel rotation */
+        .spin-transition {
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div id="app" class="app-container text-white theme-galaxy">
+        
+        <!-- ==================== STREAK / TOAST / POPUPS (Overlay alerts) ==================== -->
+        <div id="toast" class="absolute top-16 left-4 right-4 bg-brand-600 text-white p-4 rounded-2xl shadow-2xl flex items-center gap-3 transform -translate-y-32 opacity-0 transition-all duration-300 z-50">
+            <div class="text-2xl"><i class="fas fa-fire text-playful-orange"></i></div>
+            <div>
+                <h4 id="toast-title" class="font-bold text-sm">Hebat!</h4>
+                <p id="toast-msg" class="text-xs">Streak harian anda bertambah!</p>
+            </div>
+        </div>
+
+        <!-- Dynamic Overlay / Modal Container -->
+        <div id="custom-modal" class="absolute inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-6">
+            <div class="bg-indigo-900/90 border-4 border-indigo-500 rounded-3xl p-6 text-center max-w-sm w-full animate-pop shadow-2xl">
+                <div id="modal-icon" class="text-5xl text-playful-yellow mb-3">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 id="modal-title" class="text-2xl font-black mb-2 text-playful-yellow">Tahniah!</h3>
+                <p id="modal-desc" class="text-sm text-indigo-200 mb-6">Anda telah berjaya menamatkan tugasan ini.</p>
+                <button onclick="closeModal()" class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-black py-3 px-6 rounded-2xl shadow-lg border-b-4 border-emerald-700 transition">
+                    Teruskan
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== SCREEN: REGISTRATION ==================== -->
+        <div id="screen-register" class="flex-1 flex flex-col justify-between p-6 overflow-y-auto custom-scroll">
+            <div class="text-center mt-6">
+                <div class="text-7xl mb-2 animate-float inline-block">🚀</div>
+                <h1 class="text-4xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-playful-pink via-purple-400 to-playful-blue">SIFIR QUEST</h1>
+                <p class="text-indigo-200 text-sm mt-1" data-key="reg-subtitle">Mulakan Pengembaraan Matematik Premium Anda!</p>
+            </div>
+
+            <!-- Form -->
+            <div class="bg-indigo-950/70 border-2 border-indigo-800 rounded-3xl p-6 shadow-xl space-y-4 my-6">
+                <div>
+                    <label class="block text-xs font-bold text-indigo-300 mb-1 uppercase tracking-wider" data-key="reg-name">NAMA PENUH</label>
+                    <input type="text" id="reg-input-name" placeholder="cth: Muhammad" class="w-full bg-indigo-900/50 border border-indigo-700 rounded-xl px-4 py-3 text-white placeholder-indigo-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-300 mb-1 uppercase tracking-wider" data-key="reg-age">UMUR</label>
+                        <select id="reg-input-age" class="w-full bg-indigo-900/50 border border-indigo-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm">
+                            <option value="7">7 Tahun</option>
+                            <option value="8">8 Tahun</option>
+                            <option value="9">9 Tahun</option>
+                            <option value="10">10 Tahun</option>
+                            <option value="11">11 Tahun</option>
+                            <option value="12">12 Tahun</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-300 mb-1 uppercase tracking-wider" data-key="reg-year">TAHUN/DARJAH</label>
+                        <select id="reg-input-year" class="w-full bg-indigo-900/50 border border-indigo-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm">
+                            <option value="1">Darjah 1</option>
+                            <option value="2">Darjah 2</option>
+                            <option value="3">Darjah 3</option>
+                            <option value="4">Darjah 4</option>
+                            <option value="5">Darjah 5</option>
+                            <option value="6">Darjah 6</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-indigo-300 mb-1 uppercase tracking-wider" data-key="reg-code">KOD AKSES (PILIHAN)</label>
+                    <input type="text" id="reg-input-code" placeholder="cth: SCH99" class="w-full bg-indigo-900/50 border border-indigo-700 rounded-xl px-4 py-3 text-white placeholder-indigo-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm">
+                </div>
+            </div>
+
+            <!-- Choose Starter Character -->
+            <div class="mb-4">
+                <p class="text-center text-xs font-bold text-indigo-300 mb-3" data-key="reg-select-char">PILIH HERO PERTAMA ANDA:</p>
+                <div class="grid grid-cols-5 gap-2" id="starter-character-list">
+                    <!-- Dynamic rendering of starter heroes -->
+                </div>
+            </div>
+
+            <button onclick="handleRegister()" class="w-full bg-gradient-to-r from-emerald-400 to-green-600 hover:brightness-110 active:scale-95 text-white font-black py-4 rounded-2xl shadow-lg border-b-4 border-emerald-700 transition text-center" data-key="reg-start-btn">
+                DAFTAR & MULA BERMAIN!
+            </button>
+        </div>
+
+
+        <!-- ==================== HEADER BAR ==================== -->
+        <div id="app-header" class="hidden flex items-center justify-between px-4 py-3 bg-indigo-950/80 border-b border-indigo-800 backdrop-blur-md z-30">
+            <div class="flex items-center gap-2">
+                <img id="header-avatar" src="https://placehold.co/100/purple/white?text=🦸" class="w-9 h-9 rounded-full border-2 border-purple-400 object-cover" onerror="this.src='https://placehold.co/100/purple/white?text=H'">
+                <div>
+                    <div id="header-username" class="font-black text-xs text-white leading-tight">SifirHero</div>
+                    <div class="flex items-center gap-1">
+                        <span class="text-[9px] bg-purple-600 text-white px-1.5 py-0.5 rounded-full font-bold">LVL <span id="header-level">1</span></span>
+                        <div class="w-16 bg-indigo-900 h-1.5 rounded-full overflow-hidden">
+                            <div id="header-xp-bar" class="bg-purple-400 h-full" style="width: 30%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1 bg-indigo-900/60 px-2 py-1 rounded-full border border-indigo-700/50">
+                    <span class="text-playful-yellow text-xs"><i class="fas fa-star"></i></span>
+                    <span id="header-stars" class="font-black text-xs text-yellow-300">0</span>
+                </div>
+                <div class="flex items-center gap-1 bg-indigo-900/60 px-2 py-1 rounded-full border border-indigo-700/50">
+                    <span class="text-amber-400 text-xs"><i class="fas fa-coins animate-pulse"></i></span>
+                    <span id="header-coins" class="font-black text-xs text-amber-300">250</span>
+                </div>
+                <!-- Dynamic Language Toggle Button -->
+                <button onclick="toggleLanguage()" class="bg-indigo-800 text-white font-black text-[10px] py-1 px-2.5 rounded-lg border border-indigo-600 active:scale-95 flex items-center gap-1">
+                    <i class="fas fa-globe text-playful-blue"></i> <span id="lang-btn-text">BM</span>
+                </button>
+            </div>
+        </div>
+
+
+        <!-- ==================== CONTENT SCREEN WRAPPERS ==================== -->
+        <div id="app-content" class="hidden flex-1 overflow-y-auto custom-scroll relative">
+            
+            <!-- SECTION 1: HOME (Adventure Map) -->
+            <div id="screen-home" class="p-4 space-y-6">
+                <!-- Daily streak / Mission Widget -->
+                <div class="bg-gradient-to-r from-purple-900/90 to-indigo-900/90 border-2 border-purple-500 rounded-3xl p-4 shadow-xl flex items-center justify-between">
+                    <div>
+                        <h3 class="font-black text-sm text-playful-yellow flex items-center gap-1" data-key="streak-banner"><i class="fas fa-fire animate-pulse text-playful-orange"></i> Streak Harian: <span id="home-streak-count">1</span> Hari</h3>
+                        <p class="text-xs text-indigo-200 mt-1" data-key="streak-tip">Teruskan bermain esok untuk ganjaran berganda!</p>
+                    </div>
+                    <button onclick="openSpinWheel()" class="bg-gradient-to-r from-yellow-400 to-amber-500 hover:brightness-110 active:scale-95 text-xs text-indigo-950 font-black px-4 py-2.5 rounded-2xl shadow-lg animate-bounce">
+                        <i class="fas fa-dharmachakra"></i> SPIN!
+                    </button>
+                </div>
+
+                <!-- Daily Mission Mini Tracker -->
+                <div class="bg-indigo-950/60 border border-indigo-800 rounded-3xl p-4">
+                    <h4 class="font-bold text-xs text-indigo-300 uppercase tracking-widest mb-3 flex items-center justify-between">
+                        <span data-key="daily-mission-title">Misi Hari Ini</span>
+                        <span class="text-playful-pink text-xs"><i class="fas fa-calendar-day"></i></span>
+                    </h4>
+                    <div class="space-y-2" id="daily-mission-container">
+                        <!-- Dynamic rendering of daily goals -->
+                    </div>
+                </div>
+
+                <!-- Adventure Map View -->
+                <div class="relative bg-black/40 rounded-3xl p-6 border border-indigo-900 overflow-hidden">
+                    <div class="absolute inset-0 opacity-10 pointer-events-none bg-repeat" style="background-image: url('https://placehold.co/100');"></div>
+                    
+                    <div class="relative text-center mb-6">
+                        <span class="text-xs font-extrabold tracking-widest text-indigo-400 uppercase" data-key="map-mode">MOD KEMBARA</span>
+                        <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300" data-key="map-title">Peta Pengembaraan Sifir</h2>
+                    </div>
+
+                    <!-- Map nodes list inside vertical winding path -->
+                    <div class="relative flex flex-col items-center gap-12 py-6" id="adventure-map-container">
+                        <!-- Dynamic Levels will be rendered here. Alternating left-center-right nodes -->
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- SECTION 2: PLAY (Alternative/Special Modes Hub) -->
+            <div id="screen-play" class="hidden p-4 space-y-4">
+                <div class="text-center mb-4">
+                    <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-500" data-key="modes-title">Pusat Latihan & Cabaran</h2>
+                    <p class="text-xs text-indigo-300" data-key="modes-subtitle">Pilih cara anda mencabar minda sifir anda!</p>
+                </div>
+
+                <!-- Custom Sifir Selection Table Grid -->
+                <div class="bg-indigo-950/60 border border-indigo-800 rounded-3xl p-4">
+                    <h3 class="font-black text-sm text-indigo-200 mb-3" data-key="pilih-sifir-label">Pilih & Latih Sifir Khusus:</h3>
+                    <div class="grid grid-cols-4 gap-2">
+                        <!-- Sifir buttons 1 to 12 -->
+                        <script>
+                            for (let i = 1; i <= 12; i++) {
+                                document.write(`
+                                    <button onclick="startQuickSifir(${i})" class="bg-indigo-900/80 hover:bg-purple-900 border border-indigo-700 hover:border-purple-500 active:scale-95 text-white py-3 rounded-2xl font-black text-sm transition">
+                                        × ${i}
+                                    </button>
+                                `);
+                            }
+                        </script>
+                    </div>
+                </div>
+
+                <!-- Speed Challenge Grid Options -->
+                <div class="bg-indigo-950/60 border border-indigo-800 rounded-3xl p-4 space-y-3">
+                    <h3 class="font-black text-sm text-indigo-200" data-key="speed-header">Cabaran Laju (Speed Challenge):</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="startSpeedChallenge(30)" class="bg-gradient-to-r from-red-500 to-pink-600 active:scale-95 text-white font-bold p-3 rounded-2xl text-xs flex items-center justify-between shadow">
+                            <span>⏱️ 30 Saat</span>
+                            <i class="fas fa-bolt"></i>
+                        </button>
+                        <button onclick="startSpeedChallenge(60)" class="bg-gradient-to-r from-red-600 to-orange-600 active:scale-95 text-white font-bold p-3 rounded-2xl text-xs flex items-center justify-between shadow">
+                            <span>⏱️ 60 Saat</span>
+                            <i class="fas fa-bolt"></i>
+                        </button>
+                        <button onclick="startSpeedChallenge(120)" class="bg-gradient-to-r from-orange-500 to-yellow-600 active:scale-95 text-white font-bold p-3 rounded-2xl text-xs flex items-center justify-between shadow">
+                            <span>⏱️ 120 Saat</span>
+                            <i class="fas fa-bolt"></i>
+                        </button>
+                        <button onclick="startSpeedChallenge(-1)" class="bg-gradient-to-r from-purple-600 to-pink-700 active:scale-95 text-white font-bold p-3 rounded-2xl text-xs flex items-center justify-between shadow">
+                            <span data-key="unlimited-mode">🧠 Tanpa Had</span>
+                            <i class="fas fa-infinity"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Boss Encounter Shortcut -->
+                <div class="bg-gradient-to-r from-red-950 via-red-900 to-indigo-950 border-2 border-red-700 rounded-3xl p-4 flex items-center justify-between">
+                    <div>
+                        <span class="text-[9px] bg-red-600 text-white font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider" data-key="boss-badge">Cabaran Raja</span>
+                        <h4 class="font-black text-base text-red-200 mt-1" data-key="boss-shortcut-title">Pertempuran Boss Besar!</h4>
+                        <p class="text-xs text-red-300" data-key="boss-shortcut-desc">Uji kehebatan matematik dan kalahkan Raja Sifir.</p>
+                    </div>
+                    <button onclick="startBossEncounter()" class="bg-gradient-to-r from-red-500 to-rose-600 active:scale-95 text-xs text-white font-black px-4 py-3 rounded-2xl shadow-xl flex items-center gap-1.5 border border-red-400">
+                        <i class="fas fa-dragon"></i> SERANG
+                    </button>
+                </div>
+
+                <!-- Casual Play Mode (Latihan Santai) -->
+                <button onclick="startCasualTraining()" class="w-full bg-indigo-900/40 hover:bg-indigo-800/60 border border-indigo-700 rounded-2xl p-4 text-left flex items-center gap-4 active:scale-98 transition">
+                    <div class="text-3xl"><i class="fas fa-coffee text-playful-blue"></i></div>
+                    <div>
+                        <h4 class="font-black text-sm text-white" data-key="casual-title">Latihan Santai</h4>
+                        <p class="text-xs text-indigo-300" data-key="casual-desc">Latihan tanpa pemasa dan tekanan. Belajar mengikut kelajuan sendiri.</p>
+                    </div>
+                </button>
+            </div>
+
+
+            <!-- SECTION 3: REWARDS (Shop, Achievements, Spin Wheel UI) -->
+            <div id="screen-rewards" class="hidden p-4 space-y-6">
+                <!-- Tab Switching: Shop vs Achievements -->
+                <div class="flex bg-indigo-950/80 p-1.5 rounded-2xl border border-indigo-800">
+                    <button onclick="toggleRewardTab('shop')" id="reward-tab-shop" class="flex-1 bg-indigo-800 text-white font-black text-xs py-2.5 rounded-xl transition text-center" data-key="tab-shop">
+                        Kedai Hero
+                    </button>
+                    <button onclick="toggleRewardTab('achieve')" id="reward-tab-achieve" class="flex-1 text-indigo-300 font-black text-xs py-2.5 rounded-xl transition text-center" data-key="tab-achieve">
+                        Pencapaian
+                    </button>
+                </div>
+
+                <!-- Rewards Screen content 1: The Premium Shop -->
+                <div id="reward-shop-section" class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-black text-sm text-playful-yellow" data-key="shop-title-avatar">Buka Kunci Karakter & Tema:</h3>
+                        <span class="text-xs text-indigo-300 flex items-center gap-1"><i class="fas fa-coins text-amber-400"></i> <span id="shop-coin-display">0</span></span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3" id="shop-items-grid">
+                        <!-- Dynamic shop content loaded via JS -->
+                    </div>
+                </div>
+
+                <!-- Rewards Screen content 2: Achievements and Badges -->
+                <div id="reward-achieve-section" class="hidden space-y-4">
+                    <h3 class="font-black text-sm text-playful-pink" data-key="badge-title">Pingat Sifir & Lencana Pencapaian:</h3>
+                    <div class="space-y-3" id="achievements-list-container">
+                        <!-- Dynamic achievement cards -->
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- SECTION 4: LEADERBOARD -->
+            <div id="screen-leaderboard" class="hidden p-4 space-y-4">
+                <div class="text-center">
+                    <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-green-500" data-key="lead-title">Kedudukan Jaguh Sifir</h2>
+                    <p class="text-xs text-indigo-300" data-key="lead-subtitle">Siapakah pakar sifir terpantas minggu ini?</p>
+                </div>
+
+                <!-- Ranking Types Selector -->
+                <div class="flex bg-indigo-950/80 p-1 rounded-2xl border border-indigo-800 text-xs">
+                    <button onclick="loadLeaderboard('device')" id="btn-lead-device" class="flex-1 bg-indigo-800 text-white font-black py-2 rounded-xl transition">Peranti</button>
+                    <button onclick="loadLeaderboard('school')" id="btn-lead-school" class="flex-1 text-indigo-300 font-bold py-2 rounded-xl transition">Sekolah</button>
+                    <button onclick="loadLeaderboard('global')" id="btn-lead-global" class="flex-1 text-indigo-300 font-bold py-2 rounded-xl transition">Global</button>
+                </div>
+
+                <!-- The Podiums for Top 3 -->
+                <div class="grid grid-cols-3 gap-2 items-end pt-6 pb-2" id="leaderboard-podium">
+                    <!-- Dynamic Top 3 placement podium layout -->
+                </div>
+
+                <!-- Leaderboard Rank List -->
+                <div class="bg-indigo-950/60 border border-indigo-800 rounded-3xl p-3 space-y-2" id="leaderboard-list">
+                    <!-- Dynamic list items -->
+                </div>
+            </div>
+
+
+            <!-- SECTION 5: PROFILE (User info, Parent Analytics, Milestones Certificate, Settings) -->
+            <div id="screen-profile" class="hidden p-4 space-y-6">
+                <!-- Simple Profile Info -->
+                <div class="bg-indigo-950/60 border border-indigo-800 rounded-3xl p-4 flex items-center gap-4">
+                    <img id="profile-pic" src="https://placehold.co/100/purple/white?text=🦸" class="w-16 h-16 rounded-3xl border-2 border-purple-500 object-cover" onerror="this.src='https://placehold.co/100/purple/white?text=P'">
+                    <div class="flex-1">
+                        <h3 id="profile-name" class="text-lg font-black text-white">Adli</h3>
+                        <p class="text-xs text-indigo-300"><span data-key="age-label">Umur</span>: <span id="profile-age">9</span> | <span data-key="year-label">Darjah</span>: <span id="profile-year">3</span></p>
+                        <div class="mt-2 flex items-center gap-2">
+                            <span class="text-[10px] bg-indigo-800 text-indigo-200 border border-indigo-700 px-2 py-0.5 rounded-full font-bold">Code: <span id="profile-code">SCH99</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent Portal Accordion / Box -->
+                <div class="bg-gradient-to-br from-indigo-900/80 to-purple-950/80 border-2 border-purple-500/50 rounded-3xl p-4 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-black text-sm text-playful-blue flex items-center gap-1.5">
+                            <i class="fas fa-chart-line text-playful-blue animate-pulse"></i>
+                            <span data-key="parent-portal">PORTAL IBU BAPA & STATISTIK</span>
+                        </h3>
+                        <span class="text-[10px] bg-playful-blue/20 text-playful-blue font-extrabold px-2 py-0.5 rounded-full uppercase">Laporan</span>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-indigo-950/80 p-3 rounded-2xl border border-indigo-800">
+                            <span class="text-[10px] text-indigo-300 block" data-key="parent-played">Masa Bermain</span>
+                            <span id="parent-stat-playtime" class="font-black text-base text-white">0s</span>
+                        </div>
+                        <div class="bg-indigo-950/80 p-3 rounded-2xl border border-indigo-800">
+                            <span class="text-[10px] text-indigo-300 block" data-key="parent-answered">Soalan Dijawab</span>
+                            <span id="parent-stat-answered" class="font-black text-base text-white">0</span>
+                        </div>
+                        <div class="bg-indigo-950/80 p-3 rounded-2xl border border-indigo-800">
+                            <span class="text-[10px] text-indigo-300 block" data-key="parent-acc">Ketepatan Jawapan</span>
+                            <span id="parent-stat-accuracy" class="font-black text-base text-emerald-400">0%</span>
+                        </div>
+                        <div class="bg-indigo-950/80 p-3 rounded-2xl border border-indigo-800">
+                            <span class="text-[10px] text-indigo-300 block" data-key="parent-strongest">Sifir Terkuat</span>
+                            <span id="parent-stat-strongest" class="font-black text-base text-playful-yellow">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Graph / Sifir Progress Visualizer -->
+                    <div>
+                        <span class="text-xs font-bold text-indigo-200 block mb-2" data-key="parent-graph-title">Tahap Menguasai Sifir (1-12)</span>
+                        <div class="bg-indigo-950/60 p-3 rounded-2xl border border-indigo-800 flex items-end justify-between h-24 pt-4" id="parent-progress-bars">
+                            <!-- Bars 1 to 12 rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Milestone Achievements Certificate Trigger -->
+                <div class="bg-indigo-950/60 border border-indigo-800 rounded-3xl p-4 space-y-3">
+                    <h3 class="font-black text-sm text-playful-yellow" data-key="cert-section-title">Sijil Kejayaan Sifir</h3>
+                    <p class="text-xs text-indigo-300" data-key="cert-section-desc">Kumpul sekurang-kurangnya 1,000 bintang untuk membuka Sijil Pencapaian Rasmi anda!</p>
+                    <button onclick="checkAndOpenCertificate()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:brightness-110 active:scale-95 text-white font-black py-3 rounded-2xl text-xs flex items-center justify-center gap-2 shadow border-b-4 border-amber-700">
+                        <i class="fas fa-file-invoice text-sm"></i>
+                        <span data-key="cert-view-btn">LIHAT & MUAT TURUN SIJIL</span>
+                    </button>
+                </div>
+
+                <!-- App Settings Panel -->
+                <div class="bg-indigo-950/60 border border-indigo-800 rounded-3xl p-4 space-y-4">
+                    <h3 class="font-bold text-xs text-indigo-300 uppercase tracking-widest" data-key="settings-title">Tetapan Aplikasi</h3>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <span data-key="music-label">Muzik Latar</span>
+                        <button onclick="toggleMusic()" id="btn-toggle-music" class="bg-indigo-800 text-white font-bold py-1.5 px-4 rounded-xl border border-indigo-600 active:scale-95 text-xs">
+                            ON
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between text-sm">
+                        <span data-key="sfx-label">Kesan Bunyi (SFX)</span>
+                        <button onclick="toggleSFX()" id="btn-toggle-sfx" class="bg-indigo-800 text-white font-bold py-1.5 px-4 rounded-xl border border-indigo-600 active:scale-95 text-xs">
+                            ON
+                        </button>
+                    </div>
+
+                    <div class="pt-2 border-t border-indigo-800 flex flex-col gap-2">
+                        <button onclick="resetAppProgress()" class="w-full bg-red-950/50 hover:bg-red-900 border border-red-800 text-red-300 text-xs font-bold py-2.5 rounded-xl transition" data-key="reset-btn">
+                            Padam Kemajuan / Reset Data
+                        </button>
+                        <button onclick="logoutUser()" class="w-full bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 text-xs font-bold py-2.5 rounded-xl transition" data-key="logout-btn">
+                            Log Keluar Akaun
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ==================== SCREEN: GAMEPLAY ACTIVE VIEW ==================== -->
+        <div id="screen-gameplay" class="hidden flex-1 flex flex-col justify-between p-4 overflow-y-auto custom-scroll">
+            
+            <!-- Gameplay HUD -->
+            <div class="flex items-center justify-between bg-indigo-950/80 p-3 rounded-2xl border border-indigo-800">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="quitGameplay()" class="text-indigo-400 hover:text-white mr-2"><i class="fas fa-times text-lg"></i></button>
+                    <span id="gameplay-level-title" class="text-xs font-bold text-indigo-300">Level 1</span>
+                </div>
+
+                <!-- Timer / Endless indicator -->
+                <div id="gameplay-timer-container" class="flex items-center gap-1 bg-red-950/50 border border-red-800 text-red-200 px-3 py-1 rounded-full text-xs font-bold hidden">
+                    <i class="fas fa-clock text-red-400 animate-pulse"></i>
+                    <span id="gameplay-timer-val">30s</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- Progress visual (e.g., 2/10 questions) -->
+                    <span id="gameplay-progress-text" class="text-xs text-indigo-300">Q 1/10</span>
+                </div>
+            </div>
+
+            <!-- Gameplay Main Workspace (Changes per mode) -->
+            <div class="flex-1 flex flex-col justify-center py-6" id="gameplay-workspace">
+                <!-- Mode-specific layouts are generated dynamically here -->
+            </div>
+
+            <!-- Standard Keyboard Helper / Feedback Area -->
+            <div id="gameplay-footer-action" class="space-y-3">
+                <!-- Feedback panel will render here on answered status -->
+            </div>
+        </div>
+
+
+        <!-- ==================== SCREEN: SPIN WHEEL (Overlay panel) ==================== -->
+        <div id="screen-spin-wheel" class="hidden absolute inset-0 bg-black/90 backdrop-blur-sm z-40 flex flex-col justify-between p-6">
+            <div class="flex items-center justify-between">
+                <h3 class="font-black text-xl text-playful-yellow" data-key="spin-title"><i class="fas fa-dharmachakra"></i> Roda Putar Bertuah</h3>
+                <button onclick="closeSpinWheel()" class="text-white hover:text-red-400 text-lg"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center justify-center relative">
+                <!-- Pointer -->
+                <div class="absolute top-10 text-3xl text-playful-pink z-30 drop-shadow-md">
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                
+                <!-- The Wheel -->
+                <div id="wheel" class="w-72 h-72 rounded-full border-8 border-indigo-400 shadow-2xl overflow-hidden relative spin-transition flex items-center justify-center bg-indigo-950">
+                    <!-- Dynamic Wheel Wedges with Text/Emojis will be drawn inside -->
+                    <div id="wheel-wedges" class="absolute inset-0"></div>
+                </div>
+
+                <button id="spin-btn" onclick="spinTheWheel()" class="mt-8 bg-gradient-to-r from-yellow-400 via-orange-500 to-playful-pink hover:brightness-110 active:scale-95 text-white font-black text-lg py-3 px-8 rounded-full shadow-2xl border-b-4 border-amber-700 transition">
+                    PUTAR SEKARANG!
+                </button>
+            </div>
+
+            <div class="text-center text-xs text-indigo-300 mb-4" data-key="spin-limit">
+                Satu putaran percuma setiap hari!
+            </div>
+        </div>
+
+
+        <!-- ==================== SCREEN: CERTIFICATE VIEW ==================== -->
+        <div id="screen-certificate" class="hidden absolute inset-0 bg-black/90 backdrop-blur-sm z-40 flex flex-col justify-between p-4 overflow-y-auto custom-scroll">
+            <div class="flex items-center justify-between">
+                <h3 class="font-black text-sm text-playful-yellow" data-key="cert-view-title"><i class="fas fa-award"></i> Sijil Kegayaan Sifir Quest</h3>
+                <button onclick="closeCertificate()" class="text-white hover:text-red-400 text-lg"><i class="fas fa-times"></i></button>
+            </div>
+
+            <!-- Certificate Printable Template area -->
+            <div class="bg-white text-indigo-950 p-6 rounded-2xl shadow-2xl border-4 border-amber-500 text-center relative max-w-sm mx-auto my-6 overflow-hidden flex flex-col justify-between" id="certificate-print-area" style="min-height: 480px;">
+                <!-- Delicate vector backgrounds -->
+                <div class="absolute inset-2 border-2 border-indigo-200 pointer-events-none rounded-xl"></div>
+                <div class="absolute -top-10 -left-10 w-24 h-24 bg-amber-200/40 rounded-full blur-xl pointer-events-none"></div>
+                <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-indigo-200/40 rounded-full blur-xl pointer-events-none"></div>
+
+                <!-- Header -->
+                <div class="relative z-10">
+                    <span class="text-[10px] tracking-widest font-black text-amber-600 block mb-1">SIJIL PENGHARGAAN SIFIR QUEST</span>
+                    <h2 class="text-2xl font-black text-indigo-950 leading-tight">Master of Sifir</h2>
+                    <div class="w-16 h-1 bg-amber-500 mx-auto mt-2"></div>
+                </div>
+
+                <!-- Middle Content -->
+                <div class="relative z-10 py-4">
+                    <p class="text-[11px] italic text-indigo-600">Dengan ini memperakui bahawa</p>
+                    <h3 id="cert-display-name" class="text-xl font-extrabold text-indigo-950 uppercase border-b border-dashed border-indigo-300 py-1 inline-block min-w-[200px]">AHMAD DANISH</h3>
+                    
+                    <p class="text-[11px] text-indigo-700 mt-4 leading-relaxed mx-auto max-w-xs">
+                        Telah berjaya menguasai sifir matematik, melengkapkan kembara Sifir Quest dengan cemerlang dan berjaya mengumpul
+                    </p>
+                    
+                    <div class="flex items-center justify-center gap-1 mt-2 text-amber-600 font-bold text-sm">
+                        <i class="fas fa-star text-amber-500"></i>
+                        <span id="cert-display-stars">1,250</span> Bintang Pencapaian
+                    </div>
+                </div>
+
+                <!-- Footer Signatures & Stamp -->
+                <div class="relative z-10 flex items-end justify-between mt-4">
+                    <div class="text-left">
+                        <span id="cert-display-date" class="text-[9px] text-indigo-500 block">Tarikh: 02/07/2026</span>
+                        <div class="border-t border-indigo-300 w-20 mt-6 text-[8px] text-indigo-600 text-center pt-1 font-bold">Ibu Bapa / Guru</div>
+                    </div>
+
+                    <!-- Seal -->
+                    <div class="relative flex items-center justify-center">
+                        <div class="w-12 h-12 bg-amber-500 rounded-full border-2 border-white flex items-center justify-center text-white text-base shadow animate-float">
+                            <i class="fas fa-award"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-3 pb-4">
+                <button onclick="printOrDownloadCertificate()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:brightness-110 active:scale-95 text-white font-black py-3 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-lg">
+                    <i class="fas fa-download"></i>
+                    <span data-key="cert-download-btn">DOWNLOAD / CETAK SIJIL</span>
+                </button>
+                <p class="text-[10px] text-indigo-300 text-center" data-key="cert-print-helper">Gunakan pilihan 'Cetak ke PDF' pada menu cetakan sistem peranti anda.</p>
+            </div>
+        </div>
+
+
+        <!-- ==================== BOTTOM NAVIGATION BAR ==================== -->
+        <div id="app-nav" class="hidden h-16 bg-indigo-950/90 border-t border-indigo-800 flex items-center justify-around z-30 relative shadow-2xl">
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center justify-center flex-1 text-emerald-400 transition transform hover:scale-105">
+                <i class="fas fa-map-marked-alt text-lg"></i>
+                <span class="text-[10px] font-black mt-0.5" data-key="nav-home">Kembara</span>
+            </button>
+            <button onclick="switchTab('play')" id="nav-play" class="flex flex-col items-center justify-center flex-1 text-indigo-400 transition transform hover:scale-105">
+                <i class="fas fa-gamepad text-lg"></i>
+                <span class="text-[10px] font-bold mt-0.5" data-key="nav-play">Main</span>
+            </button>
+            <button onclick="switchTab('rewards')" id="nav-rewards" class="flex flex-col items-center justify-center flex-1 text-indigo-400 transition transform hover:scale-105">
+                <i class="fas fa-gift text-lg"></i>
+                <span class="text-[10px] font-bold mt-0.5" data-key="nav-rewards">Ganjaran</span>
+            </button>
+            <button onclick="switchTab('leaderboard')" id="nav-leaderboard" class="flex flex-col items-center justify-center flex-1 text-indigo-400 transition transform hover:scale-105">
+                <i class="fas fa-trophy text-lg"></i>
+                <span class="text-[10px] font-bold mt-0.5" data-key="nav-leaderboard">Carta</span>
+            </button>
+            <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center justify-center flex-1 text-indigo-400 transition transform hover:scale-105">
+                <i class="fas fa-user text-lg"></i>
+                <span class="text-[10px] font-bold mt-0.5" data-key="nav-profile">Profil</span>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Sound Synthesis Manager using Web Audio API
+        const SoundManager = {
+            ctx: null,
+            enabled: true,
+            musicOn: true,
+            musicNode: null,
+
+            init() {
+                try {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.error("Audio Context not supported", e);
+                }
+            },
+
+            playClick() {
+                if (!this.enabled || !this.ctx) return;
+                this.ctx.resume();
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.08);
+            },
+
+            playCorrect() {
+                if (!this.enabled || !this.ctx) return;
+                this.ctx.resume();
+                let now = this.ctx.currentTime;
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start();
+                osc.stop(now + 0.5);
+            },
+
+            playWrong() {
+                if (!this.enabled || !this.ctx) return;
+                this.ctx.resume();
+                let now = this.ctx.currentTime;
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.frequency.setValueAtTime(220, now); // A3
+                osc.frequency.linearRampToValueAtTime(110, now + 0.3); // A2
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start();
+                osc.stop(now + 0.3);
+            },
+
+            playWin() {
+                if (!this.enabled || !this.ctx) return;
+                this.ctx.resume();
+                let now = this.ctx.currentTime;
+                // Quick victory fanfare
+                [0, 0.12, 0.24, 0.36].forEach((delay, idx) => {
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    let freqs = [523.25, 659.25, 783.99, 1046.50];
+                    osc.frequency.setValueAtTime(freqs[idx], now + delay);
+                    gain.gain.setValueAtTime(0.1, now + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.25);
+                    osc.start(now + delay);
+                    osc.stop(now + delay + 0.25);
+                });
+            },
+
+            startMusic() {
+                // Synthesizes a subtle looped background pad or simple beep melody
+                if (!this.musicOn || !this.ctx) return;
+                try {
+                    this.ctx.resume();
+                    // We only build a basic loop to avoid clogging AudioNodes
+                    this.musicNode = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    this.musicNode.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    this.musicNode.type = 'triangle';
+                    this.musicNode.frequency.setValueAtTime(150, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+                    this.musicNode.start();
+                } catch(e){}
+            },
+
+            stopMusic() {
+                if (this.musicNode) {
+                    try { this.musicNode.stop(); } catch(e){}
+                    this.musicNode = null;
+                }
+            }
+        };
+
+        const DICTIONARY = {
+            bm: {
+                "reg-subtitle": "Mulakan Pengembaraan Matematik Premium Anda!",
+                "reg-name": "NAMA PENUH",
+                "reg-age": "UMUR",
+                "reg-year": "TAHUN / DARJAH",
+                "reg-code": "KOD AKSES (PILIHAN)",
+                "reg-select-char": "PILIH HERO PERTAMA ANDA:",
+                "reg-start-btn": "DAFTAR & MULA BERMAIN!",
+                "streak-banner": "Streak Harian:",
+                "streak-tip": "Teruskan bermain esok untuk ganjaran berganda!",
+                "daily-mission-title": "Misi Hari Ini",
+                "map-mode": "MOD KEMBARA",
+                "map-title": "Peta Pengembaraan Sifir",
+                "modes-title": "Pusat Latihan & Cabaran",
+                "modes-subtitle": "Pilih cara anda mencabar minda sifir anda!",
+                "pilih-sifir-label": "Pilih & Latih Sifir Khusus:",
+                "speed-header": "Cabaran Laju (Speed Challenge):",
+                "unlimited-mode": "🧠 Tanpa Had",
+                "boss-badge": "Cabaran Raja",
+                "boss-shortcut-title": "Pertempuran Boss Besar!",
+                "boss-shortcut-desc": "Uji kehebatan matematik dan kalahkan Raja Sifir.",
+                "casual-title": "Latihan Santai",
+                "casual-desc": "Latihan tanpa pemasa dan tekanan. Belajar mengikut kelajuan sendiri.",
+                "tab-shop": "Kedai Hero",
+                "tab-achieve": "Pencapaian",
+                "shop-title-avatar": "Buka Kunci Karakter & Tema:",
+                "badge-title": "Pingat Sifir & Lencana Pencapaian:",
+                "lead-title": "Kedudukan Jaguh Sifir",
+                "lead-subtitle": "Siapakah pakar sifir terpantas minggu ini?",
+                "parent-portal": "PORTAL IBU BAPA & STATISTIK",
+                "parent-played": "Masa Bermain",
+                "parent-answered": "Soalan Dijawab",
+                "parent-acc": "Ketepatan Jawapan",
+                "parent-strongest": "Sifir Terkuat",
+                "parent-graph-title": "Tahap Menguasai Sifir (1-12)",
+                "cert-section-title": "Sijil Kejayaan Sifir",
+                "cert-section-desc": "Kumpul sekurang-kurangnya 1,000 bintang untuk membuka Sijil Pencapaian Rasmi anda!",
+                "cert-view-btn": "LIHAT & MUAT TURUN SIJIL",
+                "settings-title": "Tetapan Aplikasi",
+                "music-label": "Muzik Latar",
+                "sfx-label": "Kesan Bunyi (SFX)",
+                "reset-btn": "Padam Kemajuan / Reset Data",
+                "logout-btn": "Log Keluar Akaun",
+                "nav-home": "Kembara",
+                "nav-play": "Main",
+                "nav-rewards": "Ganjaran",
+                "nav-leaderboard": "Carta",
+                "nav-profile": "Profil",
+                "age-label": "Umur",
+                "year-label": "Darjah",
+                "spin-title": "Roda Putar Bertuah",
+                "spin-limit": "Satu putaran percuma setiap hari!",
+                "cert-view-title": "Sijil Kegayaan Sifir Quest",
+                "cert-download-btn": "DOWNLOAD / CETAK SIJIL",
+                "cert-print-helper": "Gunakan pilihan 'Cetak ke PDF' pada menu cetakan sistem peranti anda."
+            },
+            en: {
+                "reg-subtitle": "Start Your Premium Mathematical Adventure!",
+                "reg-name": "FULL NAME",
+                "reg-age": "AGE",
+                "reg-year": "YEAR / GRADE",
+                "reg-code": "ACCESS CODE (OPTIONAL)",
+                "reg-select-char": "SELECT YOUR FIRST HERO:",
+                "reg-start-btn": "REGISTER & START PLAYING!",
+                "streak-banner": "Daily Streak:",
+                "streak-tip": "Play again tomorrow for double rewards!",
+                "daily-mission-title": "Daily Missions",
+                "map-mode": "ADVENTURE MAP",
+                "map-title": "Multiplication Quest Map",
+                "modes-title": "Practice & Challenges",
+                "modes-subtitle": "Choose how you want to challenge your multiplication mind!",
+                "pilih-sifir-label": "Choose & Practice Specific Table:",
+                "speed-header": "Speed Challenge:",
+                "unlimited-mode": "🧠 Endless Mode",
+                "boss-badge": "King Challenge",
+                "boss-shortcut-title": "Epic Boss Battle!",
+                "boss-shortcut-desc": "Test your mathematical power and defeat the Sifir King.",
+                "casual-title": "Casual Practice",
+                "casual-desc": "Practice without timers or pressure. Learn at your own pace.",
+                "tab-shop": "Hero Shop",
+                "tab-achieve": "Achievements",
+                "shop-title-avatar": "Unlock Characters & Themes:",
+                "badge-title": "Multiplication Medals & Achievement Badges:",
+                "lead-title": "Sifir Leaderboards",
+                "lead-subtitle": "Who is the fastest multiplication wizard this week?",
+                "parent-portal": "PARENT PORTAL & ANALYTICS",
+                "parent-played": "Total Time Played",
+                "parent-answered": "Questions Answered",
+                "parent-acc": "Accuracy Rate",
+                "parent-strongest": "Strongest Table",
+                "parent-graph-title": "Multiplication Mastery Table (1-12)",
+                "cert-section-title": "Completion Certificate",
+                "cert-section-desc": "Collect at least 1,000 stars to unlock your Official Achievement Certificate!",
+                "cert-view-btn": "VIEW & DOWNLOAD CERTIFICATE",
+                "settings-title": "App Settings",
+                "music-label": "Background Music",
+                "sfx-label": "Sound Effects (SFX)",
+                "reset-btn": "Reset Game Progress",
+                "logout-btn": "Log Out Account",
+                "nav-home": "Adventure",
+                "nav-play": "Play",
+                "nav-rewards": "Rewards",
+                "nav-leaderboard": "Leaderboard",
+                "nav-profile": "Profile",
+                "age-label": "Age",
+                "year-label": "Grade",
+                "spin-title": "Lucky Wheel Spin",
+                "spin-limit": "One free spin daily!",
+                "cert-view-title": "Sifir Quest Achievements Certificate",
+                "cert-download-btn": "DOWNLOAD / PRINT CERTIFICATE",
+                "cert-print-helper": "Choose 'Print to PDF' options on your device print settings."
+            }
+        };
+
+        let state = {
+            currentLanguage: 'bm',
+            user: null, // Stores user register credentials
+            stats: {
+                stars: 0,
+                coins: 200,
+                xp: 0,
+                level: 1,
+                streak: 1,
+                lastPlayDate: null,
+                playTimeTotal: 0, // seconds
+                answeredTotal: 0,
+                correctTotal: 0,
+                tableScores: {}, // track correctness per table 1-12
+            },
+            unlockedHeroes: ['wizard'], // default unlocked hero
+            activeHero: 'wizard',
+            activeTheme: 'galaxy',
+            adventureStage: 1, // current stage unlocked on map
+            dailyMissions: [
+                { id: 'm1', target: 15, current: 0, desc_bm: 'Jawab 15 soalan', desc_en: 'Answer 15 questions', rewarded: false, type: 'ans', reward: 50 },
+                { id: 'm2', target: 3, current: 0, desc_bm: 'Selesaikan 3 peringkat kembara', desc_en: 'Complete 3 adventure levels', rewarded: false, type: 'lvl', reward: 100 },
+                { id: 'm3', target: 10, current: 0, desc_bm: 'Jawab 10 kali betul berturut-turut', desc_en: 'Get 10 perfect answers consecutively', rewarded: false, type: 'perf', reward: 120 }
+            ]
+        };
+
+        // Static Game Assets
+        const HERO_ASSETS = {
+            robot: { name: "RoboSifir", emoji: "🤖", price: 0 },
+            wizard: { name: "Al-Khawarizmi JR", emoji: "🧙", price: 0 },
+            ninja: { name: "Sifir Shinobi", emoji: "🥷", price: 150 },
+            pirate: { name: "Captain Math", emoji: "🏴‍☠️", price: 200 },
+            astronaut: { name: "Cosmo Kid", emoji: "🧑‍🚀", price: 300 },
+            dino: { name: "Rex Sifir", emoji: "🦖", price: 400 }
+        };
+
+        const THEMES_ASSETS = {
+            galaxy: { name: "Galaxy Spark", css: "theme-galaxy", price: 0 },
+            forest: { name: "Enchanted Forest", css: "theme-forest", price: 100 },
+            sunset: { name: "Amber Sunset", css: "theme-sunset", price: 150 }
+        };
+
+        // Local Storage Helper
+        function saveStateToStorage() {
+            localStorage.setItem('sifir_quest_state', JSON.stringify(state));
+        }
+
+        function loadStateFromStorage() {
+            let data = localStorage.getItem('sifir_quest_state');
+            if (data) {
+                state = JSON.parse(data);
+                return true;
+            }
+            return false;
+        }
+
+        // Translation application helper
+        function applyTranslations() {
+            const lang = state.currentLanguage;
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (DICTIONARY[lang] && DICTIONARY[lang][key]) {
+                    el.innerText = DICTIONARY[lang][key];
+                }
+            });
+            document.getElementById('lang-btn-text').innerText = lang.toUpperCase();
+        }
+
+        function toggleLanguage() {
+            state.currentLanguage = (state.currentLanguage === 'bm') ? 'en' : 'bm';
+            saveStateToStorage();
+            applyTranslations();
+            renderDailyMissions();
+            renderAdventureMap();
+        }
+
+        // Notification / Toast helper
+        function showToast(title, msg, isSuccess = true) {
+            SoundManager.playClick();
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = msg;
+            
+            toast.className = `absolute top-16 left-4 right-4 ${isSuccess ? 'bg-emerald-600' : 'bg-red-600'} text-white p-4 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50`;
+            
+            setTimeout(() => {
+                toast.className = `absolute top-16 left-4 right-4 ${isSuccess ? 'bg-emerald-600' : 'bg-red-600'} text-white p-4 rounded-2xl shadow-2xl flex items-center gap-3 transform -translate-y-32 opacity-0 transition-all duration-300 z-50`;
+            }, 3000);
+        }
+
+        // Custom modal helper
+        function showModal(icon, title, desc) {
+            document.getElementById('modal-icon').innerHTML = icon;
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            SoundManager.playClick();
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        window.onload = function() {
+            SoundManager.init();
+            
+            // Check if profile is already configured
+            const hasData = loadStateFromStorage();
+            
+            // Sync Settings UI
+            document.getElementById('btn-toggle-music').innerText = SoundManager.musicOn ? 'ON' : 'OFF';
+            document.getElementById('btn-toggle-sfx').innerText = SoundManager.enabled ? 'ON' : 'OFF';
+
+            if (hasData && state.user) {
+                // Instantly load dashboard
+                document.getElementById('screen-register').classList.add('hidden');
+                document.getElementById('app-header').classList.remove('hidden');
+                document.getElementById('app-content').classList.remove('hidden');
+                document.getElementById('app-nav').classList.remove('hidden');
+                
+                // Set theme
+                updateThemeCSS();
+                
+                // Refresh Top HUD & elements
+                updateTopHUD();
+                renderAdventureMap();
+                renderDailyMissions();
+                checkStreakBonus();
+                
+                // Track time played
+                startPlaytimeTracker();
+            } else {
+                // Initialize starter character options
+                renderStarterHeroes();
+            }
+            
+            applyTranslations();
+        };
+
+        // Playtime analytic tracker
+        let playtimerInterval = null;
+        function startPlaytimeTracker() {
+            if (playtimerInterval) clearInterval(playtimerInterval);
+            playtimerInterval = setInterval(() => {
+                state.stats.playTimeTotal++;
+                if (state.stats.playTimeTotal % 10 === 0) {
+                    saveStateToStorage();
+                }
+            }, 1000);
+        }
+
+        function checkStreakBonus() {
+            let today = new Date().toDateString();
+            if (state.stats.lastPlayDate !== today) {
+                if (state.stats.lastPlayDate) {
+                    let lastDate = new Date(state.stats.lastPlayDate);
+                    let diffTime = Math.abs(new Date() - lastDate);
+                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    if (diffDays === 1) {
+                        state.stats.streak++;
+                    } else if (diffDays > 1) {
+                        state.stats.streak = 1; // reset streak
+                    }
+                } else {
+                    state.stats.streak = 1;
+                }
+                state.stats.lastPlayDate = today;
+                saveStateToStorage();
+                setTimeout(() => {
+                    showToast("STREAK!", state.currentLanguage === 'bm' ? `Tahniah! Streak harian ke-${state.stats.streak}!` : `Congrats! Daily streak day ${state.stats.streak}!`);
+                }, 1000);
+            }
+        }
+
+        function updateThemeCSS() {
+            const container = document.getElementById('app');
+            // Remove previous themes
+            container.classList.remove('theme-galaxy', 'theme-forest', 'theme-sunset');
+            // Apply current theme style class
+            let themeClass = THEMES_ASSETS[state.activeTheme]?.css || 'theme-galaxy';
+            container.classList.add(themeClass);
+        }
+
+        function updateTopHUD() {
+            if (!state.user) return;
+            document.getElementById('header-username').innerText = state.user.name;
+            document.getElementById('header-level').innerText = state.stats.level;
+            document.getElementById('header-stars').innerText = state.stats.stars;
+            document.getElementById('header-coins').innerText = state.stats.coins;
+            
+            // XP progress calculation (each level is level * 100 XP)
+            let xpNeeded = state.stats.level * 100;
+            let percent = (state.stats.xp / xpNeeded) * 100;
+            document.getElementById('header-xp-bar').style.width = `${percent}%`;
+
+            // Sync images
+            let activeHeroObj = HERO_ASSETS[state.activeHero];
+            let placeholderImg = `https://placehold.co/100/purple/white?text=${activeHeroObj ? activeHeroObj.emoji : '🧙'}`;
+            document.getElementById('header-avatar').src = placeholderImg;
+            document.getElementById('profile-pic').src = placeholderImg;
+        }
+
+        let selectedStarterHero = 'wizard';
+        function renderStarterHeroes() {
+            let container = document.getElementById('starter-character-list');
+            container.innerHTML = "";
+            Object.keys(HERO_ASSETS).forEach(key => {
+                let h = HERO_ASSETS[key];
+                if (h.price === 0) {
+                    let isSelected = selectedStarterHero === key;
+                    container.innerHTML += `
+                        <button onclick="selectStarterHero('${key}')" class="flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition ${isSelected ? 'border-purple-400 bg-purple-950/40 scale-105' : 'border-indigo-800 bg-indigo-950/20'}">
+                            <span class="text-3xl">${h.emoji}</span>
+                            <span class="text-[9px] mt-1 font-bold truncate w-full text-center">${h.name}</span>
+                        </button>
+                    `;
+                }
+            });
+        }
+
+        function selectStarterHero(key) {
+            SoundManager.playClick();
+            selectedStarterHero = key;
+            renderStarterHeroes();
+        }
+
+        // Registration form handle
+        function handleRegister() {
+            SoundManager.playClick();
+            let name = document.getElementById('reg-input-name').value.trim();
+            let age = document.getElementById('reg-input-age').value;
+            let year = document.getElementById('reg-input-year').value;
+            let code = document.getElementById('reg-input-code').value.trim() || 'FREE';
+
+            if (!name) {
+                showToast("Ops!", state.currentLanguage === 'bm' ? "Sila masukkan nama penuh anda." : "Please enter your full name.", false);
+                return;
+            }
+
+            state.user = { name, age, year, code };
+            state.activeHero = selectedStarterHero;
+            if (!state.unlockedHeroes.includes(selectedStarterHero)) {
+                state.unlockedHeroes.push(selectedStarterHero);
+            }
+            state.stats.lastPlayDate = new Date().toDateString();
+
+            saveStateToStorage();
+            
+            // Switch Screens
+            document.getElementById('screen-register').classList.add('hidden');
+            document.getElementById('app-header').classList.remove('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+            document.getElementById('app-nav').classList.remove('hidden');
+            
+            SoundManager.startMusic();
+            updateTopHUD();
+            renderAdventureMap();
+            renderDailyMissions();
+            startPlaytimeTracker();
+
+            showToast("Sifir Quest", state.currentLanguage === 'bm' ? "Selamat datang ke dunia sifir!" : "Welcome to the multiplication world!");
+        }
+
+        function renderAdventureMap() {
+            const container = document.getElementById('adventure-map-container');
+            container.innerHTML = "";
+
+            // We generate 12 levels representing Sifir 1 to 12
+            // Node layouts winding: Alternating offset styles (left, center, right)
+            const mapWinds = ['items-start pl-8', 'items-center', 'items-end pr-8', 'items-center'];
+            
+            for (let i = 1; i <= 12; i++) {
+                let windClass = mapWinds[(i - 1) % 4];
+                let isLocked = i > state.adventureStage;
+                let isActive = i === state.adventureStage;
+                
+                let isBoss = i === 6 || i === 12;
+                let nodeColor = "bg-indigo-800 border-indigo-600";
+                let emoji = "⭐️";
+
+                if (isBoss) {
+                    nodeColor = "bg-rose-900 border-rose-600";
+                    emoji = "👹";
+                } else if (isActive) {
+                    nodeColor = "bg-emerald-500 border-emerald-400 active-node";
+                } else if (!isLocked) {
+                    nodeColor = "bg-purple-600 border-purple-400";
+                }
+
+                container.innerHTML += `
+                    <div class="flex flex-col ${windClass} w-full transition duration-300">
+                        <button onclick="startAdventureStage(${i}, ${isLocked})" class="w-16 h-16 rounded-full flex flex-col items-center justify-center font-black text-white border-4 shadow-xl active:scale-90 transition ${nodeColor} ${isLocked ? 'opacity-40 cursor-not-allowed' : ''}">
+                            <span class="text-xl">${isLocked ? '🔒' : emoji}</span>
+                            <span class="text-[10px] uppercase font-black">${isBoss ? 'BOSS' : 'LVL ' + i}</span>
+                        </button>
+                        <span class="text-xs font-bold text-indigo-300 mt-1">${state.currentLanguage === 'bm' ? 'Sifir' : 'Table'} ${i}</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Daily mission renderer
+        function renderDailyMissions() {
+            let container = document.getElementById('daily-mission-container');
+            container.innerHTML = "";
+
+            state.dailyMissions.forEach(m => {
+                let desc = state.currentLanguage === 'bm' ? m.desc_bm : m.desc_en;
+                let isCompleted = m.current >= m.target;
+                let percent = Math.min((m.current / m.target) * 100, 100);
+
+                container.innerHTML += `
+                    <div class="bg-indigo-900/40 p-3 rounded-2xl border border-indigo-800/60 space-y-2">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-bold text-indigo-200">${desc}</span>
+                            <span class="text-[10px] text-indigo-400 font-extrabold">${m.current}/${m.target}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex-1 bg-indigo-950 h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-emerald-400 to-green-500 h-full" style="width: ${percent}%;"></div>
+                            </div>
+                            ${isCompleted && !m.rewarded ? 
+                                `<button onclick="claimMissionReward('${m.id}')" class="bg-playful-yellow text-indigo-950 font-black text-[10px] px-2 py-1 rounded-xl shadow animate-bounce">CLAIM</button>` : 
+                                m.rewarded ? `<span class="text-emerald-400 text-xs"><i class="fas fa-check-circle"></i></span>` : `<span class="text-[10px] text-amber-400 font-bold"><i class="fas fa-coins"></i> +${m.reward}</span>`
+                            }
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function claimMissionReward(id) {
+            let m = state.dailyMissions.find(x => x.id === id);
+            if (m && m.current >= m.target && !m.rewarded) {
+                m.rewarded = true;
+                addCoins(m.reward);
+                addXP(50);
+                saveStateToStorage();
+                renderDailyMissions();
+                showToast("Mission Claimed!", state.currentLanguage === 'bm' ? `Tahniah! Anda dapat +${m.reward} Syiling!` : `Congrats! You got +${m.reward} Coins!`);
+            }
+        }
+
+        // Add game progress helpers
+        function addCoins(amount) {
+            state.stats.coins += amount;
+            updateTopHUD();
+            saveStateToStorage();
+        }
+
+        function addXP(amount) {
+            state.stats.xp += amount;
+            let xpNeeded = state.stats.level * 100;
+            if (state.stats.xp >= xpNeeded) {
+                state.stats.xp -= xpNeeded;
+                state.stats.level++;
+                SoundManager.playWin();
+                setTimeout(() => {
+                    showModal("<i class='fas fa-arrow-up text-playful-pink'></i>", 
+                        state.currentLanguage === 'bm' ? "TAHNIAH! UP LEVEL!" : "CONGRATS! LEVEL UP!", 
+                        state.currentLanguage === 'bm' ? `Anda kini Level ${state.stats.level}!` : `You are now Level ${state.stats.level}!`);
+                }, 500);
+            }
+            updateTopHUD();
+            saveStateToStorage();
+        }
+
+        // Tab Switcher Bottom Nav
+        function switchTab(tabId) {
+            SoundManager.playClick();
+            // Hide all screens
+            document.getElementById('screen-home').classList.add('hidden');
+            document.getElementById('screen-play').classList.add('hidden');
+            document.getElementById('screen-rewards').classList.add('hidden');
+            document.getElementById('screen-leaderboard').classList.add('hidden');
+            document.getElementById('screen-profile').classList.add('hidden');
+
+            // Show target
+            document.getElementById(`screen-${tabId}`).classList.remove('hidden');
+
+            // Reset Tab styling in bottom nav
+            ['home', 'play', 'rewards', 'leaderboard', 'profile'].forEach(tab => {
+                let btn = document.getElementById(`nav-${tab}`);
+                if (tab === tabId) {
+                    btn.classList.add('text-emerald-400');
+                    btn.classList.remove('text-indigo-400');
+                } else {
+                    btn.classList.add('text-indigo-400');
+                    btn.classList.remove('text-emerald-400');
+                }
+            });
+
+            // Extra lazy loaded setups
+            if (tabId === 'rewards') {
+                renderShopItems();
+                renderAchievements();
+            } else if (tabId === 'profile') {
+                renderParentStats();
+            } else if (tabId === 'leaderboard') {
+                loadLeaderboard('device');
+            }
+        }
+
+        let activeRewardTab = 'shop';
+        function toggleRewardTab(tab) {
+            SoundManager.playClick();
+            activeRewardTab = tab;
+            if (tab === 'shop') {
+                document.getElementById('reward-tab-shop').className = "flex-1 bg-indigo-800 text-white font-black text-xs py-2.5 rounded-xl transition text-center";
+                document.getElementById('reward-tab-achieve').className = "flex-1 text-indigo-300 font-bold text-xs py-2.5 rounded-xl transition text-center";
+                document.getElementById('reward-shop-section').classList.remove('hidden');
+                document.getElementById('reward-achieve-section').classList.add('hidden');
+                renderShopItems();
+            } else {
+                document.getElementById('reward-tab-achieve').className = "flex-1 bg-indigo-800 text-white font-black text-xs py-2.5 rounded-xl transition text-center";
+                document.getElementById('reward-tab-shop').className = "flex-1 text-indigo-300 font-bold text-xs py-2.5 rounded-xl transition text-center";
+                document.getElementById('reward-achieve-section').classList.remove('hidden');
+                document.getElementById('reward-shop-section').classList.add('hidden');
+                renderAchievements();
+            }
+        }
+
+        function renderShopItems() {
+            document.getElementById('shop-coin-display').innerText = state.stats.coins;
+            let grid = document.getElementById('shop-items-grid');
+            grid.innerHTML = "";
+
+            // Render Hero Characters
+            Object.keys(HERO_ASSETS).forEach(key => {
+                let h = HERO_ASSETS[key];
+                let isUnlocked = state.unlockedHeroes.includes(key);
+                let isActive = state.activeHero === key;
+
+                grid.innerHTML += `
+                    <div class="bg-indigo-900/50 border border-indigo-800 p-3 rounded-2xl flex flex-col items-center justify-between text-center space-y-2">
+                        <span class="text-4xl animate-float">${h.emoji}</span>
+                        <div>
+                            <h4 class="font-bold text-xs text-white">${h.name}</h4>
+                            <p class="text-[9px] text-indigo-300">${isUnlocked ? (isActive ? 'USED' : 'UNLOCKED') : 'PRICE: ' + h.price + ' 💰'}</p>
+                        </div>
+                        ${isUnlocked ? 
+                            `<button onclick="setActiveHero('${key}')" class="w-full ${isActive ? 'bg-indigo-950 border-indigo-800 text-indigo-500' : 'bg-purple-600 hover:bg-purple-700'} text-white text-[10px] font-black py-1.5 rounded-xl transition">${isActive ? 'ACTIVE' : 'SELECT'}</button>` :
+                            `<button onclick="buyHero('${key}', ${h.price})" class="w-full bg-amber-500 hover:bg-amber-600 text-indigo-950 text-[10px] font-black py-1.5 rounded-xl transition">BUY CHARACTER</button>`
+                        }
+                    </div>
+                `;
+            });
+
+            // Render Themes
+            Object.keys(THEMES_ASSETS).forEach(key => {
+                let t = THEMES_ASSETS[key];
+                let isUnlocked = key === 'galaxy' || state.stats.stars >= t.price; // themed unlock via stars milestone
+                let isActive = state.activeTheme === key;
+
+                grid.innerHTML += `
+                    <div class="bg-indigo-900/50 border border-indigo-800 p-3 rounded-2xl flex flex-col items-center justify-between text-center space-y-2">
+                        <span class="text-3xl">🎨</span>
+                        <div>
+                            <h4 class="font-bold text-xs text-white">${t.name}</h4>
+                            <p class="text-[9px] text-indigo-300">${isUnlocked ? 'UNLOCKED' : 'NEED: ' + t.price + ' ⭐'}</p>
+                        </div>
+                        ${isUnlocked ? 
+                            `<button onclick="setActiveTheme('${key}')" class="w-full ${isActive ? 'bg-indigo-950 border-indigo-800 text-indigo-500' : 'bg-emerald-600 hover:bg-emerald-700'} text-white text-[10px] font-black py-1.5 rounded-xl transition">${isActive ? 'ACTIVE' : 'USE THEME'}</button>` :
+                            `<button class="w-full bg-indigo-950 text-indigo-500 text-[10px] font-black py-1.5 rounded-xl cursor-not-allowed" disabled>LOCKED</button>`
+                        }
+                    </div>
+                `;
+            });
+        }
+
+        function setActiveHero(key) {
+            SoundManager.playClick();
+            state.activeHero = key;
+            saveStateToStorage();
+            updateTopHUD();
+            renderShopItems();
+            showToast("Hero Changed", `Sifir Quest Hero: ${HERO_ASSETS[key].name}!`);
+        }
+
+        function buyHero(key, price) {
+            if (state.stats.coins >= price) {
+                state.stats.coins -= price;
+                state.unlockedHeroes.push(key);
+                state.activeHero = key;
+                saveStateToStorage();
+                updateTopHUD();
+                renderShopItems();
+                showToast("Hero Unlocked!", `${HERO_ASSETS[key].name} joined your quest!`);
+            } else {
+                showToast("Ops!", state.currentLanguage === 'bm' ? "Syiling tidak mencukupi." : "Not enough coins.", false);
+            }
+        }
+
+        function setActiveTheme(key) {
+            SoundManager.playClick();
+            state.activeTheme = key;
+            saveStateToStorage();
+            updateThemeCSS();
+            renderShopItems();
+            showToast("Theme Changed", `Theme: ${THEMES_ASSETS[key].name}!`);
+        }
+
+        function renderAchievements() {
+            let container = document.getElementById('achievements-list-container');
+            container.innerHTML = "";
+
+            // List of achievements dynamically checked
+            const badges = [
+                { key: 'ans100', name: "Sifir Junior (100+ Ans)", desc: "Jawab 100+ soalan dengan betul.", check: () => state.stats.correctTotal >= 100 },
+                { key: 'streak7', name: "Consistent Spark (7-Day Streak)", desc: "Main selama 7 hari berturut-turut.", check: () => state.stats.streak >= 7 },
+                ...Array.from({length: 12}, (_, i) => i+1).map(num => ({
+                    key: `sifir${num}`,
+                    name: `Master of Sifir ${num}`,
+                    desc: `Selesaikan peringkat kembara Sifir ${num} dengan sempurna.`,
+                    check: () => state.adventureStage > num
+                }))
+            ];
+
+            badges.forEach(b => {
+                let isAchieved = b.check();
+                container.innerHTML += `
+                    <div class="bg-indigo-900/40 p-3 rounded-2xl border ${isAchieved ? 'border-amber-500 bg-gradient-to-r from-indigo-900/60 to-purple-900/60' : 'border-indigo-800'} flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full ${isAchieved ? 'bg-amber-500 text-indigo-950' : 'bg-indigo-950 text-indigo-700'} flex items-center justify-center text-xl shadow-md">
+                            <i class="fas ${isAchieved ? 'fa-award animate-float' : 'fa-lock'}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-black text-xs ${isAchieved ? 'text-amber-400' : 'text-indigo-300'}">${b.name}</h4>
+                            <p class="text-[10px] text-indigo-200">${b.desc}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Parent Portal analytics drawer
+        function renderParentStats() {
+            document.getElementById('profile-name').innerText = state.user.name;
+            document.getElementById('profile-age').innerText = state.user.age;
+            document.getElementById('profile-year').innerText = state.user.year;
+            document.getElementById('profile-code').innerText = state.user.code;
+
+            // Simple conversions for stats
+            let totalAnswers = state.stats.answeredTotal || 0;
+            let correctAnswers = state.stats.correctTotal || 0;
+            let accuracy = totalAnswers > 0 ? Math.round((correctAnswers / totalAnswers) * 100) : 0;
+            
+            // Format playtime
+            let minutes = Math.floor(state.stats.playTimeTotal / 60);
+            let seconds = state.stats.playTimeTotal % 60;
+            let formatTime = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+
+            document.getElementById('parent-stat-playtime').innerText = formatTime;
+            document.getElementById('parent-stat-answered').innerText = totalAnswers;
+            document.getElementById('parent-stat-accuracy').innerText = `${accuracy}%`;
+
+            // Identify strongest sifir table
+            let strongestTable = "-";
+            let maxScore = 0;
+            Object.keys(state.stats.tableScores).forEach(table => {
+                let score = state.stats.tableScores[table].correct || 0;
+                if (score > maxScore) {
+                    maxScore = score;
+                    strongestTable = `Sifir ${table}`;
+                }
+            });
+            document.getElementById('parent-stat-strongest').innerText = strongestTable;
+
+            // Render custom CSS/HTML charts
+            let parentBarsContainer = document.getElementById('parent-progress-bars');
+            parentBarsContainer.innerHTML = "";
+            for (let i = 1; i <= 12; i++) {
+                let tblObj = state.stats.tableScores[i] || { correct: 0, total: 0 };
+                let tblPercent = tblObj.total > 0 ? Math.round((tblObj.correct / tblObj.total) * 100) : 0;
+                
+                parentBarsContainer.innerHTML += `
+                    <div class="flex flex-col items-center h-full justify-end flex-1 group relative cursor-pointer">
+                        <!-- Tooltip inside parent portal -->
+                        <span class="absolute bottom-16 bg-indigo-900 border border-indigo-700 text-white font-bold text-[9px] px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition">${tblPercent}%</span>
+                        <div class="bg-indigo-900 w-2.5 h-full rounded-full overflow-hidden flex flex-col justify-end">
+                            <div class="bg-gradient-to-t from-emerald-500 to-green-400 w-full" style="height: ${tblPercent}%;"></div>
+                        </div>
+                        <span class="text-[8px] font-black text-indigo-300 mt-1">${i}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function checkAndOpenCertificate() {
+            SoundManager.playClick();
+            if (state.stats.stars >= 1000) {
+                document.getElementById('cert-display-name').innerText = state.user.name;
+                document.getElementById('cert-display-stars').innerText = state.stats.stars;
+                document.getElementById('cert-display-date').innerText = "Tarikh: " + new Date().toLocaleDateString();
+                document.getElementById('screen-certificate').classList.remove('hidden');
+            } else {
+                showToast("Bintang Tidak Cukup", state.currentLanguage === 'bm' ? "Kumpul 1,000 bintang dahulu!" : "Collect 1,000 stars first!", false);
+            }
+        }
+
+        function closeCertificate() {
+            SoundManager.playClick();
+            document.getElementById('screen-certificate').classList.add('hidden');
+        }
+
+        function printOrDownloadCertificate() {
+            SoundManager.playClick();
+            // High quality custom window print
+            window.print();
+        }
+
+        // Spin wheel setup & operation
+        function openSpinWheel() {
+            SoundManager.playClick();
+            document.getElementById('screen-spin-wheel').classList.remove('hidden');
+            drawWheel();
+        }
+
+        function closeSpinWheel() {
+            SoundManager.playClick();
+            document.getElementById('screen-spin-wheel').classList.add('hidden');
+        }
+
+        const WHEEL_ITEMS = [
+            { type: 'coins', amount: 50, label: "+50 Coins 💰" },
+            { type: 'stars', amount: 10, label: "+10 Stars ⭐" },
+            { type: 'coins', amount: 100, label: "+100 Coins 💰" },
+            { type: 'xp', amount: 80, label: "+80 XP 🚀" },
+            { type: 'stars', amount: 20, label: "+20 Stars ⭐" },
+            { type: 'coins', amount: 150, label: "+150 Coins 💰" }
+        ];
+
+        function drawWheel() {
+            let container = document.getElementById('wheel-wedges');
+            container.innerHTML = "";
+            let degSlice = 360 / WHEEL_ITEMS.length;
+
+            WHEEL_ITEMS.forEach((item, index) => {
+                let rot = index * degSlice;
+                // Draw simple styled wedges inside SVG or pure transforms
+                container.innerHTML += `
+                    <div class="absolute inset-0 flex items-center justify-center font-black text-[11px]" style="transform: rotate(${rot}deg); transform-origin: 50% 50%;">
+                        <span class="absolute" style="transform: translateY(-90px);">${item.label}</span>
+                    </div>
+                `;
+            });
+        }
+
+        let isSpinning = false;
+        function spinTheWheel() {
+            if (isSpinning) return;
+            SoundManager.playClick();
+            isSpinning = true;
+
+            // Trigger random wedge stop
+            let targetIdx = Math.floor(Math.random() * WHEEL_ITEMS.length);
+            let degreePerSlice = 360 / WHEEL_ITEMS.length;
+            
+            // Total spins + destination slice
+            let extraSpins = 5 * 360;
+            let destDeg = extraSpins + (targetIdx * degreePerSlice);
+
+            const wheel = document.getElementById('wheel');
+            wheel.style.transform = `rotate(-${destDeg}deg)`;
+
+            setTimeout(() => {
+                isSpinning = false;
+                let wonItem = WHEEL_ITEMS[targetIdx];
+                
+                // Reward Player
+                if (wonItem.type === 'coins') {
+                    addCoins(wonItem.amount);
+                } else if (wonItem.type === 'stars') {
+                    state.stats.stars += wonItem.amount;
+                } else if (wonItem.type === 'xp') {
+                    addXP(wonItem.amount);
+                }
+                
+                saveStateToStorage();
+                updateTopHUD();
+                SoundManager.playWin();
+
+                showModal("<i class='fas fa-gift text-amber-500 animate-bounce'></i>", 
+                    state.currentLanguage === 'bm' ? "TAHNIAH!" : "CONGRATS!", 
+                    state.currentLanguage === 'bm' ? `Anda memenangi ${wonItem.label}!` : `You won ${wonItem.label}!`);
+                
+                closeSpinWheel();
+            }, 4000);
+        }
+
+        function loadLeaderboard(type) {
+            SoundManager.playClick();
+            // Tab highlight sync
+            ['device', 'school', 'global'].forEach(t => {
+                let btn = document.getElementById(`btn-lead-${t}`);
+                if (t === type) {
+                    btn.className = "flex-1 bg-indigo-800 text-white font-black py-2 rounded-xl transition";
+                } else {
+                    btn.className = "flex-1 text-indigo-300 font-bold py-2 rounded-xl transition";
+                }
+            });
+
+            // Mock Data Generation for School/Global
+            let list = [];
+            if (type === 'device') {
+                list = [
+                    { name: state.user?.name || "Player", stars: state.stats.stars, level: state.stats.level, isSelf: true },
+                    { name: "SifirMaster_007", stars: 850, level: 7, isSelf: false },
+                    { name: "Sara_Maths", stars: 620, level: 5, isSelf: false },
+                    { name: "ImranSifir", stars: 450, level: 4, isSelf: false }
+                ];
+            } else if (type === 'school') {
+                list = [
+                    { name: "Afiq SK Putrajaya", stars: 2500, level: 15, isSelf: false },
+                    { name: "Sofia Cemerlang", stars: 1980, level: 12, isSelf: false },
+                    { name: state.user?.name || "Player", stars: state.stats.stars, level: state.stats.level, isSelf: true },
+                    { name: "Aizat Kancil", stars: 920, level: 8, isSelf: false }
+                ];
+            } else {
+                list = [
+                    { name: "HyperSifir_MY", stars: 5400, level: 25, isSelf: false },
+                    { name: "MathGamer_Indo", stars: 4200, level: 21, isSelf: false },
+                    { name: "Singapore_Sifir", stars: 3900, level: 19, isSelf: false },
+                    { name: "SK_Raja_Geometri", stars: 2100, level: 14, isSelf: false },
+                    { name: state.user?.name || "Player", stars: state.stats.stars, level: state.stats.level, isSelf: true }
+                ];
+            }
+
+            // Sort by Stars
+            list.sort((a,b) => b.stars - a.stars);
+
+            // Podiums (Top 3)
+            let top3 = list.slice(0, 3);
+            let podiumContainer = document.getElementById('leaderboard-podium');
+            podiumContainer.innerHTML = "";
+            
+            // Build visual columns for Top 3 (Order: 2nd, 1st, 3rd)
+            let p2 = top3[1] || { name: "-", stars: 0, level: 1 };
+            let p1 = top3[0] || { name: "-", stars: 0, level: 1 };
+            let p3 = top3[2] || { name: "-", stars: 0, level: 1 };
+
+            podiumContainer.innerHTML = `
+                <!-- 2nd Place -->
+                <div class="flex flex-col items-center">
+                    <span class="text-xs font-bold text-gray-300 truncate w-16 text-center">${p2.name}</span>
+                    <div class="bg-indigo-900/40 border border-indigo-700 w-16 h-20 rounded-t-xl flex flex-col justify-end p-2 text-center mt-1">
+                        <span class="text-gray-400 font-black">2</span>
+                        <span class="text-[9px] text-amber-300 font-bold">${p2.stars}⭐</span>
+                    </div>
+                </div>
+                <!-- 1st Place -->
+                <div class="flex flex-col items-center">
+                    <span class="text-yellow-400 animate-bounce"><i class="fas fa-crown"></i></span>
+                    <span class="text-xs font-black text-white truncate w-20 text-center">${p1.name}</span>
+                    <div class="bg-gradient-to-t from-yellow-600 to-amber-400 w-20 h-28 rounded-t-xl flex flex-col justify-end p-2 text-center mt-1 shadow-lg">
+                        <span class="text-yellow-950 font-black text-lg">1</span>
+                        <span class="text-[9px] text-yellow-950 font-black">${p1.stars}⭐</span>
+                    </div>
+                </div>
+                <!-- 3rd Place -->
+                <div class="flex flex-col items-center">
+                    <span class="text-xs font-bold text-amber-600 truncate w-16 text-center">${p3.name}</span>
+                    <div class="bg-indigo-900/40 border border-indigo-700 w-16 h-16 rounded-t-xl flex flex-col justify-end p-2 text-center mt-1">
+                        <span class="text-amber-700 font-black">3</span>
+                        <span class="text-[9px] text-amber-300 font-bold">${p3.stars}⭐</span>
+                    </div>
+                </div>
+            `;
+
+            // List Remaining Ranks
+            let listContainer = document.getElementById('leaderboard-list');
+            listContainer.innerHTML = "";
+            list.slice(3).forEach((item, index) => {
+                let rank = index + 4;
+                listContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-indigo-900/30 ${item.isSelf ? 'border border-emerald-500' : ''}">
+                        <div class="flex items-center gap-2">
+                            <span class="font-black text-indigo-400 w-4">${rank}</span>
+                            <span class="text-xs font-bold ${item.isSelf ? 'text-emerald-400' : 'text-white'}">${item.name}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-black">
+                            <span class="bg-indigo-800 text-indigo-200 px-1.5 py-0.5 rounded">LVL ${item.level}</span>
+                            <span class="text-amber-300">${item.stars}⭐</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Settings / Progress reset helpers
+        function toggleMusic() {
+            SoundManager.playClick();
+            SoundManager.musicOn = !SoundManager.musicOn;
+            if (SoundManager.musicOn) {
+                SoundManager.startMusic();
+            } else {
+                SoundManager.stopMusic();
+            }
+            document.getElementById('btn-toggle-music').innerText = SoundManager.musicOn ? 'ON' : 'OFF';
+        }
+
+        function toggleSFX() {
+            SoundManager.playClick();
+            SoundManager.enabled = !SoundManager.enabled;
+            document.getElementById('btn-toggle-sfx').innerText = SoundManager.enabled ? 'ON' : 'OFF';
+        }
+
+        function resetAppProgress() {
+            SoundManager.playClick();
+            // Use custom modal prompt rather than native alert/confirm
+            showModal("<i class='fas fa-exclamation-triangle text-red-500'></i>", 
+                state.currentLanguage === 'bm' ? "Sahkan Reset?" : "Confirm Reset?", 
+                state.currentLanguage === 'bm' ? "Tindakan ini akan memadamkan semua kemajuan, duit syiling, bintang dan barangan yang telah dibeli." : "This will wipe all your progress, coins, stars, and items.");
+            
+            // Temporary override Teruskan modal button logic to reset progress
+            const modalBtn = document.querySelector('#custom-modal button');
+            modalBtn.onclick = function() {
+                localStorage.clear();
+                window.location.reload();
+            };
+        }
+
+        function logoutUser() {
+            SoundManager.playClick();
+            localStorage.removeItem('sifir_quest_state');
+            window.location.reload();
+        }
+
+        let activeGameMode = ""; // 'adventure', 'speed', 'casual', 'boss'
+        let currentLevelNum = 1;
+        let currentQuestionIdx = 0;
+        let totalQuestionsCount = 10;
+        let correctCountThisSession = 0;
+        let currentQuestionObj = null;
+        let selectedGameplayDifficult = "easy"; // easy, medium, hard
+        let gameplayTimerInterval = null;
+        let gameplayTimeLeft = 30;
+        let consecutivePerfectCount = 0;
+
+        // Boss Battle state
+        let bossHPMax = 100;
+        let bossHPCurrent = 100;
+        let playerHPMax = 5;
+        let playerHPCurrent = 5;
+
+        function startAdventureStage(levelNum, isLocked) {
+            if (isLocked) {
+                SoundManager.playWrong();
+                showToast("Peringkat Dikunci", state.currentLanguage === 'bm' ? "Selesaikan peringkat sebelumnya dahulu!" : "Complete previous levels first!", false);
+                return;
+            }
+            SoundManager.playClick();
+            activeGameMode = "adventure";
+            currentLevelNum = levelNum;
+            currentQuestionIdx = 0;
+            correctCountThisSession = 0;
+            totalQuestionsCount = 10;
+            consecutivePerfectCount = 0;
+
+            // Check if level is boss battle
+            if (levelNum === 6 || levelNum === 12) {
+                startBossEncounter(levelNum);
+                return;
+            }
+
+            // Hide HUD tabs
+            document.getElementById('app-header').classList.add('hidden');
+            document.getElementById('app-content').classList.add('hidden');
+            document.getElementById('app-nav').classList.add('hidden');
+            document.getElementById('screen-gameplay').classList.remove('hidden');
+
+            document.getElementById('gameplay-level-title').innerText = `${state.currentLanguage === 'bm' ? 'Peringkat Kembara' : 'Adventure Stage'} ${levelNum}`;
+            document.getElementById('gameplay-timer-container').classList.add('hidden'); // No timer for standard adventure
+
+            generateNextQuestion();
+        }
+
+        function startQuickSifir(num) {
+            SoundManager.playClick();
+            activeGameMode = "casual";
+            currentLevelNum = num;
+            currentQuestionIdx = 0;
+            correctCountThisSession = 0;
+            totalQuestionsCount = 10;
+
+            document.getElementById('app-header').classList.add('hidden');
+            document.getElementById('app-content').classList.add('hidden');
+            document.getElementById('app-nav').classList.add('hidden');
+            document.getElementById('screen-gameplay').classList.remove('hidden');
+
+            document.getElementById('gameplay-level-title').innerText = `${state.currentLanguage === 'bm' ? 'Latihan Sifir' : 'Practice Sifir'} ${num}`;
+            document.getElementById('gameplay-timer-container').classList.add('hidden');
+
+            generateNextQuestion();
+        }
+
+        function startSpeedChallenge(seconds) {
+            SoundManager.playClick();
+            activeGameMode = "speed";
+            currentQuestionIdx = 0;
+            correctCountThisSession = 0;
+            totalQuestionsCount = 999; // infinite questions
+            gameplayTimeLeft = seconds;
+
+            document.getElementById('app-header').classList.add('hidden');
+            document.getElementById('app-content').classList.add('hidden');
+            document.getElementById('app-nav').classList.add('hidden');
+            document.getElementById('screen-gameplay').classList.remove('hidden');
+
+            document.getElementById('gameplay-level-title').innerText = state.currentLanguage === 'bm' ? 'Speed Challenge' : 'Speed Challenge';
+            
+            let timerContainer = document.getElementById('gameplay-timer-container');
+            timerContainer.classList.remove('hidden');
+
+            if (seconds === -1) {
+                document.getElementById('gameplay-timer-val').innerText = "∞";
+            } else {
+                document.getElementById('gameplay-timer-val').innerText = `${gameplayTimeLeft}s`;
+                // Start Timer Interval
+                if (gameplayTimerInterval) clearInterval(gameplayTimerInterval);
+                gameplayTimerInterval = setInterval(() => {
+                    gameplayTimeLeft--;
+                    document.getElementById('gameplay-timer-val').innerText = `${gameplayTimeLeft}s`;
+                    if (gameplayTimeLeft <= 0) {
+                        clearInterval(gameplayTimerInterval);
+                        finishGameplaySession();
+                    }
+                }, 1000);
+            }
+
+            generateNextQuestion();
+        }
+
+        function startCasualTraining() {
+            SoundManager.playClick();
+            // Select random active multiplication table 1 to 12
+            let randomTbl = Math.floor(Math.random() * 12) + 1;
+            startQuickSifir(randomTbl);
+        }
+
+        function startBossEncounter(stageNum = 12) {
+            activeGameMode = "boss";
+            currentLevelNum = stageNum;
+            currentQuestionIdx = 0;
+            correctCountThisSession = 0;
+            totalQuestionsCount = 99; // keep fighting until boss or player HP becomes 0
+
+            bossHPMax = stageNum * 15;
+            bossHPCurrent = bossHPMax;
+            playerHPMax = 5;
+            playerHPCurrent = playerHPMax;
+
+            document.getElementById('app-header').classList.add('hidden');
+            document.getElementById('app-content').classList.add('hidden');
+            document.getElementById('app-nav').classList.add('hidden');
+            document.getElementById('screen-gameplay').classList.remove('hidden');
+
+            document.getElementById('gameplay-level-title').innerText = state.currentLanguage === 'bm' ? 'PERTEMPURAN BOSS!' : 'BOSS BATTLE!';
+            document.getElementById('gameplay-timer-container').classList.add('hidden');
+
+            generateNextQuestion();
+        }
+
+        function generateNextQuestion() {
+            currentQuestionIdx++;
+            
+            if (activeGameMode !== "speed" && activeGameMode !== "boss" && currentQuestionIdx > totalQuestionsCount) {
+                finishGameplaySession();
+                return;
+            }
+
+            document.getElementById('gameplay-progress-text').innerText = activeGameMode === "speed" ? `Dijawab: ${correctCountThisSession}` : `Q ${currentQuestionIdx}/${totalQuestionsCount}`;
+
+            // Determine what multiplication table base to practice
+            let tableBase = currentLevelNum;
+            if (activeGameMode === "speed" || activeGameMode === "boss") {
+                tableBase = Math.floor(Math.random() * 12) + 1;
+            }
+
+            let multiplier = Math.floor(Math.random() * 12) + 1;
+            let product = tableBase * multiplier;
+
+            // Prevent consecutive duplication
+            if (currentQuestionObj && currentQuestionObj.product === product && currentQuestionObj.base === tableBase) {
+                multiplier = (multiplier % 12) + 1;
+                product = tableBase * multiplier;
+            }
+
+            currentQuestionObj = {
+                base: tableBase,
+                multiplier: multiplier,
+                product: product
+            };
+
+            // Select random gameplay question type (1: MCQ, 2: Drag, 3: Fill, 4: Match, 5: Balloon, 6: Memory)
+            // If activeGameMode is boss, use multiple choice & input keys to make it epic and quick!
+            let questionType = Math.floor(Math.random() * 6) + 1;
+            if (activeGameMode === "boss") {
+                questionType = Math.random() > 0.5 ? 1 : 3; // MCQ or Fill blank
+            }
+
+            renderGameplayWorkspace(questionType);
+        }
+
+        function renderGameplayWorkspace(type) {
+            const workspace = document.getElementById('gameplay-workspace');
+            workspace.innerHTML = "";
+            document.getElementById('gameplay-footer-action').innerHTML = "";
+
+            let questionText = `${currentQuestionObj.base} × ${currentQuestionObj.multiplier} = ?`;
+
+            if (activeGameMode === "boss") {
+                // Prepend Boss visual
+                let bossPercent = (bossHPCurrent / bossHPMax) * 100;
+                let playerPercent = (playerHPCurrent / playerHPMax) * 100;
+
+                workspace.innerHTML += `
+                    <div class="mb-6 space-y-4">
+                        <!-- Boss HP -->
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-extrabold text-red-400">👹 RAJA SIFIR SURI</span>
+                            <span class="font-bold text-red-300">${bossHPCurrent}/${bossHPMax} HP</span>
+                        </div>
+                        <div class="w-full bg-red-950 h-3.5 rounded-full overflow-hidden border border-red-800">
+                            <div class="bg-gradient-to-r from-red-600 to-rose-500 h-full transition-all duration-300" style="width: ${bossPercent}%;"></div>
+                        </div>
+
+                        <!-- Player HP -->
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-extrabold text-indigo-300">🦸 ${state.user?.name || 'Player'}</span>
+                            <span class="font-bold text-indigo-200">${playerHPCurrent}/${playerHPMax} HP</span>
+                        </div>
+                        <div class="w-full bg-indigo-950 h-3 rounded-full overflow-hidden border border-indigo-800">
+                            <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full transition-all duration-300" style="width: ${playerPercent}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            switch(type) {
+                case 1: // Multiple Choice
+                    renderMCQ(workspace, questionText);
+                    break;
+                case 2: // Drag and drop simulation (Optimized click-placement for mobile)
+                    renderDragDropSimulation(workspace);
+                    break;
+                case 3: // Fill in the blank
+                    renderFillInBlank(workspace);
+                    break;
+                case 4: // Match the pair
+                    renderMatchThePair(workspace);
+                    break;
+                case 5: // Balloon Pop
+                    renderBalloonPop(workspace);
+                    break;
+                case 6: // Memory Card Match
+                    renderMemoryCardGame(workspace);
+                    break;
+                default:
+                    renderMCQ(workspace, questionText);
+                    break;
+            }
+        }
+
+        // Multiple choice layout builder
+        function renderMCQ(workspace, qText) {
+            let correctAns = currentQuestionObj.product;
+            let options = generateWrongAnswers(correctAns);
+            options.push(correctAns);
+            // Shuffle
+            options.sort(() => Math.random() - 0.5);
+
+            workspace.innerHTML += `
+                <div class="text-center mb-8">
+                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-widest">${state.currentLanguage === 'bm' ? 'Pilih Jawapan Betul' : 'Pick Correct Answer'}</span>
+                    <h1 class="text-5xl font-black text-white mt-2 animate-float">${qText}</h1>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 max-w-sm mx-auto w-full">
+                    ${options.map(opt => `
+                        <button onclick="checkSelectedAnswer(${opt}, this)" class="bg-indigo-900/60 hover:bg-purple-900/60 border-2 border-indigo-700/80 hover:border-purple-500 active:scale-95 text-white font-black text-xl py-5 px-4 rounded-3xl transition shadow-lg text-center">
+                            ${opt}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Optimized click-placement instead of tricky HTML5 drag drop to make mobile works perfectly
+        function renderDragDropSimulation(workspace) {
+            let correctAns = currentQuestionObj.product;
+            let options = generateWrongAnswers(correctAns);
+            options.push(correctAns);
+            options.sort(() => Math.random() - 0.5);
+
+            workspace.innerHTML += `
+                <div class="text-center mb-6">
+                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-widest" data-key="drag-tip">${state.currentLanguage === 'bm' ? 'Isi Petak Jawapan' : 'Fill Answer Box'}</span>
+                    <div class="flex items-center justify-center gap-3 text-4xl font-black text-white mt-4">
+                        <span>${currentQuestionObj.base}</span>
+                        <span>×</span>
+                        <span>${currentQuestionObj.multiplier}</span>
+                        <span>=</span>
+                        <div id="drag-drop-zone" class="w-20 h-16 border-4 border-dashed border-indigo-500 rounded-2xl flex items-center justify-center text-3xl text-playful-yellow bg-indigo-950/50">?</div>
+                    </div>
+                </div>
+
+                <p class="text-center text-xs text-indigo-300 mb-6">${state.currentLanguage === 'bm' ? 'Ketik pada nombor gergasi untuk meletakkannya' : 'Tap a bubble block to place the answer'}</p>
+
+                <div class="flex justify-center gap-3 flex-wrap">
+                    ${options.map(opt => `
+                        <button onclick="placeSimulationAnswer(${opt}, this)" class="bg-gradient-to-r from-purple-600 to-indigo-700 hover:brightness-110 active:scale-95 text-white font-black text-lg w-16 h-16 rounded-full shadow-lg flex items-center justify-center border-b-4 border-indigo-900 transition">
+                            ${opt}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        let tempSelectedAns = null;
+        function placeSimulationAnswer(ans, element) {
+            SoundManager.playClick();
+            tempSelectedAns = ans;
+            let zone = document.getElementById('drag-drop-zone');
+            zone.innerText = ans;
+            zone.className = "w-20 h-16 border-4 border-solid border-emerald-500 rounded-2xl flex items-center justify-center text-3xl font-black text-emerald-400 bg-indigo-950/80 animate-pop";
+
+            // Draw Check Action button
+            let footer = document.getElementById('gameplay-footer-action');
+            footer.innerHTML = `
+                <button onclick="checkSelectedAnswer(${ans})" class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-black py-4 rounded-2xl shadow-xl transition">
+                    ${state.currentLanguage === 'bm' ? 'SEMAK JAWAPAN' : 'CHECK ANSWER'}
+                </button>
+            `;
+        }
+
+        // Fill in the Blank mode
+        function renderFillInBlank(workspace) {
+            // Pick a random missing element (either table base, multiplier, or product)
+            let missingType = Math.random() > 0.5 ? 'multiplier' : 'product';
+            let qStr = "";
+            let correctVal = 0;
+
+            if (missingType === 'multiplier') {
+                qStr = `${currentQuestionObj.base} × <span class="text-playful-pink border-b-4 border-dashed border-playful-pink px-3 font-black">?</span> = ${currentQuestionObj.product}`;
+                correctVal = currentQuestionObj.multiplier;
+            } else {
+                qStr = `${currentQuestionObj.base} × ${currentQuestionObj.multiplier} = <span class="text-playful-pink border-b-4 border-dashed border-playful-pink px-3 font-black">?</span>`;
+                correctVal = currentQuestionObj.product;
+            }
+
+            workspace.innerHTML += `
+                <div class="text-center mb-6">
+                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-widest">${state.currentLanguage === 'bm' ? 'Lengkapkan Sifir' : 'Complete Multiplication'}</span>
+                    <h1 class="text-4xl font-black text-white mt-4 leading-normal">${qStr}</h1>
+                    <div id="blank-input-display" class="text-5xl font-black text-playful-yellow mt-4 h-16 bg-indigo-950/60 max-w-[120px] mx-auto rounded-2xl flex items-center justify-center border border-indigo-800">_</div>
+                </div>
+
+                <!-- Numerical Keypad -->
+                <div class="grid grid-cols-3 gap-2 max-w-[240px] mx-auto w-full">
+                    ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => `
+                        <button onclick="appendBlankInput(${num})" class="bg-indigo-900 border border-indigo-700 active:scale-95 text-white font-bold py-3.5 rounded-xl text-lg">${num}</button>
+                    `).join('')}
+                    <button onclick="clearBlankInput()" class="bg-red-950 text-red-300 font-bold py-3.5 rounded-xl text-xs flex items-center justify-center">CLR</button>
+                    <button onclick="appendBlankInput(0)" class="bg-indigo-900 border border-indigo-700 active:scale-95 text-white font-bold py-3.5 rounded-xl text-lg">0</button>
+                    <button onclick="submitBlankInput(${correctVal})" class="bg-emerald-600 text-white font-black py-3.5 rounded-xl text-sm flex items-center justify-center">OK</button>
+                </div>
+            `;
+        }
+
+        let currentBlankVal = "";
+        function appendBlankInput(char) {
+            SoundManager.playClick();
+            if (currentBlankVal.length < 3) {
+                currentBlankVal += char;
+                document.getElementById('blank-input-display').innerText = currentBlankVal;
+            }
+        }
+
+        function clearBlankInput() {
+            SoundManager.playClick();
+            currentBlankVal = "";
+            document.getElementById('blank-input-display').innerText = "_";
+        }
+
+        function submitBlankInput(correctVal) {
+            let inputNum = parseInt(currentBlankVal);
+            checkSelectedAnswer(inputNum, null, correctVal);
+            currentBlankVal = ""; // reset for next question
+        }
+
+        // Match the Pair mode
+        function renderMatchThePair(workspace) {
+            let qList = [
+                { id: 1, text: `${currentQuestionObj.base} × ${currentQuestionObj.multiplier}`, val: currentQuestionObj.product },
+                { id: 2, text: `${currentQuestionObj.base} × 2`, val: currentQuestionObj.base * 2 },
+                { id: 3, text: `${currentQuestionObj.base} × 5`, val: currentQuestionObj.base * 5 }
+            ];
+            
+            let answers = qList.map(q => q.val).sort(() => Math.random() - 0.5);
+
+            workspace.innerHTML += `
+                <div class="text-center mb-6">
+                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-widest">${state.currentLanguage === 'bm' ? 'Padankan Kiri & Kanan' : 'Match Left & Right'}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto w-full">
+                    <!-- Left Column: Questions -->
+                    <div class="space-y-3" id="match-col-questions">
+                        ${qList.map(q => `
+                            <button onclick="selectMatchPair('q', ${q.val}, this)" class="w-full bg-indigo-900/60 border-2 border-indigo-700 text-xs font-black p-4 rounded-2xl transition text-center hover:border-purple-400">
+                                ${q.text}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <!-- Right Column: Answers -->
+                    <div class="space-y-3" id="match-col-answers">
+                        ${answers.map(ans => `
+                            <button onclick="selectMatchPair('a', ${ans}, this)" class="w-full bg-indigo-900/60 border-2 border-indigo-700 text-sm font-black p-4 rounded-2xl transition text-center hover:border-purple-400">
+                                ${ans}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        let selectedMatchQ = null;
+        let selectedMatchA = null;
+        let selectedMatchQElem = null;
+        let selectedMatchAElem = null;
+        let pairedCount = 0;
+
+        function selectMatchPair(type, val, elem) {
+            SoundManager.playClick();
+            if (type === 'q') {
+                if (selectedMatchQElem) selectedMatchQElem.classList.remove('border-purple-400', 'bg-purple-900/40');
+                selectedMatchQ = val;
+                selectedMatchQElem = elem;
+                elem.classList.add('border-purple-400', 'bg-purple-900/40');
+            } else {
+                if (selectedMatchAElem) selectedMatchAElem.classList.remove('border-purple-400', 'bg-purple-900/40');
+                selectedMatchA = val;
+                selectedMatchAElem = elem;
+                elem.classList.add('border-purple-400', 'bg-purple-900/40');
+            }
+
+            // Check if match is found
+            if (selectedMatchQ !== null && selectedMatchA !== null) {
+                if (selectedMatchQ === selectedMatchA) {
+                    // Correct Match
+                    SoundManager.playCorrect();
+                    selectedMatchQElem.className = "w-full bg-emerald-950/60 border-2 border-emerald-500 text-xs font-black p-4 rounded-2xl text-emerald-300 pointer-events-none";
+                    selectedMatchAElem.className = "w-full bg-emerald-950/60 border-2 border-emerald-500 text-sm font-black p-4 rounded-2xl text-emerald-300 pointer-events-none";
+                    pairedCount++;
+
+                    selectedMatchQ = null;
+                    selectedMatchA = null;
+                    selectedMatchQElem = null;
+                    selectedMatchAElem = null;
+
+                    if (pairedCount >= 3) {
+                        pairedCount = 0; // reset
+                        // Successfully completed whole match task
+                        setTimeout(() => {
+                            checkSelectedAnswer(currentQuestionObj.product, null, currentQuestionObj.product);
+                        }, 500);
+                    }
+                } else {
+                    // Wrong Match
+                    SoundManager.playWrong();
+                    selectedMatchQElem.classList.add('animate-shake', 'border-red-500');
+                    selectedMatchAElem.classList.add('animate-shake', 'border-red-500');
+                    
+                    let qTemp = selectedMatchQElem;
+                    let aTemp = selectedMatchAElem;
+                    setTimeout(() => {
+                        qTemp.classList.remove('animate-shake', 'border-red-500', 'border-purple-400', 'bg-purple-900/40');
+                        aTemp.classList.remove('animate-shake', 'border-red-500', 'border-purple-400', 'bg-purple-900/40');
+                    }, 500);
+
+                    selectedMatchQ = null;
+                    selectedMatchA = null;
+                    selectedMatchQElem = null;
+                    selectedMatchAElem = null;
+                }
+            }
+        }
+
+        // Balloon Pop Mode
+        function renderBalloonPop(workspace) {
+            let correctAns = currentQuestionObj.product;
+            let options = generateWrongAnswers(correctAns).slice(0, 2);
+            options.push(correctAns);
+            options.sort(() => Math.random() - 0.5);
+
+            workspace.innerHTML += `
+                <div class="text-center mb-4">
+                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-widest">${state.currentLanguage === 'bm' ? 'Letupkan Belon Jawapan' : 'Pop the Correct Balloon'}</span>
+                    <h1 class="text-4xl font-black text-white mt-2">${currentQuestionObj.base} × ${currentQuestionObj.multiplier} = ?</h1>
+                </div>
+
+                <!-- Floating Canvas Container -->
+                <div class="relative w-full h-72 bg-indigo-950/40 border border-indigo-900 rounded-3xl overflow-hidden" id="balloon-floating-container">
+                    <!-- Balloons rendered as moving up absolute div tags -->
+                </div>
+            `;
+
+            // Append floating balloons
+            const container = document.getElementById('balloon-floating-container');
+            const balloonColors = ['bg-playful-pink', 'bg-playful-blue', 'bg-playful-purple'];
+
+            options.forEach((opt, idx) => {
+                let col = balloonColors[idx % balloonColors.length];
+                let leftPos = 15 + (idx * 30); // distribute across screen width %
+                let delay = idx * 1.5;
+
+                container.innerHTML += `
+                    <div onclick="popBalloon(${opt}, this)" class="absolute balloon-animation text-center cursor-pointer flex flex-col items-center justify-center transition hover:scale-105" style="left: ${leftPos}%; animation-delay: ${delay}s; top: 0;">
+                        <div class="w-16 h-20 ${col} rounded-full flex items-center justify-center font-black text-lg text-white shadow-lg relative">
+                            ${opt}
+                            <!-- Balloon knot representation -->
+                            <div class="absolute bottom-[-4px] left-1/2 transform -translate-x-1/2 w-2 h-2 ${col} rotate-45"></div>
+                        </div>
+                        <div class="w-0.5 h-12 bg-indigo-700 mt-1"></div>
+                    </div>
+                `;
+            });
+        }
+
+        function popBalloon(ans, elem) {
+            // Trigger beautiful particle visual pop
+            SoundManager.playClick();
+            elem.style.transform = 'scale(1.4)';
+            elem.style.opacity = '0';
+            setTimeout(() => {
+                checkSelectedAnswer(ans);
+            }, 300);
+        }
+
+        // Memory Card Game
+        function renderMemoryCardGame(workspace) {
+            let list = [
+                { id: 1, text: `${currentQuestionObj.base}×${currentQuestionObj.multiplier}`, matchId: 'm1' },
+                { id: 2, text: `${currentQuestionObj.product}`, matchId: 'm1' },
+                { id: 3, text: `${currentQuestionObj.base}×2`, matchId: 'm2' },
+                { id: 4, text: `${currentQuestionObj.base * 2}`, matchId: 'm2' }
+            ];
+            
+            list.sort(() => Math.random() - 0.5);
+
+            workspace.innerHTML += `
+                <div class="text-center mb-6">
+                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-widest">${state.currentLanguage === 'bm' ? 'Padankan Kad Sifir' : 'Memory Card Match'}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 max-w-xs mx-auto w-full" id="memory-cards-grid">
+                    ${list.map(card => `
+                        <div onclick="flipMemoryCard('${card.matchId}', this)" class="w-full h-24 bg-indigo-900 hover:bg-purple-900 border-2 border-indigo-700/80 rounded-2xl flex items-center justify-center font-black cursor-pointer text-indigo-300 transition select-none text-xs" data-match="${card.matchId}" data-flipped="false">
+                            <span class="hidden card-content">${card.text}</span>
+                            <span class="card-question-mark text-lg">❓</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        let firstFlippedCard = null;
+        let memoryMatchesLeft = 2;
+
+        function flipMemoryCard(matchId, cardElem) {
+            if (cardElem.getAttribute('data-flipped') === 'true' || (firstFlippedCard && firstFlippedCard === cardElem)) return;
+            SoundManager.playClick();
+            
+            // Uncover content
+            cardElem.setAttribute('data-flipped', 'true');
+            cardElem.classList.remove('bg-indigo-900', 'text-indigo-300');
+            cardElem.classList.add('bg-purple-950', 'text-white', 'border-purple-400');
+            cardElem.querySelector('.card-content').classList.remove('hidden');
+            cardElem.querySelector('.card-question-mark').classList.add('hidden');
+
+            if (!firstFlippedCard) {
+                firstFlippedCard = cardElem;
+            } else {
+                let firstMatchId = firstFlippedCard.getAttribute('data-match');
+                let secondMatchId = cardElem.getAttribute('data-match');
+
+                if (firstMatchId === secondMatchId) {
+                    // Match Success!
+                    SoundManager.playCorrect();
+                    firstFlippedCard.className = "w-full h-24 bg-emerald-950/60 border-2 border-emerald-500 rounded-2xl flex items-center justify-center font-black text-emerald-400 text-xs pointer-events-none";
+                    cardElem.className = "w-full h-24 bg-emerald-950/60 border-2 border-emerald-500 rounded-2xl flex items-center justify-center font-black text-emerald-400 text-xs pointer-events-none";
+                    
+                    firstFlippedCard = null;
+                    memoryMatchesLeft--;
+
+                    if (memoryMatchesLeft <= 0) {
+                        memoryMatchesLeft = 2; // reset
+                        setTimeout(() => {
+                            checkSelectedAnswer(currentQuestionObj.product, null, currentQuestionObj.product);
+                        }, 600);
+                    }
+                } else {
+                    // Match Failed
+                    SoundManager.playWrong();
+                    let fCard = firstFlippedCard;
+                    firstFlippedCard = null;
+
+                    setTimeout(() => {
+                        // Reset flip animations
+                        [fCard, cardElem].forEach(c => {
+                            c.setAttribute('data-flipped', 'false');
+                            c.className = "w-full h-24 bg-indigo-900 hover:bg-purple-900 border-2 border-indigo-700/80 rounded-2xl flex items-center justify-center font-black cursor-pointer text-indigo-300 transition select-none text-xs";
+                            c.querySelector('.card-content').classList.add('hidden');
+                            c.querySelector('.card-question-mark').classList.remove('hidden');
+                        });
+                    }, 1000);
+                }
+            }
+        }
+
+        // Wrong Answer Pool Generator
+        function generateWrongAnswers(correctAns) {
+            let pool = new Set();
+            while (pool.size < 3) {
+                let variance = Math.floor(Math.random() * 15) - 7;
+                let candidate = correctAns + variance;
+                if (candidate > 0 && candidate !== correctAns) {
+                    pool.add(candidate);
+                }
+            }
+            return Array.from(pool);
+        }
+
+        function checkSelectedAnswer(chosen, elemBtn = null, forcedCorrectVal = null) {
+            let correctAns = forcedCorrectVal !== null ? forcedCorrectVal : currentQuestionObj.product;
+            let isCorrect = chosen === correctAns;
+
+            // Log performance analytic data
+            state.stats.answeredTotal++;
+            let tableKey = currentQuestionObj.base;
+            if (!state.stats.tableScores[tableKey]) {
+                state.stats.tableScores[tableKey] = { correct: 0, total: 0 };
+            }
+            state.stats.tableScores[tableKey].total++;
+
+            if (isCorrect) {
+                correctCountThisSession++;
+                state.stats.correctTotal++;
+                state.stats.tableScores[tableKey].correct++;
+                consecutivePerfectCount++;
+
+                // Daily missions incremental update
+                state.dailyMissions.find(m => m.type === 'ans').current++;
+                let perfMission = state.dailyMissions.find(m => m.type === 'perf');
+                if (consecutivePerfectCount > perfMission.current) {
+                    perfMission.current = consecutivePerfectCount;
+                }
+
+                SoundManager.playCorrect();
+                if (elemBtn) {
+                    elemBtn.className = "bg-emerald-600 border-2 border-emerald-400 text-white font-black text-xl py-5 px-4 rounded-3xl transition shadow-lg text-center animate-pop";
+                }
+                showFeedbackPanel(true);
+            } else {
+                consecutivePerfectCount = 0; // reset perfect streak
+                SoundManager.playWrong();
+                if (elemBtn) {
+                    elemBtn.classList.add('animate-shake', 'border-red-500', 'bg-red-950');
+                }
+                showFeedbackPanel(false, correctAns);
+            }
+
+            saveStateToStorage();
+        }
+
+        function showFeedbackPanel(isCorrect, rightAns = 0) {
+            const footer = document.getElementById('gameplay-footer-action');
+            
+            // Render beautiful floating particles over correct choices
+            if (isCorrect) {
+                triggerParticles();
+            }
+
+            // Perform Boss action calculation if mode active
+            if (activeGameMode === "boss") {
+                if (isCorrect) {
+                    bossHPCurrent -= 10;
+                    if (bossHPCurrent <= 0) {
+                        bossHPCurrent = 0;
+                        setTimeout(() => {
+                            finishGameplaySession();
+                        }, 500);
+                        return;
+                    }
+                } else {
+                    playerHPCurrent--;
+                    if (playerHPCurrent <= 0) {
+                        playerHPCurrent = 0;
+                        setTimeout(() => {
+                            finishGameplaySession();
+                        }, 500);
+                        return;
+                    }
+                }
+            }
+
+            let msgTitle = isCorrect ? "TERBAIK!" : "ALAMAK!";
+            let msgDesc = isCorrect ? "Jawapan anda adalah tepat!" : `Jawapan betul ialah: ${rightAns}`;
+            let bgStyle = isCorrect ? "bg-emerald-950 border-emerald-700" : "bg-red-950 border-red-900";
+
+            footer.innerHTML = `
+                <div class="${bgStyle} border-2 rounded-2xl p-4 flex items-center justify-between text-white animate-pop">
+                    <div>
+                        <h4 class="font-black text-sm">${msgTitle}</h4>
+                        <p class="text-xs opacity-90">${msgDesc}</p>
+                    </div>
+                    <button onclick="generateNextQuestion()" class="bg-indigo-800 hover:bg-indigo-700 active:scale-95 text-xs text-white font-black px-4 py-2.5 rounded-xl border border-indigo-600 transition">
+                        ${state.currentLanguage === 'bm' ? 'TERUSKAN' : 'CONTINUE'}
+                    </button>
+                </div>
+            `;
+        }
+
+        function triggerParticles() {
+            const app = document.getElementById('app');
+            for (let i = 0; i < 15; i++) {
+                let part = document.createElement('div');
+                part.className = 'particle text-xl';
+                part.innerText = Math.random() > 0.5 ? '⭐' : '✨';
+                part.style.left = `${Math.floor(Math.random() * 80) + 10}%`;
+                part.style.top = '30%';
+                app.appendChild(part);
+                setTimeout(() => part.remove(), 1500);
+            }
+        }
+
+        function quitGameplay() {
+            SoundManager.playClick();
+            if (gameplayTimerInterval) clearInterval(gameplayTimerInterval);
+            
+            // Reset gameplay states & back to home view
+            document.getElementById('screen-gameplay').classList.add('hidden');
+            document.getElementById('app-header').classList.remove('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+            document.getElementById('app-nav').classList.remove('hidden');
+            
+            updateTopHUD();
+            renderAdventureMap();
+        }
+
+        function finishGameplaySession() {
+            if (gameplayTimerInterval) clearInterval(gameplayTimerInterval);
+            SoundManager.playWin();
+
+            let starsGained = 0;
+            let coinsGained = 0;
+            let xpGained = 0;
+            let isVictory = true;
+
+            if (activeGameMode === "adventure") {
+                // If answers accuracy > 70% level is unlocked to next stage
+                let acc = (correctCountThisSession / totalQuestionsCount);
+                if (acc >= 0.70) {
+                    starsGained = 50;
+                    coinsGained = 30;
+                    xpGained = 60;
+                    
+                    // Increment Adventure Map progress unlocked
+                    if (currentLevelNum === state.adventureStage) {
+                        state.adventureStage++;
+                        state.dailyMissions.find(m => m.type === 'lvl').current++;
+                    }
+                } else {
+                    isVictory = false;
+                    starsGained = 10;
+                    coinsGained = 5;
+                    xpGained = 15;
+                }
+            } else if (activeGameMode === "speed") {
+                // Gain based on total answers
+                starsGained = correctCountThisSession * 5;
+                coinsGained = correctCountThisSession * 3;
+                xpGained = correctCountThisSession * 6;
+            } else if (activeGameMode === "boss") {
+                if (bossHPCurrent <= 0) {
+                    starsGained = 150;
+                    coinsGained = 100;
+                    xpGained = 200;
+                    
+                    if (currentLevelNum === state.adventureStage) {
+                        state.adventureStage++;
+                        state.dailyMissions.find(m => m.type === 'lvl').current++;
+                    }
+                } else {
+                    isVictory = false;
+                    starsGained = 20;
+                    coinsGained = 10;
+                    xpGained = 30;
+                }
+            } else {
+                // Casual
+                starsGained = correctCountThisSession * 4;
+                coinsGained = correctCountThisSession * 2;
+                xpGained = correctCountThisSession * 5;
+            }
+
+            // Add resources to state
+            state.stats.stars += starsGained;
+            addCoins(coinsGained);
+            addXP(xpGained);
+            saveStateToStorage();
+
+            // Quit gameplay view first
+            document.getElementById('screen-gameplay').classList.add('hidden');
+            document.getElementById('app-header').classList.remove('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+            document.getElementById('app-nav').classList.remove('hidden');
+
+            updateTopHUD();
+            renderAdventureMap();
+            renderDailyMissions();
+
+            // Show Session Complete Premium Modal
+            let summaryTitle = isVictory ? "HEBAT! TUGASAN TAMAT!" : "CUBA LAGI!";
+            let summaryDesc = state.currentLanguage === 'bm' ? 
+                `Anda berjaya menjawab ${correctCountThisSession} betul!\n\nGanjaran:\n⭐ +${starsGained} Bintang\n💰 +${coinsGained} Syiling\n🚀 +${xpGained} XP` :
+                `You answered ${correctCountThisSession} correctly!\n\nRewards:\n⭐ +${starsGained} Stars\n💰 +${coinsGained} Coins\n🚀 +${xpGained} XP`;
+
+            showModal("<i class='fas fa-trophy text-playful-yellow animate-float'></i>", summaryTitle, summaryDesc);
+        }
+
+    </script>
+</body>
+</html>
